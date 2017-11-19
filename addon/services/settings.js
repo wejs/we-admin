@@ -1,9 +1,19 @@
 import Ember from 'ember';
-import ENV from "../config/environment";
+
+let ENV;
 
 export default Ember.Service.extend({
   store: Ember.inject.service('store'),
   session: Ember.inject.service('session'),
+
+  init(){
+    this._super(...arguments);
+
+    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+    this.set('ENV', ENV);
+  },
+
   data: null,
 
   accessToken: Ember.computed.alias('session.session.authenticated.access_token'),
@@ -22,7 +32,7 @@ export default Ember.Service.extend({
 
   systemSettings: Ember.computed.alias('data.systemSettings'),
 
-  imageHost: ENV.imageHost,
+  imageHost: Ember.computed.alias('ENV.imageHost'),
 
   themeCollorOptions: [
     { id: 'default', name: 'Cor padrão do tema'},

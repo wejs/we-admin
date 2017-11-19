@@ -1,5 +1,6 @@
 import Ember from 'ember';
-import ENV from "../config/environment";
+
+let ENV;
 
 import AjaxService from 'ember-ajax/services/ajax';
 import { UnauthorizedError } from 'ember-ajax/errors';
@@ -7,6 +8,12 @@ import { UnauthorizedError } from 'ember-ajax/errors';
 export default AjaxService.extend({
   session: Ember.inject.service(),
   host: ENV.API_HOST,
+
+  init(){
+    this._super(...arguments);
+
+    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+  },
 
   request(url, options) {
     this.get('session').authorize('authorizer:custom', (headers) => {

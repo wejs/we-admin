@@ -1,9 +1,16 @@
 import Ember from 'ember';
-import ENV from "../config/environment";
+
+let ENV;
 
 export default Ember.Service.extend({
   session: Ember.inject.service(),
   ajax: Ember.inject.service(),
+
+  init(){
+    this._super(...arguments);
+
+    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+  },
 
   query(vocabularyId, opts) {
     let headers = { Accept: 'application/json' },

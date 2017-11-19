@@ -1,7 +1,13 @@
 import Ember from 'ember';
-import ENV from "../config/environment";
+
+let ENV;
 
 export default Ember.Service.extend({
+  init(){
+    this._super(...arguments);
+
+    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+  },
   getImageData(imageId) {
     let headers = { Accept: 'application/json' },
         accessToken = this.get('session.session.authenticated.access_token');

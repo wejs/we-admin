@@ -1,5 +1,4 @@
 import Ember from 'ember';
-import ENV from "../config/environment";
 
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
@@ -7,6 +6,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   ajax: Ember.inject.service(),
 
   model() {
+    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
 
     return Ember.RSVP.hash({
       contentCount: this.get('ajax')

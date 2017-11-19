@@ -3,6 +3,7 @@ import Ember from 'ember';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
 export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
+  authorizer: 'authorizer:custom',
   init(){
     this._super(...arguments);
 
@@ -10,7 +11,6 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
 
     this.set('host', ENV.API_HOST);
   },
-  authorizer: 'authorizer:custom',
   /**
     @method pathForType
     @param {String} modelName
