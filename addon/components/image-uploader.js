@@ -3,14 +3,16 @@ import Ember from 'ember';
 let ENV;
 
 export default Ember.Component.extend({
-  init(){
+  init() {
     this._super(...arguments);
 
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+    this.set('url', `${ENV.API_HOST}/api/v1/image`);
   },
 
   isLOading: false,
-  url: `${ENV.API_HOST}/api/v1/image`,
+  url: null,
   uploader: null,
 
   multiple: false,

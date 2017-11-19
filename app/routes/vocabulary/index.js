@@ -21,14 +21,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           propertyName: 'createdAt',
           filteredBy: 'createdAt',
           title: i18n.t('form-vocabulary-createdAt'),
-          template: 'partials/list-item-created-at'
+          component: 'mt-list-item-created-at'
         },
         {
           propertyName: 'actions',
           disableSorting: true,
           disableFiltering: true,
           title: i18n.t('Actions'),
-          template: 'vocabulary/list-item-actions'
+          component: 'mt-actions-vocabulary'
         }
       ]
     });

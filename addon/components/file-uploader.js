@@ -7,10 +7,12 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+    this.set('url', `${ENV.API_HOST}/api/v1/file`);
   },
 
   isLOading: false,
-  url: `${ENV.API_HOST}/api/v1/file`,
+  url: null,
   uploader: null,
 
   multiple: false,

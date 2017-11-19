@@ -28,14 +28,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           propertyName: 'createdAt',
           filteredBy: 'createdAt',
           title: 'Enviado em',
-          template: 'partials/list-item-created-at'
+          component: 'mt-list-item-created-at'
         },
         {
           propertyName: 'actions',
           disableSorting: true,
           disableFiltering: true,
           title: i18n.t('Actions'),
-          template: 'site-contacts/list-item-actions'
+          component: 'mt-actions-site-contacts'
         }
       ]
     });
