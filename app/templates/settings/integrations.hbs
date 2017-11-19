@@ -1,0 +1,64 @@
+<h1 class="page-header">Integrações</h1>
+
+{{settings-menu}}
+
+<form {{action "save" model.settings on="submit"}}>
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-envelope-o" aria-hidden="true"></i> Mailchimp:</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>Mailchimp API key:</label>
+              {{input value=model.settings.mailChimpApiKey name="mailChimpApiKey" class="form-control" placeholder="Digite a api key aqui..."}}
+              <p class="help-block">A API Key gerada na sessão profile da conta do Mailchimp. <br>
+              Exemplo: 732d9e3157d54d5c9827dc1e5a271eb6-us16</p>
+            </div>
+            <div class="form-group">
+              <label>ID único da lista:</label>
+              {{input value=model.settings.mailChimpListID name="mailChimpListID" class="form-control" placeholder="Digite o id aqui..."}}
+              <p class="help-block">O ID único da lista no Mailchimp disponível nas configurações da lista de email. <br>
+              Exemplo: 943fba4c31</p>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-comment-o" aria-hidden="true"></i> Disqus:</div>
+        <div class="panel-body">
+          <p>A integração com o Disqus é feita diretamente nos widgets do sistema em cada página dispensando configurações globais.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-google" aria-hidden="true"></i> Google analytics:</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>ID de acompanhamento:</label>
+              {{input value=model.settings.googleAnalyticsID name="googleAnalyticsID" class="form-control" placeholder="Digite o id aqui..."}}
+              <p class="help-block">O ID de acompanhamento pego no site do google analytics. Ex: UA-00000000-0.</p>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-12">
+      <div>
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

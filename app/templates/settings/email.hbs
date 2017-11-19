@@ -1,0 +1,57 @@
+<h1 class="page-header">Emails e contato do site</h1>
+
+{{settings-menu}}
+
+<form {{action "save" model.settings on="submit"}}>
+  <div class="row">
+
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">Configurações do email de contato:</div>
+        <div class="panel-body">
+          <fieldset>
+
+            <div class="form-group">
+              <label>Email de contato do site*:</label>
+              {{input value=model.settings.emailContact class="form-control" placeholder="Digite o email aqui..." required="required"}}
+              <p class="help-block">Endereço de email de contato do site que é usado para recebimento das mensagens de contato e avisos aos administradores.<br>
+              Normalmente as organizações usam um email das suas áreas de comunicação.</p>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+{{!--       <div class="panel panel-default">
+        <div class="panel-heading">Usar um <a href="https://pt.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol" target="_blank">SMTP</a> customizado?:</div>
+        <div class="panel-body">
+          <fieldset>
+
+            <div class="form-group">
+              <label>Cores do site:</label>
+              {{#power-select
+                options=settings.themeCollorOptions
+                selected=model.themeCollor
+                searchEnabled=false
+                onchange=(action (mut model.themeCollor) )
+                as |opts|
+              }}
+                {{opts.name}}
+              {{/power-select}}
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+ --}}
+      <div>
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          Salvar
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</form>

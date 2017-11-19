@@ -1,0 +1,34 @@
+{{#bs-navbar position="static-top" as |navbar|}}
+	<div class="navbar-header">
+    {{#navbar.toggle}}
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+    {{/navbar.toggle}}
+    <a href="/" class="navbar-brand">
+      {{#if settings.systemSettings.logoUrlOriginal}}
+        <img class="site-logo" src="{{settings.imageHost}}{{settings.systemSettings.logoUrlOriginal}}">
+        <span class="sr-only">
+          {{#if settings.systemSettings.siteName}}
+            {{settings.systemSettings.siteName}}
+          {{else}}
+            {{appName}}
+          {{/if}}
+        </span>
+      {{else}}
+        <span>
+          {{#if settings.systemSettings.siteName}}
+            {{settings.systemSettings.siteName}}
+          {{else}}
+            {{appName}}
+          {{/if}}
+        </span>
+      {{/if}}
+    </a>
+	</div>
+  {{#navbar.content}}
+		{{partial 'partials/navbar-top-links'}}
+		{{partial 'partials/sidebar-menu'}}
+ {{/navbar.content}}
+{{/bs-navbar}}
