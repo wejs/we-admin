@@ -1,7 +1,7 @@
 <h1 class="page-header">{{t 'user.edit' username=model.user.username}}</h1>
 
-{{#bs-tab as |tab|}}
-  {{#tab.pane title=(t 'user.Data')}}
+{{#bs-tab activeId=model.tab as |tab|}}
+  {{#tab.pane elementId="userTabPaneData" title=(t 'user.Data')}}
     <form {{action "save" model.user on="submit"}}>
       <fieldset>
         <div class="form-group">
@@ -59,7 +59,7 @@
       </div>
     </form>
   {{/tab.pane}}
-  {{#tab.pane title=(t 'auth.Password-and-login')}}
+  {{#tab.pane elementId="userTabPanePassword" title=(t 'auth.Password-and-login')}}
     <h4>{{t 'auth.change-password'}}</h4>
     <form {{action "changePassword" model on="submit"}}>
       <fieldset>
@@ -80,7 +80,7 @@
       </div>
     </form>
   {{/tab.pane}}
-  {{#tab.pane title=(t 'roles.link')}}
+  {{#tab.pane elementId="userTabPaneRoles" title=(t 'roles.link')}}
     <ul class="list-group">
       {{#each model.roles as |role|}}
         {{#if role.canAddInUsers}}

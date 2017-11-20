@@ -2,16 +2,32 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import ENV from "../../config/environment";
 
+const userMenuTabs = [
+  'userTabPaneData',
+  'userTabPanePassword',
+  'userTabPaneRoles'
+];
+
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   notifications: Ember.inject.service('notification-messages'),
   acl: Ember.inject.service('acl'),
 
+  queryParams: {
+    tab: { refreshModel: false }
+  },
+
   model(params) {
+
+    if (userMenuTabs.indexOf(params.tab) === -1) {
+      params.tab = 'userTabPaneData';
+    }
+
     return Ember.RSVP.hash({
       user: this.get('store').findRecord('user', params.id),
       roles: this.get('acl').getRolesArray(),
       newPassword: null,
-      rNewPassword: null
+      rNewPassword: null,
+      tab: params.tab
     });
   },
   actions: {
