@@ -1,16 +1,63 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-import ENV from "../../config/environment";
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   session: Ember.inject.service('session'),
 
   model(params) {
     return Ember.RSVP.hash({
-      record: this.get('store').findRecord('menu', params.id),
+      menuId: params.id,
+      menuData: this.getLinks(params.id),
+      record: null,
       sorted: false,
-      newLinkRecord: null,
-      editingRecord: null
+      editingRecord: null,
+      tableDrag: null
+    });
+  },
+
+  afterModel(model) {
+    let linksFormated = model.menuData.link.map((link)=> {
+      return {
+        id: link.id,
+        type: 'link',
+        attributes: link,
+        relationships: {
+          menu: {
+            data: {
+              id: model.menuId,
+              type: 'menu'
+            }
+          }
+        }
+
+      };
+    });
+
+    this.get('store').push({ data: linksFormated });
+
+    model.record = this.get('store').findRecord('menu', model.menuId);
+
+    return model.record;
+  },
+
+  getLinks(menuId) {
+    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+    return new window.Promise( (resolve, reject)=> {
+      let headers = { Accept: 'application/json' },
+          accessToken = this.get('session.session.authenticated.access_token');
+
+      if (accessToken) {
+        headers.Authorization = `Basic ${accessToken}`;
+      }
+
+      Ember.$.ajax({
+        url: `${ENV.API_HOST}/link?menuId=${menuId}&order=depth ASC`,
+        type: 'GET',
+        headers: headers
+      })
+      .done(resolve)
+      .fail(reject);
     });
   },
 
@@ -19,26 +66,36 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     link.set('menu', this.get('currentModel.record'));
     return link;
   },
+
+  reorderItems(itemModels, draggedModel) {
+    itemModels.forEach((item, i)=>{
+      item.set('weight', i);
+    });
+    this.set('currentModel.justDragged', draggedModel);
+    this.set('currentModel.record.sorted', true);
+  },
+
   actions: {
     reorderItems(itemModels, draggedModel) {
-      itemModels.forEach((item, i)=>{
-        item.set('weight', i);
-      });
-      this.set('currentModel.justDragged', draggedModel);
-      this.set('currentModel.record.sorted', true);
+      this.reorderItems(itemModels, draggedModel);
     },
-    saveLinksOrder(links) {
+    saveLinksOrder() {
+      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
       const menuId = this.get('currentModel.record.id'),
         data = {};
 
-      const length = links.get('length');
-      for (let i = 0; i < length; i++) {
-        let link = links.objectAt(i);
-        // set values:
-        data['link-'+link.get('id')+'-weight'] = link.get('weight');
-        data['link-'+link.get('id')+'-id'] = link.get('id');
-        data['link-'+link.get('id')+'-depth'] = 0;
-        data['link-'+link.get('id')+'-parent'] = null;
+      const tableDrag = this.get('currentModel.tableDrag');
+      if (!tableDrag) {
+        return null;
+      }
+
+      const form = Ember.$(tableDrag.table).parent();
+      const fields = form.serializeArray();
+
+      for (let i = 0; i < fields.length; i++) {
+        let field = fields[i];
+        data[field.name] = field.value;
       }
 
       let headers = { Accept: 'application/vnd.api+json' },
@@ -62,34 +119,48 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
 
     },
-    openLinkForm(link) {
-      if (!link) {
-        // create
-        this.set('currentModel.newLinkRecord', this.getNewLinkRecord());
-        this.set('currentModel.editingRecord', this.get('currentModel.newLinkRecord'));
-      } else {
-        // edit
-        this.set('currentModel.editingRecord', link);
-      }
+
+    onTabledragDropRow(ctx) {
+      this.set('currentModel.tableDrag', ctx.tableDrag);
+      this.set('currentModel.record.sorted', true);
     },
-    onCloseLinkModal() {
-      const record = this.get('currentModel.editingRecord');
-      if (record) {
-        window.test = record;
-        // reset record data:
-        record.rollbackAttributes();
-        // cleanup editing record:
-        this.set('currentModel.editingRecord', null);
+
+    deleteLink(link, links) {
+      if (this.linkHaveChildrens(link, links)) {
+        alert('Não é possível remover o link.\nRemova os sublinks antes de remover esse link.');
+        return false;
       }
 
-      return null;
-    },
-    saveLink(link, modal) {
-      link.save().then( (r)=> {
-        this.get('notifications').success('Link salvo');
-        return r;
-      })
-      .then( modal.close );
+      if (confirm(`Tem certeza que deseja deletar o link "${link.get('text')}"? \nEssa ação não pode ser desfeita.`)) {
+
+        link.destroyRecord()
+        .then( ()=> {
+          // remove from view:
+          Ember.$('#tabledrad-item-'+link.id).remove();
+          links.removeObject(link);
+
+          this.get('notifications').success(`O link "${link.get('text')}" foi deletado.`);
+          return null;
+        });
+      }
     }
+  },
+
+
+  linkHaveChildrens(link, links) {
+    for (let i = 0; i < links.get('length'); i++) {
+      let listItem = links.objectAt(i);
+      let parent = listItem.get('parent');
+
+      if (
+        parent &&
+        Number(parent) === Number(link.id)
+      ) {
+        return true;
+      }
+
+    }
+
+    return false;
   }
 });

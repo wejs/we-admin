@@ -1,10 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Controller.extend({
-  linkTargetOptions: [
-    'Na mesma página',
-    'Em uma nova página'
-  ],
   advancedFieldsCollapsed: true,
 
   actions: {
@@ -14,11 +10,6 @@ export default Ember.Controller.extend({
       } else {
         this.set('advancedFieldsCollapsed', true);
       }
-    },
-    selectTarget() {
-
-
-
     },
     onSaveLink(link, modal) {
       this.send('saveLink', link, modal);
