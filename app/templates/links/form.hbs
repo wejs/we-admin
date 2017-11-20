@@ -3,30 +3,50 @@
     <div class="form-group">
       <label>{{t 'form-link-href'}}*:</label>
       {{input value=model.editingRecord.href class="form-control" placeholder=(t 'form-placeholder-link-href') required="required"}}
+      <p class="help-block">URL/caminho que será aberto no navegador quando o usuário clicar no link. Exemplo /sobre.</p>
     </div>
     <div class="form-group">
       <label>{{t 'form-link-text'}}*:</label>
       {{input value=model.editingRecord.text class="form-control" placeholder=(t 'form-placeholder-link-text') required="required"}}
+      <p class="help-block">Texto que aparece para o usuário.</p>
     </div>
-    <div class="form-group">
-      <label>{{t 'form-link-title'}}:</label>
-      {{input value=model.editingRecord.title class="form-control" placeholder=(t 'form-placeholder-link-title')}}
-    </div>
-    <div class="form-group">
-      <label>{{t 'form-link-class'}}:</label>
-      {{input value=model.editingRecord.class class="form-control" placeholder=(t 'form-placeholder-link-class')}}
-    </div>
-    <div class="form-group">
-      <label>{{t 'form-link-target'}}:</label>
-      {{input value=model.editingRecord.target class="form-control" placeholder=(t 'form-placeholder-link-href')}}
-    </div>
-    <div class="form-group">
-      <label>{{t 'form-link-rel'}}:</label>
-      {{input value=model.editingRecord.rel class="form-control" placeholder=(t 'form-placeholder-link-rel')}}
-    </div>
-    <div class="form-group">
-      <label>{{t 'form-link-key'}}</label>
-      {{input value=model.editingRecord.key class="form-control" placeholder=(t 'form-placeholder-link-key')}}
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            {{#bs-button active=notCollapsed onClick=(action "toggleAdvancedFields")}}
+              {{#if advancedFieldsCollapsed}}
+                Campos avançados - clique para exibir
+              {{else}}
+                Campos avançados - clique para esconder
+              {{/if}}
+            {{/bs-button}}
+          </h4>
+        </div>
+        {{#bs-collapse collapsed=advancedFieldsCollapsed}}
+          <div class="panel-body">
+            <div class="form-group">
+              <label>{{t 'form-link-target'}}:</label>
+              {{input value=model.editingRecord.target class="form-control" placeholder=(t 'form-placeholder-link-href')}}
+              <p class="help-block">Esse campo controla onde a página será aberta. Exemplo: _blank</p>
+            </div>
+            <div class="form-group">
+              <label>{{t 'form-link-key'}}</label>
+              {{input value=model.editingRecord.key class="form-control" placeholder=(t 'form-placeholder-link-key')}}
+              <p class="help-block">Attributo que permite exibir ativar o link apertando um botão no teclado.</p>
+            </div>
+            <div class="form-group">
+              <label>{{t 'form-link-class'}}:</label>
+              {{input value=model.editingRecord.class class="form-control" placeholder=(t 'form-placeholder-link-class')}}
+              <p class="help-block">Attributo do link para controlar o visual: text-success</p>
+            </div>
+            <div class="form-group">
+              <label>{{t 'form-link-rel'}}:</label>
+              {{input value=model.editingRecord.rel class="form-control" placeholder=(t 'form-placeholder-link-rel')}}
+            </div>
+          </div>
+        {{/bs-collapse}}
+      </div>
     </div>
   </fieldset>
 </form>
