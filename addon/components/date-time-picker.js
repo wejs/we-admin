@@ -3,7 +3,7 @@ import EmberFlatpickr from 'ember-flatpickr/components/ember-flatpickr';
 
 export default EmberFlatpickr.extend({
   session: Ember.inject.service('session'),
-  altFormat: 'F j, Y H:i',
+  altFormat: 'j/n/Y H:i',
   enableSeconds: false,
   enableTime: true,
   allowInput: false,
