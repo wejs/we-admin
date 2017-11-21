@@ -5,11 +5,73 @@
       {{input value=model.record.text class="form-control" placeholder=(t 'form-placeholder-link-text') required="required"}}
       <p class="help-block">Texto do link, o texto que aparece para o usuário.</p>
     </div>
-    <div class="form-group">
-      <label>{{t 'form-link-href'}}*:</label>
-      {{input value=model.record.href class="form-control" placeholder=(t 'form-placeholder-link-href') required="required"}}
-      <p class="help-block">URL para onde o usuário irá apois clicar.</p>
-    </div>
+
+    {{#if model.record.id}}
+      <div class="form-group">
+        <label>{{t 'form-link-href'}}*:</label>
+        {{input value=model.record.href class="form-control" placeholder=(t 'form-placeholder-link-href') required="required"}}
+        <p class="help-block">URL para onde o usuário irá apois clicar.</p>
+      </div>
+    {{else}}
+
+      <div class="form-group">
+        <label>Tipo de link*:</label>
+          {{#power-select
+          options=model.linkTypes
+          selected=model.selectedLinkType
+          searchEnabled=false
+          placeholder='Clique e selecione uma opção'
+          onchange=(action (mut model.selectedLinkType) )
+          as |linkType|
+        }}
+          {{linkType.text}}
+        {{/power-select}}
+      </div>
+
+      {{#if (eq model.selectedLinkType.id 'toURL')}}
+        <hr>
+        <div class="form-group">
+          <label>{{t 'form-link-href'}}*:</label>
+          {{input value=model.record.href class="form-control" placeholder=(t 'form-placeholder-link-href') required="required"}}
+          <p class="help-block">URL para onde o usuário irá apois clicar.</p>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if (eq model.selectedLinkType.id 'selectPage')}}
+        <hr>
+        <div class="form-group">
+          <label>Selecionar página*:</label>
+          {{#power-select
+            searchEnabled=true
+            search=(action "searchPages")
+            selected=model.selectedPage
+            placeholder="Clique aqui para selecionar uma página"
+            onchange=(action "selectPage")
+            as |page|
+          }}
+            [id:{{page.id}}] {{page.title}}
+          {{/power-select}}
+          <p class="help-block">Use o campo acima para selecionar uma página existente.</p>
+        </div>
+        <hr>
+      {{/if}}
+
+      {{#if (eq model.selectedLinkType.id 'createPage')}}
+        <hr>
+          <div class="form-group">
+            {{!-- {{partial 'contents/form'}} --}}
+            {{we-page-form
+              showActionBar=false
+              page=model.pageRecord
+              alias=null
+            }}
+          </div>
+        <hr>
+      {{/if}}
+
+
+    {{/if}}
 
     {{#bs-accordion as |acc|}}
       {{#acc.item value="1" title="Campos avançados"}}
@@ -33,17 +95,12 @@
           {{input value=model.record.rel class="form-control" placeholder=(t 'form-placeholder-link-rel')}}
         </div>
       {{/acc.item}}
-
     {{/bs-accordion}}
-
-
     <div class="form-group">
       <button type="submit" class="btn btn-default">{{t 'Save'}}</button>
-
       {{#link-to 'menus.item' model.menuId class="btn btn-default"}}
         {{t 'Cancel'}}
       {{/link-to}}
     </div>
-
   </fieldset>
 </form>

@@ -16,6 +16,14 @@ export default Ember.Controller.extend({
     },
     onCloseLinkEditModal() {
       this.send('onCloseLinkModal');
+    },
+
+    searchPages() {
+      console.log('>>>>');
+    },
+
+    searchPage() {
+      console.log('2222222222222');
     }
   }
 });
