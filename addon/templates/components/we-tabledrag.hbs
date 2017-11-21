@@ -1,11 +1,15 @@
 <form class="{{tableDragId}}">
+
+<div class="tableDragLoading text-center">
+  <img src="/admin/loading.gif" alt="Carregando...">
+</div>
 <table id="{{tableDragId}}" class="table table-striped table-hover">
   <thead>
     <tr>
-      <th we-model-attr="name">text</th>
+      <th we-model-attr="name">Texto</th>
       <th we-model-attr="weight">weight</th>
       <th we-model-attr="parent">parent</th>
-      <th we-model-attr="actions">actions</th>
+      <th we-model-attr="actions">ações</th>
     </tr>
   </thead>
   <tbody>
@@ -24,10 +28,18 @@
         </td>
         <td>
           {{#link-to 'menus.item.edit-link' link.menu.id link.id class="btn btn-sm btn-default"}}
-            <i class="glyphicon glyphicon-pencil text-primary"></i> {{t 'Edit'}}
+            <i class="glyphicon glyphicon-pencil text-primary"></i>
+            {{#bs-tooltip placement="top"}}Editar link [id:{{link.id}}]{{/bs-tooltip}}
           {{/link-to}}
+
+          <a href="{{link.href}}" class="btn btn-default btn-sm" target="_blank">
+            <i class="glyphicon glyphicon-share-alt"></i>
+            {{#bs-tooltip placement="top"}}Abrir o endereço do link{{/bs-tooltip}}
+          </a>
+
           <button class="btn btn-sm btn-default" {{action 'deleteLink' link links}}>
-            <i class="glyphicon glyphicon-remove text-danger"></i> {{t 'Delete'}}
+            <i class="glyphicon glyphicon-remove text-danger"></i>
+            {{#bs-tooltip placement="top"}}Deletar link [id:{{link.id}}]{{/bs-tooltip}}
           </button>
         </td>
       </tr>
