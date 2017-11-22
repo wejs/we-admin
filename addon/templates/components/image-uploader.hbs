@@ -41,38 +41,42 @@
     </h4>
   {{/modal.header}}
   {{#modal.body}}
-    {{#if uploader}}
-      {{#if uploader.isUploading}}
-        {{#bs-progress as |p|}}
-          {{p.bar value=percent minValue=0 maxValue=100 roundDigits=percent showLabel=true animate=true type="success" striped=true}}
-        {{/bs-progress}}
-      {{else}}
-        <div class="row">
-          <div class="col-md-2">
-            <img src={{previewImageSrc}} class="content-image preview"/>
-          </div>
-          <div class="col-md-10">
-            {{textarea value=description class="form-control"}}
-
-          </div>
-        </div>
-      {{/if}}
+    {{#if error}}
+      <div class="alert alert-danger text-center" role="alert">{{{error}}}</div>
     {{else}}
-      {{image-upload
-        uploader=uploader
-        url=url
-        progress='progress'
-        didUpload='didUpload'
-        didError='didError'
-        selected='selected'
-      }}
+      {{#if uploader}}
+        {{#if uploader.isUploading}}
+          {{#bs-progress as |p|}}
+            {{p.bar value=percent minValue=0 maxValue=100 roundDigits=percent showLabel=true animate=true type="success" striped=true}}
+          {{/bs-progress}}
+        {{else}}
+          <div class="row">
+            <div class="col-md-2">
+              <img src={{previewImageSrc}} class="content-image preview"/>
+            </div>
+            <div class="col-md-10">
+              {{textarea value=description class="form-control" placeholder="Clique aqui e descreve a imagem"}}
+              <p class="help-block">Descrição da imagem. Essa descrição é usada como informação alternativa para leitores de tela.</p>
+            </div>
+          </div>
+        {{/if}}
+      {{else}}
+        {{image-upload
+          uploader=uploader
+          url=url
+          progress='progress'
+          didUpload='didUpload'
+          didError='didError'
+          selected='selected'
+        }}
+      {{/if}}
     {{/if}}
   {{/modal.body}}
   {{#modal.footer as |footer|}}
-    {{#bs-button onClick=(action modal.close) type="default"}}
+    {{#bs-button onClick=(action modal.close) type="default" class="cancel-image-btn"}}
       {{t 'Cancel'}}
     {{/bs-button}}
-    {{#bs-button onClick=(action modal.submit) type="primary"}}
+    {{#bs-button onClick=(action modal.submit) type="primary" disabled=notReadyToUpload class="submit-image-btn"}}
       {{t 'image.Add'}}
     {{/bs-button}}
   {{/modal.footer}}

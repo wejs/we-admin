@@ -1,8 +1,13 @@
 import Ember from 'ember';
+import layout from '../templates/components/image-uploader';
 
 let ENV;
 
 export default Ember.Component.extend({
+  layout,
+
+  notifications: Ember.inject.service('notification-messages'),
+
   init() {
     this._super(...arguments);
 
@@ -21,6 +26,9 @@ export default Ember.Component.extend({
   value: Ember.A([]),
   selectedFile: null,
   previewImageSrc: null,
+
+  notReadyToUpload: true,
+  error: null,
 
   uploadingImage: false,
   description: null,
@@ -69,6 +77,17 @@ export default Ember.Component.extend({
       reader.onload = (e)=> {
         // get local file src
         this.set('previewImageSrc', e.target.result);
+
+        let fileSizeInMB = Math.round(file.size/1024/1024);
+
+        if (fileSizeInMB >= 10) {
+
+          this.get('notifications').error('A imagem selecionada tem '+fileSizeInMB+'MB'+
+            ' e o limite de envio de imagens é 10MB. Selecione uma imagem com menos de 10MB de tamanho.');
+          this.hideUploadModal();
+        } else {
+          this.set('notReadyToUpload', false);
+        }
       };
       reader.readAsDataURL(file);
     },
@@ -85,6 +104,8 @@ export default Ember.Component.extend({
     },
     didError(uploader, jqXHR, textStatus, errorThrown) {
       console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
+
+
     },
     removeImage(image) {
       if (confirm(`Tem certeza que deseja remover essa imagem?`)) {
@@ -111,18 +132,26 @@ export default Ember.Component.extend({
     },
 
     openImageUploader() {
+      this.set('notReadyToUpload', true);
+      this.set('error', null);
       this.set('uploadingImage', true);
     },
 
     onHideUploadModal() {
-      if (this.get('uploadingImage')) {
-        this.set('uploadingImage', false);
-      }
+      this.hideUploadModal();
+    }
+  },
 
-      this.set('uploader', null);
-      this.set('selectedFile', null);
-      this.set('description', null);
+  hideUploadModal() {
+    if (this.get('uploadingImage')) {
       this.set('uploadingImage', false);
     }
+
+    this.set('notReadyToUpload', true);
+    this.set('error', null);
+    this.set('uploader', null);
+    this.set('selectedFile', null);
+    this.set('description', null);
+    this.set('uploadingImage', false);
   }
 });
