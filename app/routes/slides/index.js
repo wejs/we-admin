@@ -11,18 +11,28 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       columns: [
         {
           propertyName: 'id',
-          title: 'ID'
+          title: 'ID',
+          className: 'mt-c-id'
         },
         {
           propertyName: 'title',
           filteredBy: 'title',
-          title: 'Título'
+          title: 'Título',
+          className: 'mt-c-title text-cell'
         },
         {
           propertyName: 'createdAt',
           filteredBy: 'createdAt',
           title: i18n.t('form-content-createdAt'),
-          component: 'mt-list-item-created-at'
+          component: 'mt-list-item-created-at',
+          className: 'mt-c-createdAt'
+        },
+        {
+          propertyName: 'highlighted',
+          filteredBy: 'highlighted',
+          title: 'Ordenação',
+          component: 'mt-highlighted',
+          className: 'mt-c-highlighted'
         },
         {
           propertyName: 'actions',
