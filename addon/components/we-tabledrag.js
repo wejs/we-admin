@@ -23,6 +23,8 @@ export default Ember.Component.extend({
       return; // already rendered
     }
 
+    Ember.$.cookie('Drupal.tableDrag.showWeight', 0);
+
     const tableDragId = this.get('tableDragId');
     const table = Ember.$('#'+tableDragId);
     table.hide();
