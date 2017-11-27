@@ -4,6 +4,7 @@
 module.exports = {
   name: 'we-admin',
   included: function(app) {
-    app.import('vendor/menu-links-sortable.css');
+    this._super.included(app);
+    app.import('vendor/menu/menu-links-sortable.css');
   }
 };
