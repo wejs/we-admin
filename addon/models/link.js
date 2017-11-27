@@ -24,6 +24,7 @@ export default DS.Model.extend({
   depth: DS.attr('number'),
   weight: DS.attr('number'),
   parent: DS.attr('number'),
+  links: DS.attr('array'),
   menu: DS.belongsTo('menu', {
     inverse: 'links',
     async: true

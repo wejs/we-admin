@@ -1,0 +1,143 @@
+.menu-links-sortable-wrapper {
+  margin-top: 10px;
+}
+
+.menu-links .list-groups {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.menu-links p {
+  margin-bottom: 0px;
+}
+
+.menu-links p:first-child {
+  margin-top: 0;
+}
+
+.menu-links p:last-child {
+  margin-bottom: 0;
+}
+
+.menu-links .list-group-wrapper {
+  flex-grow: 1;
+  min-width: 600px;
+  margin-bottom: 30px;
+}
+
+.list-group {
+  display: flex;
+}
+
+.menu-links .list {
+  width: 200px;
+  margin-right: 20px;
+}
+
+.menu-links .list-group .dragSortList {
+  background-color: #eee;
+}
+
+.menu-links .dragSortItem {
+  overflow: auto;
+}
+
+.menu-links .the-item {
+  border: 1px solid black;
+  margin: 4px;
+  padding: 0.2em 0.5em;
+  background-color: #FFD0E9;
+}
+
+.menu-links .nestedItem {
+  margin: 7px 4px 4px 4px;
+  padding: 1em;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  display: block;
+}
+
+.menu-links .nestedItem-title {
+  min-width: 100px;
+}
+
+.menu-links .nestedItem .dragSortList {
+  // padding-top: 55px;
+  outline: 1px outline black;
+  // background-color: deepskyblue;
+}
+
+.menu-links .nestedItem .dragSortList.-isExpanded {
+  padding-top: 55px;
+}
+
+.menu-links .nestedItem .dragSortList.-isDragging {
+  outline: 2px dashed #000;
+  background-color: #a6b7ea;
+}
+
+.menu-links .nestedItem .dragSortList.-isExpanded.-isDraggingOver:before {
+  top: 15px;
+}
+
+.menu-links .nestedItem {
+  background-color : #FFF;
+}
+.menu-links .nestedItem .nestedItem {
+  background-color: #EEE;
+}
+
+.menu-links .nestedItem .nestedItem .nestedItem {
+  background-color: #DDD;
+}
+.menu-links .nestedItem .nestedItem .nestedItem .nestedItem {
+  background-color: #CCC;
+}
+.menu-links .nestedItem .nestedItem .nestedItem .nestedItem .nestedItem {
+  background-color: #FF60B4;
+}
+.menu-links .nestedItem .nestedItem .nestedItem .nestedItem .nestedItem .nestedItem {
+  background-color: #FF50AD;
+}
+
+.menu-links .dragSortList:not(.-draggingEnabled) {
+  opacity: 0.66;
+}
+
+/* Table styles */
+.menu-links table {
+  width: 100%;
+}
+
+.menu-links table.dragSortList.-isExpanded {
+  padding: 15px;
+  background-color: #f6f6f6;
+}
+
+.menu-links table.dragSortList.-isExpanded.-isDraggingOver {
+  background-color: #eee;
+}
+
+.menu-links table.dragSortList.-isExpanded.-isDraggingOver:before {
+  content: none;
+}
+
+.menu-links tr.dragSortItem.-placeholderAbove:before,
+.menu-links tr.dragSortItem.-placeholderBelow:before {
+  content: none;
+}
+
+.menu-links table .the-item {
+  margin: 0;
+}
+
+.menu-links .dragSortItem[draggable],
+.menu-links .dragSortItem [draggable] {
+  cursor: move;
+  cursor: hand;
+  cursor: -webkit-grab;
+  cursor: grab;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}

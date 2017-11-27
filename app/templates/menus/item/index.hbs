@@ -27,13 +27,33 @@
         {{/if}}
       </div>
 
-      <div>
-        {{#if model.record.sortedLinks}}
-          {{we-tabledrag
-            links=model.record.sortedLinks
-            menuId=model.menuId
-            onTabledragDropRow="onTabledragDropRow"
+      <div class="menu-links-sortable-wrapper">
+        {{#if model.links}}
+          <p class="help-block">Clique e arraste cada link abaixo para ordenar os links do menu.
+          <br>A ordem só será salva após clicar no botão "Salvar ordem"
+          </p>
+
+          {{menu-links-sortable
+            item          = model.links
+            group         = 'menu-links'
+            dragEndAction = (action 'dragEnd')
           }}
+        {{/if}}
+      </div>
+      <br>
+      <div class="menu-links-actions">
+        {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
+          <i class="glyphicon glyphicon-plus"></i> Adicionar link
+        {{/link-to}}
+
+        {{#if model.record.sorted}}
+          <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
+            {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
+          </button>
+        {{else}}
+           <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
+            {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
+           </button>
         {{/if}}
       </div>
     </div>

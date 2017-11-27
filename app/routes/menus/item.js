@@ -10,6 +10,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       menuData: this.getLinks(params.id),
       record: null,
       sorted: false,
+      links: [],
       editingRecord: null,
       tableDrag: null
     });
@@ -35,9 +36,20 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     this.get('store').push({ data: linksFormated });
 
-    model.record = this.get('store').findRecord('menu', model.menuId);
+    const p = new window.Promise((resolve, reject)=> {
+      this.get('store')
+      .findRecord('menu', model.menuId)
+      .then( (r)=> {
+        model.links = r.get('sortedLinks');
+        model.record = r;
 
-    return model.record;
+        resolve();
+        return null;
+      })
+      .catch(reject);
+    });
+
+    return p;
   },
 
   getLinks(menuId) {
@@ -79,24 +91,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     reorderItems(itemModels, draggedModel) {
       this.reorderItems(itemModels, draggedModel);
     },
+
     saveLinksOrder() {
       const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
 
+      //&link-1-id=1&link-1-depth=&link-1-weight=1&link-1-parent=&link-4-id=4&link-4-depth=1&link-4-weight=6&link-4-parent=1&link-3-id=3&link-3-depth=1&link-3-weight=7&link-3-parent=1&link-5-id=5&link-5-depth=1&link-5-weight=8&link-5-parent=1&link-7-id=7&link-7-depth=1&link-7-weight=9&link-7-parent=1&link-2-id=2&link-2-depth=1&link-2-weight=10&link-2-parent=1
+
       const menuId = this.get('currentModel.record.id'),
-        data = {};
-
-      const tableDrag = this.get('currentModel.tableDrag');
-      if (!tableDrag) {
-        return null;
-      }
-
-      const form = Ember.$(tableDrag.table).parent();
-      const fields = form.serializeArray();
-
-      for (let i = 0; i < fields.length; i++) {
-        let field = fields[i];
-        data[field.name] = field.value;
-      }
+        data = this.getLinksInFormDataFormat();
 
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
@@ -120,11 +122,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     },
 
-    onTabledragDropRow(ctx) {
-      this.set('currentModel.tableDrag', ctx.tableDrag);
-      this.set('currentModel.record.sorted', true);
-    },
-
     deleteLink(link, links) {
       if (this.linkHaveChildrens(link, links)) {
         alert('Não é possível remover o link.\nRemova os sublinks antes de remover esse link.');
@@ -146,6 +143,36 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     }
   },
 
+  getLinksInFormDataFormat() {
+    const links = this.get('currentModel.links.links');
+    const data = {};
+
+    // &link-1-id=1&link-1-depth=&link-1-weight=1&link-1-parent=&link-4-id
+
+    this.convertLinksAttrsTo(links, data);
+
+    return data;
+  },
+
+  convertLinksAttrsTo(links, data) {
+    for (let i = 0; i < links.get('length'); i++) {
+      this.convertLinkAttrsTo(links[i], data);
+    }
+  },
+
+  convertLinkAttrsTo(link, data) {
+    const prefix = 'link-'+String(link.id);
+    data[prefix+'-id'] = link.id;
+    data[prefix+'-depth'] = link.get('depth');
+    data[prefix+'-weight'] = link.get('weight');
+    data[prefix+'-parent'] = link.get('parent');
+
+    const subLinks = link.get('links');
+    if (subLinks && Ember.get(subLinks, 'length')) {
+      // this menu link have sublinks:
+      this.convertLinksAttrsTo(subLinks, data);
+    }
+  },
 
   linkHaveChildrens(link, links) {
     for (let i = 0; i < links.get('length'); i++) {

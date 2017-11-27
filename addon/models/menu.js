@@ -14,6 +14,43 @@ export default DS.Model.extend({
 
     links = links.sortBy('parent', 'weight', 'depth');
 
+    const tree = {
+      isMenu: true,
+      text: 'Menu: '+this.get('name'),
+      links: Ember.A()
+    };
+
+    // get root links:
+    links.forEach( (item)=> {
+
+      if (!item.get('links')) {
+        item.set('links', Ember.A());
+      }
+
+      const parent = item.get('parent');
+      if ( parent ) {
+        // submenu item:
+        const parentRecord = links.findBy('id', String(parent));
+        if (parentRecord) {
+          let links = parentRecord.get('links');
+          if (!links) {
+            parentRecord.links = Ember.A();
+            links = parentRecord.links;
+          }
+
+          links.push(item);
+        } else {
+          console.log('Parent record not found:', item.id, parent);
+        }
+      } else {
+        // root item:
+        tree.links.push(item);
+        if (!item.get('depth')) {
+          item.set('depth', 0);
+        }
+      }
+    });
+
     // window.links = links;
     // return;
 
@@ -41,62 +78,62 @@ export default DS.Model.extend({
     // });
 
 
-    let r = Ember.A([]);
+    // let r = Ember.A([]);
 
-    for (let i = 0; i < links.get('length'); i++) {
-      let link = links.objectAt(i);
+    // for (let i = 0; i < links.get('length'); i++) {
+    //   let link = links.objectAt(i);
 
-      if (!link.get('depth')) {
-        // is root
-        r.push(link);
-      } else {
-        let parent;
-        let length = r.get('length');
+    //   if (!link.get('depth')) {
+    //     // is root
+    //     r.push(link);
+    //   } else {
+    //     let parent;
+    //     let length = r.get('length');
 
-        if (length === 0) {
-          // first item...
-          r.push(link);
-          continue;
-        }
+    //     if (length === 0) {
+    //       // first item...
+    //       r.push(link);
+    //       continue;
+    //     }
 
-        for (let j = 0; j < length; j++) {
-          let sLink = r.objectAt(j);
-          // same link, skip ...
-          if (r.get('id') === link.get('id')) {
-            continue;
-          }
+    //     for (let j = 0; j < length; j++) {
+    //       let sLink = r.objectAt(j);
+    //       // same link, skip ...
+    //       if (r.get('id') === link.get('id')) {
+    //         continue;
+    //       }
 
-          if (parent) {
+    //       if (parent) {
 
-            if (
-              Number(sLink.get('parent')) === Number(link.get('parent'))
-            ) {
-              if (sLink.get('weight') > link.get('weight')) {
-                r.splice(j+1, 0, link);
-                break;
-              }
-            } else {
-              r.splice(j, 0, link);
-              break;
-            }
-          }
+    //         if (
+    //           Number(sLink.get('parent')) === Number(link.get('parent'))
+    //         ) {
+    //           if (sLink.get('weight') > link.get('weight')) {
+    //             r.splice(j+1, 0, link);
+    //             break;
+    //           }
+    //         } else {
+    //           r.splice(j, 0, link);
+    //           break;
+    //         }
+    //       }
 
-          if (
-            !parent &&
-            Number(sLink.get('id')) === Number(link.get('parent'))
-          ) {
-            parent = true;
-          }
-          // last run:
-          if ((j+1) >= length) {
-            r.splice(j+1, 0, link);
-          }
-        }
-      }
-    }
+    //       if (
+    //         !parent &&
+    //         Number(sLink.get('id')) === Number(link.get('parent'))
+    //       ) {
+    //         parent = true;
+    //       }
+    //       // last run:
+    //       if ((j+1) >= length) {
+    //         r.splice(j+1, 0, link);
+    //       }
+    //     }
+    //   }
+    // }
 
     // return sortedLinks;
-    return r;
+    return tree;
   }),
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date')
