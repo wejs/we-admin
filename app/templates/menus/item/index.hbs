@@ -31,6 +31,24 @@
   </div>
 
   <div class="col-md-3">
+    {{#bs-accordion as |acc|}}
+      {{#acc.item value="1" title="First item"}}
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
+      {{/acc.item}}
+      {{#acc.item value="2" as |aitem|}}
+        {{#aitem.title}}
+          <strong>Second</strong> <i>item</i>
+        {{/aitem.title}}
+        {{#aitem.body}}
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
+        {{/aitem.body}}
+      {{/acc.item}}
+      {{#acc.item value="3" title="Third item"}}
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
+      {{/acc.item}}
+    {{/bs-accordion}}
+
+
     <div class="panel panel-default menu-links-painel">
       <div class="panel-heading">
       </div>
@@ -51,24 +69,8 @@
             <label> Nome do menu:</label>
             {{input value=model.record.label class="form-control" required="required"}}
           </div>
-          <span class="menu-links-actions pull-right">
-            {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
-              <i class="glyphicon glyphicon-plus"></i> Adicionar link
-            {{/link-to}}
-
-            {{#if model.record.sorted}}
-              <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
-                {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
-              </button>
-            {{else}}
-               <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
-                {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
-               </button>
-            {{/if}}
-          </span>
+          {{partial 'menus/partials/menu-form-actions'}}
         </form>
-
-
       </div>
       <div class="panel-body">
 
@@ -88,28 +90,39 @@
           <hr>
           <div class="menu-settings">
             <h4>Configurações do menu</h4>
-            TODO!
+              <form class="form-horizontal">
+                <div class="form-group">
+                  <label for="inputEmail3" class="col-sm-4">Localização de exibição:</label>
+                  <div class="col-sm-8">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="isMainMenu" checked={{model.isMainMenu}} {{action "menuUpdated" "isMainMenu" on="change"}} /> Menu principal
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="isSecondaryMenu" checked={{model.isSecondaryMenu}} {{action "menuUpdated" "isSecondaryMenu" on="change"}} /> Menu lateral / secundário
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="isFooterMenu" checked={{model.isFooterMenu}} {{action "menuUpdated" "isFooterMenu" on="change"}} /> Menu do rodapé
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="isSocialMenu" checked={{model.isSocialMenu}} {{action "menuUpdated" "isSocialMenu" on="change"}} /> Menu das redes sociais
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
           </div>
         </div>
       </div>
       <div class="panel-footer">
         <button class="btn btn-link" type="button"><span class="text-danger">Deletar menu</span></button>
-
-        <span class="menu-links-actions pull-right">
-          {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
-            <i class="glyphicon glyphicon-plus"></i> Adicionar link
-          {{/link-to}}
-
-          {{#if model.record.sorted}}
-            <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
-              {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
-            </button>
-          {{else}}
-             <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
-              {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
-             </button>
-          {{/if}}
-        </span>
+        {{partial 'menus/partials/menu-form-actions'}}
       </div>
     </div>
   </div>

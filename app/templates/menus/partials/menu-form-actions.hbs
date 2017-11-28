@@ -1,0 +1,15 @@
+<span class="menu-links-actions pull-right">
+  {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
+    <i class="glyphicon glyphicon-plus"></i> Adicionar link
+  {{/link-to}}
+
+  {{#if model.record.updated}}
+    <button {{action 'saveAll' model.record model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar
+      {{#bs-tooltip placement="top"}}Clique para salvar as configurações e ordenação dos links do menu{{/bs-tooltip}}
+    </button>
+  {{else}}
+     <button type="button" class="btn btn-sm btn-default" disabled="disabled">Salvo
+      {{#bs-tooltip placement="top"}}As configurações e ordenação estão salva{{/bs-tooltip}}
+     </button>
+  {{/if}}
+</span>

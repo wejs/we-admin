@@ -1,20 +1,30 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
+const get = Ember.get;
+const set = Ember.set;
+
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   session: Ember.inject.service('session'),
 
   model(params) {
+    const systemSettings = this.get('settings').get('systemSettings');
+
     return Ember.RSVP.hash({
       menuId: params.id,
       menuData: this.getLinks(params.id),
       record: null,
-      sorted: false,
+      updated: false,
       links: [],
       menus: this.get('store').query('menu', {}),
       editingRecord: null,
       menuSelected: null,
-      tableDrag: null
+      tableDrag: null,
+      // menu location flags:
+      isMainMenu: (String(get(systemSettings, 'menuMainId')) === String(params.id) ),
+      isSecondaryMenu: (String(get(systemSettings, 'menuSecondaryId')) === String(params.id) ),
+      isFooterMenu: (String(get(systemSettings, 'menuFooterId')) === String(params.id) ),
+      isSocialMenu: (String(get(systemSettings, 'menuSocialId')) === String(params.id) )
     });
   },
 
@@ -65,13 +75,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       links: Ember.A()
     };
 
+    links.forEach( (item)=> {
+      // reset sublinks:
+      item.set('links', Ember.A());
+    });
+
     // get root links:
     links.forEach( (item)=> {
-
-      if (!item.get('links')) {
-        item.set('links', Ember.A());
-      }
-
       const parent = item.get('parent');
       if ( parent ) {
         // submenu item:
@@ -131,12 +141,28 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       item.set('weight', i);
     });
     this.set('currentModel.justDragged', draggedModel);
-    this.set('currentModel.record.sorted', true);
+    this.set('currentModel.record.updated', true);
   },
+
+
+  // onMenuUpdate: Ember.observer('currentModel.isMainMenu', 'currentModel.isSecondaryMenu', 'currentModel.isFooterMenu', 'currentModel.isSocialMenu', function() {
+
+  //   this.get('currentModel.')
+  //   if (: (String(get(systemSettings, 'menuMainId')) === String(params.id) ),)
+  // })
 
   actions: {
     reorderItems(itemModels, draggedModel) {
       this.reorderItems(itemModels, draggedModel);
+    },
+
+    menuUpdated(flag) {
+      if (flag) {
+        const v = get(this, 'currentModel.'+flag);
+        set(this, 'currentModel.'+flag, !(v));
+      }
+
+      set(this, 'currentModel.record.updated', true);
     },
 
     /**
@@ -165,35 +191,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         depth: 0
       }, null);
 
-      Ember.set(this, 'currentModel.record.sorted', true);
+      Ember.set(this, 'currentModel.record.updated', true);
     },
 
     saveLinksOrder() {
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
-      const menuId = this.get('currentModel.record.id'),
-        data = this.getLinksInFormDataFormat();
-
-      let headers = { Accept: 'application/vnd.api+json' },
-          accessToken = this.get('session.session.authenticated.access_token');
-
-      if (accessToken) {
-        headers.Authorization = `Basic ${accessToken}`;
-      }
-
-      Ember.$.ajax({
-        url: `${ENV.API_HOST}/admin/menu/${menuId}/sort-links`,
-        type: 'POST',
-        headers: headers,
-        data: data
-      })
-      .done( ()=> {
-        this.get('notifications').success('Ordem salva');
-      })
-      .fail( ()=> {
-        this.get('notifications').error('Erro ao salvar a ordem dos links');
-      });
-
+      this.saveLinksOrder(...arguments);
     },
 
     deleteLink(link, links) {
@@ -214,7 +216,139 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           return null;
         });
       }
+    },
+
+    saveAll() {
+      const model = this.get('currentModel');
+
+      model.record
+      .save() // save menu data:
+      .then( (r)=> {
+        // save menu sort
+        if (get(model, 'record.updated')) {
+          // save sort order
+          return this.saveLinksOrder()
+          .then(()=> {
+            set(model, 'record.updated', false);
+            return r;
+          });
+        }
+
+        return r;
+      })
+      .then((r)=> {
+        // save menu postion in template:
+        const s = this.get('settings');
+        const systemSettings = this.get('settings').get('systemSettings');
+
+        let settingsToUpdate = {};
+
+        if (model.isMainMenu) {
+          if (systemSettings.menuMainId !== model.menuId) {
+            settingsToUpdate.menuMainId = model.menuId;
+          }
+        } else {
+          if (systemSettings.menuMainId === model.menuId) {
+            settingsToUpdate.menuMainId = null;
+          }
+        }
+
+        if (model.isSecondaryMenu) {
+          if (systemSettings.menuSecondaryId !== model.menuId) {
+            settingsToUpdate.menuSecondaryId = model.menuId;
+          }
+        } else {
+          if (systemSettings.menuSecondaryId === model.menuId) {
+            settingsToUpdate.menuSecondaryId = null;
+          }
+        }
+
+        if (model.isFooterMenu) {
+          if (systemSettings.menuFooterId !== model.menuId) {
+            settingsToUpdate.menuFooterId = model.menuId;
+          }
+        } else {
+          if (systemSettings.menuFooterId === model.menuId) {
+            settingsToUpdate.menuFooterId = null;
+          }
+        }
+
+        if (model.isSocialMenu) {
+          if (systemSettings.menuSocialId !== model.menuId) {
+            settingsToUpdate.menuSocialId = model.menuId;
+          }
+        } else {
+          if (systemSettings.menuSocialId === model.menuId) {
+            settingsToUpdate.menuSocialId = null;
+          }
+        }
+
+        console.log('>>', settingsToUpdate);
+        console.log('<<', model);
+
+        if (!Object.keys(settingsToUpdate).length) {
+          // nothing to update:
+          return r;
+        }
+
+        return new window.Promise( (resolve, reject)=> {
+          s.setSystemSettings(settingsToUpdate)
+          .then( (result) => {
+            Ember.set(s, 'systemSettings', result.settings);
+            this.get('notifications').success('Configurações do menu salvas');
+            resolve(r);
+          })
+          .fail( (err)=> {
+            this.send('queryError', err);
+            reject(err);
+          });
+        });
+
+      })
+      .then(()=> {
+        // done All
+
+        return null;
+      })
+      .catch( (err)=> {
+        this.send('queryError', err);
+        this.get('notifications').error('Erro ao salvar o menu, tente novamente mais tarde ou entre em contato com um administrador');
+        return null;
+      });
     }
+  },
+
+  saveLinksOrder() {
+    return new window.Promise((resolve, reject)=> {
+      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+      const menuId = this.get('currentModel.record.id'),
+        data = this.getLinksInFormDataFormat();
+
+      let headers = { Accept: 'application/vnd.api+json' },
+          accessToken = this.get('session.session.authenticated.access_token');
+
+      if (accessToken) {
+        headers.Authorization = `Basic ${accessToken}`;
+      }
+
+      Ember.$.ajax({
+        url: `${ENV.API_HOST}/admin/menu/${menuId}/sort-links`,
+        type: 'POST',
+        headers: headers,
+        data: data
+      })
+      .done( (result)=> {
+        this.get('notifications').success('Ordem salva');
+        resolve(result);
+        return null;
+      })
+      .fail( (err)=> {
+        this.get('notifications').error('Erro ao salvar a ordem dos links');
+        reject(err);
+        return null;
+      });
+    });
   },
 
   getLinksInFormDataFormat() {
