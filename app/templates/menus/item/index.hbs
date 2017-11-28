@@ -1,62 +1,116 @@
 <div class="row">
   <div class="col-md-12">
-    <h1 class="page-header">{{t 'menu.edit' name=model.record.name}}</h1>
+    <h1 class="page-header">{{t 'menu.edit' name=model.record.label}}</h1>
   </div>
-  <div class="col-md-12">
-    <div>Nome do menu: '{{model.record.name}}'</div>
-    {{#if model.record.class}}
-      <div>Classes: "{{model.record.class}}"</div>
-    {{/if}}
-  </div>
-  <div class="col-md-12">
-    <div class="menu-links">
-      <h4>Links</h4>
-      <div class="menu-links-actions">
-        {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
-          <i class="glyphicon glyphicon-plus"></i> Adicionar link
-        {{/link-to}}
 
-        {{#if model.record.sorted}}
-          <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
-            {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
-          </button>
-        {{else}}
-           <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
-            {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
-           </button>
-        {{/if}}
-      </div>
-
-      <div class="menu-links-sortable-wrapper">
-        {{#if model.links}}
-          <p class="help-block">Clique e arraste cada link abaixo para ordenar os links do menu.
-          <br>A ordem só será salva após clicar no botão "Salvar ordem"
-          </p>
-
-          {{menu-links-sortable
-            item          = model.links
-            group         = 'menu-links'
-            dragEndAction = (action 'dragEnd')
+  <div class="col-md-12 menu-editinig-selector">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        Selecione um menu para editar {{#power-select
+            options=model.menus
+            selected=model.menuSelected
+            searchEnabled=false
+            allowClear=false
+            onchange=(action (mut model.menuSelected) )
+            as |menu|
           }}
-        {{/if}}
-      </div>
-      <br>
-      <div class="menu-links-actions">
-        {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
-          <i class="glyphicon glyphicon-plus"></i> Adicionar link
-        {{/link-to}}
+            {{menu.label}}
+          {{/power-select}}
 
-        {{#if model.record.sorted}}
-          <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
-            {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
-          </button>
-        {{else}}
-           <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
-            {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
-           </button>
-        {{/if}}
+          {{#if model.menuSelected.id}}
+            {{#link-to 'menus.item' model.menuSelected.id class="btn btn-sm btn-default"}}
+              Selecionar
+            {{/link-to}}
+          {{/if}}
+          ou
+          {{#link-to 'menus.create'}}
+            crie um menu.
+          {{/link-to}}
       </div>
     </div>
+  </div>
 
+  <div class="col-md-3">
+    <div class="panel panel-default menu-links-painel">
+      <div class="panel-heading">
+      </div>
+      <div class="panel-body">
+
+      </div>
+      <div class="panel-footer">
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="panel panel-default menu-links-painel">
+      <div class="panel-heading">
+
+        <form class="form-inline">
+          <div class="form-group">
+            <label> Nome do menu:</label>
+            {{input value=model.record.label class="form-control" required="required"}}
+          </div>
+          <span class="menu-links-actions pull-right">
+            {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
+              <i class="glyphicon glyphicon-plus"></i> Adicionar link
+            {{/link-to}}
+
+            {{#if model.record.sorted}}
+              <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
+                {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
+              </button>
+            {{else}}
+               <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
+                {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
+               </button>
+            {{/if}}
+          </span>
+        </form>
+
+
+      </div>
+      <div class="panel-body">
+
+        <div class="menu-links">
+          <h4>Estrutura do menu / links:</h4>
+
+          <div class="menu-links-sortable-wrapper">
+            {{#if model.links}}
+              <p class="help-block">Clique e arraste cada link abaixo para ordenar os links do menu.
+              <br>A ordem só será salva após clicar no botão "Salvar ordem"
+              </p>
+
+              {{menu-links-sort-list links=model.links.links onSortEnd="onSortEnd"}}
+            {{/if}}
+          </div>
+
+          <hr>
+          <div class="menu-settings">
+            <h4>Configurações do menu</h4>
+            TODO!
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <button class="btn btn-link" type="button"><span class="text-danger">Deletar menu</span></button>
+
+        <span class="menu-links-actions pull-right">
+          {{#link-to 'menus.item.add-link' model.record.id class="btn btn-sm btn-default"}}
+            <i class="glyphicon glyphicon-plus"></i> Adicionar link
+          {{/link-to}}
+
+          {{#if model.record.sorted}}
+            <button {{action 'saveLinksOrder' model.record.sortedLinks}} type="button" class="btn btn-sm btn-primary">Salvar ordem
+              {{#bs-tooltip placement="top"}}Clique para salvar a ordenação dos links do menu{{/bs-tooltip}}
+            </button>
+          {{else}}
+             <button type="button" class="btn btn-sm btn-primary" disabled="disabled">Salvar ordem
+              {{#bs-tooltip placement="top"}}A lista de links está salva{{/bs-tooltip}}
+             </button>
+          {{/if}}
+        </span>
+      </div>
+    </div>
   </div>
 </div>

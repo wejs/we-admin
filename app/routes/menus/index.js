@@ -32,5 +32,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
       ]
     });
+  },
+
+  afterModel(model) {
+    const menus = Ember.get(model, 'records');
+    if (Ember.get(menus, 'length')) {
+      this.transitionTo('/menus/'+ menus.get('firstObject.id'));
+    } else {
+      this.transitionTo('/menus/create');
+    }
   }
 });

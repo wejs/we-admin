@@ -11,12 +11,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       record: null,
       sorted: false,
       links: [],
+      menus: this.get('store').query('menu', {}),
       editingRecord: null,
+      menuSelected: null,
       tableDrag: null
     });
   },
 
   afterModel(model) {
+
     let linksFormated = model.menuData.link.map((link)=> {
       return {
         id: link.id,
@@ -40,8 +43,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       this.get('store')
       .findRecord('menu', model.menuId)
       .then( (r)=> {
-        model.links = r.get('sortedLinks');
+        model.links = this.sortModelLinks(r.get('links'), r.get('name'));
         model.record = r;
+        model.menuSelected = r;
 
         resolve();
         return null;
@@ -50,6 +54,49 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
 
     return p;
+  },
+
+  sortModelLinks(links, name) {
+    links = links.sortBy('parent', 'weight', 'depth');
+
+    const tree = {
+      isMenu: true,
+      text: 'Menu: '+name,
+      links: Ember.A()
+    };
+
+    // get root links:
+    links.forEach( (item)=> {
+
+      if (!item.get('links')) {
+        item.set('links', Ember.A());
+      }
+
+      const parent = item.get('parent');
+      if ( parent ) {
+        // submenu item:
+        const parentRecord = links.findBy('id', String(parent));
+        if (parentRecord) {
+          let links = parentRecord.get('links');
+          if (!links) {
+            parentRecord.links = Ember.A();
+            links = parentRecord.links;
+          }
+
+          links.push(item);
+        } else {
+          console.log('Parent record not found:', item.id, parent);
+        }
+      } else {
+        // root item:
+        tree.links.push(item);
+        if (!item.get('depth')) {
+          item.set('depth', 0);
+        }
+      }
+    });
+
+    return tree;
   },
 
   getLinks(menuId) {
@@ -92,10 +139,37 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       this.reorderItems(itemModels, draggedModel);
     },
 
+    /**
+     * On sort menu links list
+     *
+     * @param  {Object} options.event
+     * @param  {Object} options.toComponent
+     * @param  {Object} options.fromComponent
+     * @param  {Object} options.itemComponent
+     */
+    onSortEnd({ event, toComponent, fromComponent}) {
+      if (
+        fromComponent.links === toComponent.links &&
+        event.oldIndex === event.newIndex
+      ) {
+        return;
+      }
+
+      const item = fromComponent.links.objectAt(event.oldIndex);
+
+      fromComponent.links.removeAt(event.oldIndex);
+      toComponent.links.insertAt(event.newIndex, item);
+
+      this.resetLinksWeight(this.get('currentModel.links.links'), {
+        cw: 0,
+        depth: 0
+      }, null);
+
+      Ember.set(this, 'currentModel.record.sorted', true);
+    },
+
     saveLinksOrder() {
       const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
-      //&link-1-id=1&link-1-depth=&link-1-weight=1&link-1-parent=&link-4-id=4&link-4-depth=1&link-4-weight=6&link-4-parent=1&link-3-id=3&link-3-depth=1&link-3-weight=7&link-3-parent=1&link-5-id=5&link-5-depth=1&link-5-weight=8&link-5-parent=1&link-7-id=7&link-7-depth=1&link-7-weight=9&link-7-parent=1&link-2-id=2&link-2-depth=1&link-2-weight=10&link-2-parent=1
 
       const menuId = this.get('currentModel.record.id'),
         data = this.getLinksInFormDataFormat();
@@ -147,8 +221,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     const links = this.get('currentModel.links.links');
     const data = {};
 
-    // &link-1-id=1&link-1-depth=&link-1-weight=1&link-1-parent=&link-4-id
-
     this.convertLinksAttrsTo(links, data);
 
     return data;
@@ -189,6 +261,30 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     }
 
     return false;
+  },
+
+  resetLinksWeight(links, ctx, parent) {
+    for (let i = 0; i < links.get('length'); i++) {
+      if (!parent) {
+        // reset depth for each root item
+        ctx.depth = 0;
+      }
+      this.resetLinkWeight(links[i], ctx, parent);
+    }
+  },
+
+  resetLinkWeight(link, ctx, parent) {
+    ctx.cw++;
+    link.set('weight', ctx.cw);
+    link.set('parent', parent);
+    link.set('depth', ctx.depth);
+
+    const subLinks = link.get('links');
+    if (subLinks && Ember.get(subLinks, 'length')) {
+      ctx.depth++;
+      // this menu link have sublinks:
+      this.resetLinksWeight(subLinks, ctx, link.id);
+    }
   }
 });
 

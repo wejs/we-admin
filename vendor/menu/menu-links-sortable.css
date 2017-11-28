@@ -1,3 +1,53 @@
+.sortable-ghost {
+  outline: 2px dashed #000;
+  opacity: 0.5;
+  filter: alpha(opacity=50); /* For IE8 and earlier */
+  margin-bottom: 4px;
+  min-height: 20px;
+}
+.sortable-ghost:before {
+  content: '->'
+}
+
+.sortable-ghost > div {
+  display: none;
+}
+
+.m-list-group .m-list-group {
+  width: 100%;
+  min-height: 20px;
+  background-color: #fff;
+  padding: 7px 0px 7px 35px;
+}
+
+.m-list-group-item-label {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px 8px;
+  border-radius: 5px;
+
+  cursor: move;
+  cursor: hand;
+  cursor: -webkit-grab;
+  cursor: grab;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.m-list-group-item {
+
+}
+
+// .list-group:before {
+//   content: "->";
+// }
+
+.m-list-group .m-list-group .m-list-group .m-list-subitems {
+  display: none;
+}
+
+
+/*
 .menu-links-sortable-wrapper {
   margin-top: 10px;
 }
@@ -27,7 +77,7 @@
 }
 
 .list-group {
-  display: flex;
+
 }
 
 .menu-links .list {
@@ -105,7 +155,6 @@
   opacity: 0.66;
 }
 
-/* Table styles */
 .menu-links table {
   width: 100%;
 }
@@ -141,3 +190,4 @@
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
+*/

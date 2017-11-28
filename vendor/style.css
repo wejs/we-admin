@@ -1,0 +1,5 @@
+.menu-editinig-selector .ember-power-select-trigger{
+  display: inline-block;
+  min-width: 100px;
+  margin-bottom: -10px;
+}

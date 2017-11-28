@@ -6,5 +6,6 @@ module.exports = {
   included: function(app) {
     this._super.included(app);
     app.import('vendor/menu/menu-links-sortable.css');
+    app.import('vendor/Sortable.js');
   }
 };

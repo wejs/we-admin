@@ -1,0 +1,22 @@
+<div class="m-list-group-item-label"><i class="fa fa-arrows" aria-hidden="true"></i> [id:{{link.id}}] {{link.text}} | parent:{{link.parent}} | weight:{{link.weight}} | depth:{{link.depth}}
+  <span class="actions">
+    {{#link-to 'menus.item.edit-link' item.menu.id item.id class="btn btn-sm btn-default"}}
+      <i class="glyphicon glyphicon-pencil text-primary"></i>
+      {{#bs-tooltip placement="top"}}Editar link [id:{{item.id}}]{{/bs-tooltip}}
+    {{/link-to}}
+
+    <a href="{{item.href}}" class="btn btn-default btn-sm" target="_blank">
+      <i class="glyphicon glyphicon-share-alt"></i>
+      {{#bs-tooltip placement="top"}}Abrir o endereço do link{{/bs-tooltip}}
+    </a>
+
+    <button class="btn btn-sm btn-default" {{action 'deleteLink' item}}>
+      <i class="glyphicon glyphicon-remove text-danger"></i>
+      {{#bs-tooltip placement="top"}}Deletar link [id:{{item.id}}]{{/bs-tooltip}}
+    </button>
+  </span>
+
+</div>
+<div class="m-list-subitems">
+  {{menu-links-sort-list links=link.links group=group parentDepth=parentDepth onSortEnd="onSortEnd"}}
+</div>
