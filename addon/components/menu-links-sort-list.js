@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   group: 'default',
 
   onSortEnd: 'onSortEnd',
+  deleteLink: 'deleteLink',
 
   parentDepth: null,
   depth: 0,
@@ -57,6 +58,9 @@ export default Ember.Component.extend({
   actions: {
     onSortEnd() {
       this.sendAction('onSortEnd', ...arguments);
+    },
+    deleteLink() {
+      this.sendAction('deleteLink', ...arguments);
     }
   }
 });

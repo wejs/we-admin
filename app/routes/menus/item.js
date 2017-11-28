@@ -198,8 +198,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       this.saveLinksOrder(...arguments);
     },
 
-    deleteLink(link, links) {
-      if (this.linkHaveChildrens(link, links)) {
+    deleteLink(link) {
+      const links = this.get('currentModel.links.links');
+
+      if (this.linkHaveChildrens(link)) {
         alert('Não é possível remover o link.\nRemova os sublinks antes de remover esse link.');
         return false;
       }
@@ -208,9 +210,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
         link.destroyRecord()
         .then( ()=> {
-          // remove from view:
-          Ember.$('#tabledrad-item-'+link.id).remove();
-          links.removeObject(link);
+          if (link.get('parent')) {
+            let parent = this.get('store').peekRecord('link', link.get('parent'));
+            const parentLinks = parent.get('links');
+            parentLinks.removeObject(link);
+          } else {
+            links.removeObject(link);
+          }
 
           this.get('notifications').success(`O link "${link.get('text')}" foi deletado.`);
           return null;
@@ -380,7 +386,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     }
   },
 
-  linkHaveChildrens(link, links) {
+  linkHaveChildrens(link) {
+    let links = this.get('store').peekAll('link');
+
     for (let i = 0; i < links.get('length'); i++) {
       let listItem = links.objectAt(i);
       let parent = listItem.get('parent');
@@ -391,7 +399,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       ) {
         return true;
       }
-
     }
 
     return false;

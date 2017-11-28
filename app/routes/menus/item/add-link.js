@@ -78,8 +78,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       this.get('notifications').success('Link salvo');
       // move scroll to top:
       document.body.scrollTop = document.documentElement.scrollTop = 0;
+      const menuItemModel = this.modelFor('menus.item');
 
-      this.transitionTo('menus.item', menu.id);
+      menuItemModel.links.links.unshift(link);
+
+      this.transitionTo('/menus/'+menu.id);
+
       return r;
     });
   },
