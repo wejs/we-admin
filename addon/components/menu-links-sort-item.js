@@ -8,6 +8,7 @@ export default Ember.Component.extend({
   deleteLink: 'deleteLink',
 
   link: null,
+  hideForm: true,
   group: null,
   parentDepth: 0,
   classNames: ['m-list-group-item'],
@@ -18,6 +19,10 @@ export default Ember.Component.extend({
     },
     deleteLink() {
       this.sendAction('deleteLink', ...arguments);
+    },
+
+    openEditForm(v) {
+      this.set('hideForm', v);
     }
   }
 });

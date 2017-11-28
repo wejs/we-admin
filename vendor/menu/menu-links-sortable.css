@@ -47,6 +47,10 @@
 }
 
 
+.m-list-group-item-label .actions {
+  margin-left: 20px;
+}
+
 /*
 .menu-links-sortable-wrapper {
   margin-top: 10px;
