@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-12">
-    <h1 class="page-header">{{t 'menu.edit' name=model.record.label}}</h1>
+    <h1 class="page-header">{{t 'menu.edit' name=model.record.name}}</h1>
   </div>
 
   <div class="col-md-12 menu-editinig-selector">
@@ -14,7 +14,7 @@
             onchange=(action (mut model.menuSelected) )
             as |menu|
           }}
-            {{menu.label}}
+            {{menu.name}}
           {{/power-select}}
 
           {{#if model.menuSelected.id}}
@@ -30,35 +30,46 @@
     </div>
   </div>
 
-  <div class="col-md-3">
-    {{#bs-accordion as |acc|}}
-      {{#acc.item value="1" title="First item"}}
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
+  <div class="col-md-3 menu-item-editing-sidebar">
+    {{#bs-accordion selected="1" as |acc|}}
+      {{#acc.item value="1" as |aitem|}}
+        {{#aitem.title}}
+          Páginas <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+        {{/aitem.title}}
+        {{#aitem.body}}
+          {{menu-page-selector addLink="addLink"}}
+        {{/aitem.body}}
       {{/acc.item}}
+
       {{#acc.item value="2" as |aitem|}}
         {{#aitem.title}}
-          <strong>Second</strong> <i>item</i>
+          Links personalizados <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+        {{/aitem.title}}
+        {{#aitem.body}}
+          {{menu-custom-link-form addLink="addLink"}}
+        {{/aitem.body}}
+      {{/acc.item}}
+{{!--
+      {{#acc.item value="3" as |aitem|}}
+        {{#aitem.title}}
+          Categorias <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
         {{/aitem.title}}
         {{#aitem.body}}
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
         {{/aitem.body}}
       {{/acc.item}}
-      {{#acc.item value="3" title="Third item"}}
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
-      {{/acc.item}}
+
+      {{#acc.item value="4" as |aitem|}}
+        {{#aitem.title}}
+          Tags <i class="fa fa-caret-down pull-right" aria-hidden="true"></i>
+        {{/aitem.title}}
+        {{#aitem.body}}
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consectetur ea eos hic neque quia sequi sunt. Amet at atque corporis earum et fugiat illum magnam nisi sapiente voluptatem. Laudantium, quam?</p>
+        {{/aitem.body}}
+      {{/acc.item}} --}}
+
     {{/bs-accordion}}
 
-
-    <div class="panel panel-default menu-links-painel">
-      <div class="panel-heading">
-      </div>
-      <div class="panel-body">
-
-      </div>
-      <div class="panel-footer">
-
-      </div>
-    </div>
   </div>
   <div class="col-md-9">
     <div class="panel panel-default menu-links-painel">
@@ -67,7 +78,7 @@
         <form class="form-inline">
           <div class="form-group">
             <label> Nome do menu:</label>
-            {{input value=model.record.label class="form-control" required="required"}}
+            {{input value=model.record.name class="form-control" required="required"}}
           </div>
           {{partial 'menus/partials/menu-form-actions'}}
         </form>

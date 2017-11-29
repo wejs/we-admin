@@ -3,3 +3,9 @@
   min-width: 100px;
   margin-bottom: -10px;
 }
+
+.menu-item-editing-sidebar .tab-pane {
+  overflow-x: hidden;
+  font-size: 12px;
+  line-height: 1.8em;
+}

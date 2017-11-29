@@ -1,0 +1,14 @@
+{{partial 'site-contact-forms/menu-local'}}
+
+<h3>Assuntos de contato</h3>
+
+<p class="help-block">Assuntos disponíveis para seleção no formulário de contato do site que permitem enviar as mensagens de contato para emails diferentes.</p>
+
+<div class="actions">
+  {{#link-to 'site-contact-forms.create' class="btn btn-default"}}
+    <i class="glyphicon glyphicon-plus"></i> Adicionar assunto
+  {{/link-to}}
+</div>
+<br>
+
+{{conteudos-table data=model.records columns=model.columns pageSize=25 useFilteringByColumns=false deleteRecord='deleteRecord'}}

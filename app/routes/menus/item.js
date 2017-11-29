@@ -321,6 +321,54 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         this.get('notifications').error('Erro ao salvar o menu, tente novamente mais tarde ou entre em contato com um administrador');
         return null;
       });
+    },
+
+    addLink(link) {
+      let menu = this.get('currentModel.record');
+
+      link.set('menu', menu);
+
+      link.save()
+      .then( (r)=> {
+        this.get('notifications').success('Link salvo');
+        // move scroll to top:
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        const menuItemModel = this.get('currentModel');
+
+        menuItemModel.links.links.insertAt(0, link);
+
+        return r;
+      });
+    },
+
+    onAddPage(page) {
+      if (!page || !page.get('linkPermanent')) {
+        return null;
+      }
+
+      let linkPermanent = page.get('linkPermanent');
+
+      let menu = this.get('currentModel.record');
+      let link = this.get('store').createRecord('link', {
+        text: page.get('title'),
+        modelName: 'content',
+        modelId: page.id,
+        href: linkPermanent
+      });
+
+      link.set('menu', menu);
+
+      link.save()
+      .then( (r)=> {
+        this.get('notifications').success('Link salvo');
+        // move scroll to top:
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        const menuItemModel = this.get('currentModel');
+
+        menuItemModel.links.links.insertAt(0, link);
+
+        return r;
+      });
     }
   },
 

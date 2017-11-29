@@ -1,0 +1,16 @@
+<form class="add-link-form-small" {{action "addLink" link on="submit"}}>
+  <fieldset>
+    <div class="form-group">
+      <label>URL:</label>
+      {{input value=link.href class="form-control" placeholder="http://..." required="required"}}
+    </div>
+    <div class="form-group">
+      <label>Texto do link:</label>
+      {{input value=link.text class="form-control" required="required"}}
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-sm btn-default">Adicionar ao menu</button>
+    </div>
+  </fieldset>
+</form>

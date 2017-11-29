@@ -19,6 +19,12 @@ export default DS.Model.extend({
   class: DS.attr('string'),
   style: DS.attr('string'),
   target: DS.attr('string'),
+
+  modelName: DS.attr('string'),
+  modelId: DS.attr('string'),
+  type: DS.attr('string'),
+  role: DS.attr('string'),
+
   rel: DS.attr('string'),
   key: DS.attr('string'),
   depth: DS.attr('number'),

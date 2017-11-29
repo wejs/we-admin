@@ -1,0 +1,66 @@
+{{partial 'site-contact-forms/menu-local'}}
+
+{{#if model.record.id}}
+<h3>Editar assunto de contato #{{model.record.id}}</h3>
+{{else}}
+<h3>Adicionar assunto de contato</h3>
+{{/if}}
+
+<form {{action "save" model.record on="submit"}}>
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t 'content.form.terms.Data'}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>Assunto*:</label>
+              {{input value=model.record.subject class="form-control"  required="required"}}
+              <p class="help-block">O assunto da mensagem que aparecerá para seleção do usuário ao escrever a mensagem de contato no site.</p>
+            </div>
+            <div class="form-group">
+              <label>Enviar para os emails:*:</label>
+              {{input value=model.record.contactWithEmail class="form-control" required="required"}}
+              <p class="help-block">Digite aqui os emails que receberão a mensagem separados por <strong>;</strong>
+                <br>Exemplo: Linky Systems &lt;contact@linkysystems.com&gt;;Alberto Souza &lt;alberto@linkysystems.com&gt;</p>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div>
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          {{t 'Save'}}
+        </button>
+        <button {{action 'goTo' 'site-contact-forms.index'}} type="button" class="btn btn-default">
+          <i class="fa fa-step-backward"></i>
+          Voltar para lista
+        </button>
+      </div>
+
+    </div>
+{{!--     <div class="col-md-4">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t 'content.form.publish.Title'}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>
+                {{input type="checkbox" checked=model.record.published}} {{t 'form-content-published'}}?
+              </label>
+              {{#if model.record.publishedAt}}
+                <div class="form-group">
+                  <strong>Publicado em:</strong> {{moment-format model.record.publishedAt "DD/MM/YYYY h:mm a"}}
+                </div>
+              {{/if}}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+    </div> --}}
+  </div>
+</form>
