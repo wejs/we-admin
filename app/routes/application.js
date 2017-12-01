@@ -22,6 +22,8 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   },
   afterModel() {
     this.set('i18n.locale', this.get('settings.data.activeLocale'));
+
+    document.title = this.get('settings.systemSettings.siteName') + ' | '+document.title;
   },
 
   /**
