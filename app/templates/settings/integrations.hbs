@@ -50,6 +50,24 @@
         </div>
       </div>
 
+      <div class="panel panel-default">
+        <div class="panel-heading"><i class="fa fa-shield" aria-hidden="true"></i> Recaptcha:</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>Recaptcha key:</label>
+              {{input value=model.settings.recaptchaKey name="recaptchaKey" class="form-control"}}
+              <p class="help-block">Chave pública (key) criada em: https://www.google.com/recaptcha/admin.</p>
+            </div>
+            <div class="form-group">
+              <label>Recaptcha secret:</label>
+              {{input value=model.settings.recaptchaSecret name="recaptchaSecret" class="form-control"}}
+              <p class="help-block">Chave privada (secret) criada em: https://www.google.com/recaptcha/admin.</p>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
     </div>
 
     <div class="col-md-12">

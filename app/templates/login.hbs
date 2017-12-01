@@ -1,12 +1,26 @@
 <br>
-<div class="row"><div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+
+{{!--
+<img src="{{settings.systemSettings.logoUrlOriginal}}" class="img-square">
+ --}}
+
+
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
   {{#if model.isLoading}}
     {{bootstrap-loading}}
   {{else}}
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h1 class="panel-title">{{t 'Login'}}</h1>
+
+    {{#if settings.systemSettings.logoUrlOriginal}}
+      <div class="login-project-logo">
+        <img src="{{settings.systemSettings.logoUrlOriginal}}" class="img-square">
       </div>
+    {{/if}}
+
+    <div class="panel panel-primary">
+{{!--       <div class="panel-heading">
+        <h1 class="panel-title">{{t 'Login'}}</h1>
+      </div> --}}
       <div class="panel-body">
         <form class="form" {{action 'authenticate' on='submit'}}>
 
@@ -23,15 +37,13 @@
               {{input id='password' placeholder=(t "form-placeholder-login-password") type='password' value=password required="required" class="form-control"}}
             </div>
           </div>
-          <button class="btn btn-lg btn-primary" type="submit">{{t 'form-login-submit'}}</button>
-        </form>
-      </div>
-      <div class="panel-footer text-right">
-        <div class="login-form-links">
-          {{#link-to 'forgot-password'}}
+          <button class="btn btn-lg btn-primary" type="submit">{{t 'form-login-submit'}}</button> {{#link-to 'forgot-password'}}
             Recuperar senha
           {{/link-to}}
-        </div>
+        </form>
+      </div>
+      <div class="panel-footer text-center">
+        {{settings.systemSettings.siteName}}
       </div>
     </div>
   {{/if}}
