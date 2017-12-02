@@ -143,5 +143,30 @@ export default Ember.Service.extend({
       // this.set('systemSettings', response);
       return response;
     });
+  },
+
+  defaultSelectorLinksComponents() {
+    return [
+      {
+        name: 'content',
+        title: 'Links para páginas',
+        componentName: 'menu-page-selector'
+      },
+      {
+        name: 'custom',
+        title: 'Links personalizados',
+        componentName: 'menu-custom-link-form'
+      },
+      {
+        name: 'category',
+        title: 'Links para categorias',
+        componentName: 'menu-category-selector'
+      },
+      {
+        name: 'tags',
+        title: 'Links para tags',
+        componentName: 'menu-tag-selector'
+      }
+    ];
   }
 });

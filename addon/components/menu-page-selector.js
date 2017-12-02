@@ -59,7 +59,7 @@ export default Ember.Component.extend({
 
     addPage() {
       let selectedPage = this.get('selectedPage');
-      if (selectedPage && !selectedPage.get('linkPermanent')) {
+      if (selectedPage && selectedPage.get('linkPermanent')) {
         let linkPermanent = selectedPage.get('linkPermanent');
 
         let link = this.get('store').createRecord('link', {

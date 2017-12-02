@@ -10,7 +10,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model(params) {
     const systemSettings = this.get('settings').get('systemSettings');
 
+    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
     return Ember.RSVP.hash({
+      menuLinkSelectorComponents: (ENV.menuLinkSelectorComponents || this.defaultSelectorLinksComponents()),
+      selectedMenuComponent: 0,
       menuId: params.id,
       menuData: this.getLinks(params.id),
       record: null,
@@ -143,13 +147,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     this.set('currentModel.justDragged', draggedModel);
     this.set('currentModel.record.updated', true);
   },
-
-
-  // onMenuUpdate: Ember.observer('currentModel.isMainMenu', 'currentModel.isSecondaryMenu', 'currentModel.isFooterMenu', 'currentModel.isSocialMenu', function() {
-
-  //   this.get('currentModel.')
-  //   if (: (String(get(systemSettings, 'menuMainId')) === String(params.id) ),)
-  // })
 
   actions: {
     reorderItems(itemModels, draggedModel) {
@@ -331,12 +328,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       link.save()
       .then( (r)=> {
         this.get('notifications').success('Link salvo');
-        // move scroll to top:
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
         const menuItemModel = this.get('currentModel');
-
         menuItemModel.links.links.insertAt(0, link);
-
         return r;
       });
     },

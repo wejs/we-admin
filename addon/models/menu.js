@@ -13,6 +13,8 @@ export default DS.Model.extend({
     inverse: 'menu',
     async: true
   }),
+  linkPermanent: DS.attr('string'),
+
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date')
 });

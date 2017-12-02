@@ -30,7 +30,9 @@ export default DS.Model.extend({
   depth: DS.attr('number'),
   weight: DS.attr('number'),
   parent: DS.attr('number'),
-  links: DS.attr('array'),
+  links: DS.attr('array', {
+    defaultValue() { return Ember.A(); }
+  }),
   menu: DS.belongsTo('menu', {
     inverse: 'links',
     async: true
@@ -56,7 +58,7 @@ export default DS.Model.extend({
     // check if is internal url
     return (!isExternal(href));
   }),
-
+  linkPermanent: DS.attr('string'),
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date')
 });

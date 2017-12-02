@@ -18,5 +18,6 @@ export default DS.Model.extend({
   creator: DS.belongsTo('user', {
     inverse: 'slides'
   }),
+  linkPermanent: DS.attr('string'),
   image: DS.attr('array')
 });

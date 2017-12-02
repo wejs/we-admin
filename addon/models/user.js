@@ -18,6 +18,7 @@ export default DS.Model.extend({
     inverse: 'creator',
     async: true
   }),
+  linkPermanent: DS.attr('string'),
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date'),
   avatar: DS.attr('array')

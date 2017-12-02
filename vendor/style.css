@@ -18,3 +18,7 @@
 .login-project-logo img {
   max-width: 170px;
 }
+
+.menu-links-footer {
+  min-height: 50px;
+}
