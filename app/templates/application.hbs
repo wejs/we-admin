@@ -9,6 +9,8 @@
         {{partial 'partials/header'}}
         <div id="page-wrapper">
           {{outlet}}
+
+          {{image-uploader-browser}}
         </div>
       </div>
     {{else}}
@@ -17,4 +19,7 @@
   {{else}}
     {{partial 'partials/home-un-authenticated'}}
   {{/if}}
+
 {{/if}}
+
+{{partial 'partials/file-selector-modal'}}

@@ -22,3 +22,7 @@
 .menu-links-footer {
   min-height: 50px;
 }
+
+.file-selector-modal {
+  z-index: 75536
+}
