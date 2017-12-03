@@ -9,6 +9,7 @@ export default Ember.Controller.extend({
   ajax: Ember.inject.service(),
   session: Ember.inject.service('session'),
   settings: Ember.inject.service('settings'),
+  upload: Ember.inject.service('upload'),
 
   queryParams: ['type'],
 
@@ -27,11 +28,13 @@ export default Ember.Controller.extend({
           'legacyoutput advlist autolink lists link image charmap hr anchor pagebreak',
           'searchreplace wordcount visualblocks visualchars code fullscreen',
           'insertdatetime nonbreaking save table contextmenu directionality',
-          'emoticons paste textcolor colorpicker textpattern imagetools codesample'
+          'emoticons paste textcolor colorpicker textpattern codesample'
         ],
         toolbar1: 'undo redo | insert | styleselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image |  codesample',
         language: this.getEditorLocale(),
-        language_url: this.getEditorLocaleUrl()
+        language_url: this.getEditorLocaleUrl(),
+        file_browser_callback_types: 'image',
+        file_picker_callback: this.get('upload').get_file_picker_callback()
       };
 
       return opts;
