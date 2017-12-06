@@ -24,6 +24,7 @@ export default Ember.Controller.extend({
       const opts = {
         min_height: 300,
         theme: 'modern',
+        convert_urls: false,
         plugins: [
           'legacyoutput advlist autolink lists link image charmap hr anchor pagebreak',
           'searchreplace wordcount visualblocks visualchars code fullscreen',

@@ -6,10 +6,6 @@
     <form {{action "save" model.user on="submit"}}>
       <fieldset>
         <div class="form-group">
-          <label>{{t 'form-user-username'}}</label>
-          {{input value=model.user.username class="form-control" placeholder=(t 'form-placeholder-user-username') required="required"}}
-        </div>
-        <div class="form-group">
           <label>{{t 'form-user-displayName'}}</label>
           {{input value=model.user.displayName class="form-control" placeholder=(t 'form-placeholder-user-displayName') required="required"}}
         </div>
