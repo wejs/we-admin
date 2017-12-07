@@ -120,14 +120,14 @@
               <label>{{t 'form-content-createdAt'}}:</label>
               {{date-time-picker
                 onChange=(action "changeDate" page "createdAt")
-                value=(readonly page.createdAt)
+                date=(readonly page.createdAt)
               }}
             </div>
             <div class="form-group">
               <label>{{t 'form-content-updatedAt'}}:</label>
               {{date-time-picker
                 onChange=(action "changeDate" page "updatedAt")
-                value=(readonly page.updatedAt)
+                date=(readonly page.updatedAt)
               }}
             </div>
           </fieldset>
