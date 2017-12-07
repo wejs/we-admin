@@ -26,3 +26,9 @@
 .file-selector-modal {
   z-index: 75536
 }
+
+
+.user-avatar-in-table {
+  width: 25px;
+  margin: 0px 3px 3px 0px;
+}

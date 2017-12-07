@@ -1,0 +1,55 @@
+<h1 class="page-header">Editar comentário #{{model.record.id}}</h1>
+
+<form {{action "save" model.record on="submit"}}>
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t 'content.form.terms.Data'}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>Comentário:</label>
+              {{tinymce-editor
+                options=editorOptions
+                value=model.record.body
+              }}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div>
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          {{t 'Save'}}
+        </button>
+        <button {{action 'goTo' 'comments.index'}} type="button" class="btn btn-default">
+          <i class="fa fa-step-backward"></i>
+          Lista de comentários
+        </button>
+      </div>
+    </div>
+{{!--     <div class="col-md-4">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t 'content.form.publish.Title'}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>
+                {{input type="checkbox" checked=model.record.published}} {{t 'form-content-published'}}?
+              </label>
+              {{#if model.record.publishedAt}}
+                <div class="form-group">
+                  <strong>Publicado em:</strong> {{moment-format model.record.publishedAt "DD/MM/YYYY h:mm a"}}
+                </div>
+              {{/if}}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+    </div> --}}
+  </div>
+</form>

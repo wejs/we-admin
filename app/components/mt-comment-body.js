@@ -1,0 +1,1 @@
+export { default } from 'we-admin/components/mt-comment-body';

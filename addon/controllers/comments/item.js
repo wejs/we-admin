@@ -1,5 +1,4 @@
 import Ember from 'ember';
-const set = Ember.set;
 
 let ENV;
 
@@ -110,11 +109,6 @@ export default Ember.Controller.extend({
         return;
       }
       this.get('model.record').set(field, dates[0]);
-    },
-
-    selectEmailType(record, typeObject) {
-      record.set('type', typeObject.id);
-      set(this, 'model.selectedEmailType', typeObject);
     }
   }
 });

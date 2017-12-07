@@ -1,0 +1,5 @@
+{{#if record.creator.id}}
+  {{#link-to 'users.item' record.creator.id}}<img src="{{ENV.API_HOST}}/avatar/{{record.creator.id}}" alt="Avatar do {{record.creator.displayName}}" class="user-avatar-in-table">{{/link-to}}
+  <strong>{{record.creator.displayName}}</strong>
+  <a href="mailto:{{record.creator.email}}">{{record.creator.email}}</a>
+{{else}}<strong>Anônimo</strong>{{/if}}
