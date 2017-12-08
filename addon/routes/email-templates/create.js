@@ -22,10 +22,16 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   afterModel(model) {
-    const tid = get(model, 'selectedEmailType.id');
+    const selectedEmailType = get(model, 'selectedEmailType');
+
+    const tid = selectedEmailType.id;
     if (tid) {
       set(model, 'record.type', tid);
     }
+
+    set(model.record, 'subject', selectedEmailType.defaultSubject);
+    set(model.record, 'text', selectedEmailType.defaultText);
+    set(model.record, 'html', selectedEmailType.defaultHTML);
   },
 
   getEmailTypesArray() {

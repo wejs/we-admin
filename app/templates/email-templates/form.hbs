@@ -40,7 +40,9 @@
 
       {{#if model.selectedEmailType}}
         <div class="panel panel-default">
-          <div class="panel-heading">{{t 'content.form.terms.Data'}}</div>
+          <div class="panel-heading">Dados
+            <span class="pull-right"><button type="button" class="btn btn-default btn-xs" {{action "resetDefaultValues" model.record model.selectedEmailType}}>Resetar padrão</button></span>
+          </div>
           <div class="panel-body">
             <fieldset>
               <div class="form-group">
@@ -107,7 +109,6 @@
                 </tr>
               </thead>
               <tbody>
-                {{log model.selectedEmailType.templateVariables}}
                 {{#each-in model.selectedEmailType.templateVariables as |id tv|}}
                   <tr>
                     <td>&#123;&#123;{{id}}&#125;&#125;</td>

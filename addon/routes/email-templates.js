@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+const set = Ember.set;
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model() {
@@ -27,6 +28,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
   },
   actions: {
+    resetDefaultValues(record, selectedEmailType) {
+      console.log('>', selectedEmailType);
+      set(record, 'subject', selectedEmailType.defaultSubject);
+      set(record, 'text', selectedEmailType.defaultText);
+      set(record, 'html', selectedEmailType.defaultHTML);
+    },
     save(record) {
       record.save()
       .then( (r)=> {
