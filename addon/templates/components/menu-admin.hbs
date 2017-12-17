@@ -1,0 +1,7 @@
+{{#ember-metismenu classNames="nav"}}
+  {{#each links as |link|}}
+    <li>
+      {{#link-to link.linkTo}}{{{link.icon}}} {{link.text}}{{/link-to}}
+    </li>
+  {{/each}}
+{{/ember-metismenu}}

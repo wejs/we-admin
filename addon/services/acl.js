@@ -15,11 +15,41 @@ const rolesCanAssociateWithUser = [
 
 export default Ember.Service.extend({
   session: Ember.inject.service('session'),
-  init(){
+  settings: Ember.inject.service('settings'),
+
+  init() {
     this._super(...arguments);
 
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
   },
+
+  userRoles: Ember.computed.alias('settings.userRoles'),
+  isAdmin: Ember.computed.alias('settings.isAdmin'),
+  permissions: Ember.computed.alias('settings.data.userPermissions'),
+
+  /**
+   * Check if current user can do something
+   * @param  {String} permission
+   * @return {Boolena}
+   */
+  can(permission) {
+    if (this.get('isAdmin')) {
+      return true;
+    }
+
+    if (!permission) {
+      return false;
+    }
+
+    const permissions = this.get('permissions');
+
+    if (!permissions) {
+      return false;
+    }
+
+    return this.get('permissions')[permission];
+  },
+
   /**
    * Get all permissions and roles from api host
    *

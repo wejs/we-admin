@@ -5,9 +5,7 @@
 <p class="help-block">Assuntos disponíveis para seleção no formulário de contato do site que permitem enviar as mensagens de contato para emails diferentes.</p>
 
 <div class="actions">
-  {{#link-to 'site-contact-forms.create' class="btn btn-default"}}
-    <i class="glyphicon glyphicon-plus"></i> Adicionar assunto
-  {{/link-to}}
+  {{#acl-btn-create model="site-contact-form" url="/site-contact-forms/create"}}Adicionar assunto{{/acl-btn-create}}
 </div>
 <br>
 

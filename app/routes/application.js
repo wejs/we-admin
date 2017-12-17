@@ -3,6 +3,13 @@ import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mi
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
   session: Ember.inject.service('session'),
+  acl: Ember.inject.service('acl'),
+  ENV: null,
+
+  init() {
+    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this._super(...arguments);
+  },
 
   beforeModel() {
     this.get('notifications').setDefaultAutoClear(true);

@@ -23,8 +23,11 @@ export default Ember.Service.extend({
   // alias for help get current authenticated user roles
   userRoles: Ember.computed.alias('user.roles'),
 
-  isAdmin: Ember.computed('userRoles', function(){
+  isAdmin: Ember.computed('userRoles', function() {
     let roles = this.get('userRoles');
+    if (!roles || !roles.indexOf) {
+      return false;
+    }
     return (roles.indexOf('administrator') > -1 );
   }),
   // invert isAdmin to use in disabled inputs

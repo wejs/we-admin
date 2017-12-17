@@ -1,15 +1,21 @@
-{{#link-to 'users.item' record.id class="btn btn-default"}}
-  <i class="glyphicon glyphicon-pencil text-success"></i>
-  {{#bs-tooltip placement="top"}}Editar{{/bs-tooltip}}
-{{/link-to}}
+<a href="{{record.linkPermanent}}" class="btn btn-default btn-sm" target="_blank">
+<i class="glyphicon glyphicon-eye-open"></i>
+{{#bs-tooltip placement="top"}}Ver{{/bs-tooltip}}
+</a>
 
-{{#link-to 'users.item' record.id (query-params tab="userTabPanePassword") class="btn btn-default"}}
-  <i class="fa fa-key text-danger" aria-hidden="true"></i>
-  {{#bs-tooltip placement="top"}}Senha{{/bs-tooltip}}
-{{/link-to}}
+{{#acl-can permission="manage_permissions" tagName="span"}}
+  {{#link-to 'users.item' record.id class="btn btn-sm btn-default"}}
+    <i class="glyphicon glyphicon-pencil text-success"></i>
+    {{#bs-tooltip placement="top"}}Editar{{/bs-tooltip}}
+  {{/link-to}}
 
-{{#link-to 'users.item' record.id (query-params tab="userTabPaneRoles") class="btn btn-default"}}
-  <i class="fa fa-id-card-o text-default" aria-hidden="true"></i>
-  {{#bs-tooltip placement="top"}}Perfis{{/bs-tooltip}}
-{{/link-to}}
+  {{#link-to 'users.item' record.id (query-params tab="userTabPanePassword") class="btn btn-sm btn-default"}}
+    <i class="fa fa-key text-danger" aria-hidden="true"></i>
+    {{#bs-tooltip placement="top"}}Senha{{/bs-tooltip}}
+  {{/link-to}}
 
+  {{#link-to 'users.item' record.id (query-params tab="userTabPaneRoles") class="btn btn-sm btn-default"}}
+    <i class="fa fa-id-card-o text-default" aria-hidden="true"></i>
+    {{#bs-tooltip placement="top"}}Perfis{{/bs-tooltip}}
+  {{/link-to}}
+{{/acl-can}}

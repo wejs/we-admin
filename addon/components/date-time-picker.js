@@ -21,7 +21,8 @@ export default EmberFlatpickr.extend({
       // dateFormat: 'Z',
       // timeFormat: 'H:i',
       utc: false,
-      wrap: false
+      wrap: false,
+      date: new Date()
     };
 
     Ember.setProperties(this.attrs, defaults);
