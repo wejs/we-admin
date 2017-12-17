@@ -29,7 +29,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   actions: {
     resetDefaultValues(record, selectedEmailType) {
-      console.log('>', selectedEmailType);
       set(record, 'subject', selectedEmailType.defaultSubject);
       set(record, 'text', selectedEmailType.defaultText);
       set(record, 'html', selectedEmailType.defaultHTML);
