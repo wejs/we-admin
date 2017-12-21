@@ -23,7 +23,7 @@ export default DS.Model.extend({
   modelName: DS.attr('string'),
   modelId: DS.attr('string'),
   type: DS.attr('string'),
-  role: DS.attr('string'),
+  userRole: DS.attr('string'),
 
   rel: DS.attr('string'),
   key: DS.attr('string'),

@@ -1,0 +1,14 @@
+{{#bs-tab as |tab|}}
+  {{#each options as |page|}}
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" {{action "pageChecked" page on="change"}} /> {{page.text}}
+      </label>
+    </div>
+  {{/each}}
+  {{#if havePagesSelected}}
+    <button type="button" class="btn btn-sm btn-default" {{action 'addPages'}}>Adicionar ao menu</button>
+  {{else}}
+    <button type="button" class="btn btn-sm btn-default" disabled>Adicionar ao menu</button>
+  {{/if}}
+{{/bs-tab}}

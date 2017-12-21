@@ -31,6 +31,7 @@
   </div>
 
   <div class="col-md-3 menu-item-editing-sidebar">
+    <h5>Adicionar link:</h5>
     {{#bs-accordion onChange=(action 'onChangeMenuComponent') selected=model.selectedMenuComponent as |acc|}}
       {{#each model.menuLinkSelectorComponents as |mlc index|}}
         {{#acc.item value=index as |aitem|}}
