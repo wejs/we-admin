@@ -8,11 +8,6 @@ const systemRoles = [
   'unAuthenticated'
 ];
 
-const rolesCanAssociateWithUser = [
-  'administrator',
-  'editor'
-];
-
 export default Ember.Service.extend({
   session: Ember.inject.service('session'),
   settings: Ember.inject.service('settings'),
@@ -112,11 +107,6 @@ export default Ember.Service.extend({
       for (let name in data) {
         if (systemRoles.indexOf(name) >-1 ) {
           data[name].isSystemRole = true;
-        }
-        if (rolesCanAssociateWithUser.indexOf(name) > -1) {
-          data[name].canAddInUsers = true;
-        } else {
-          data[name].canAddInUsers = false;
         }
 
         roles.push(data[name]);
