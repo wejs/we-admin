@@ -39,7 +39,7 @@
     "ember-i18n": "5.0.2",
     "ember-models-table": "^2.2.3",
     "ember-moment": "7.5.0",
-    "ember-power-select": "1.10.1",
+    "ember-power-select": "1.10.4",
     "ember-truth-helpers": "^2.0.0",
     "ember-simple-auth": "^1.4.0",
     "loader.js": "^4.6.0"
