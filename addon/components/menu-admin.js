@@ -5,6 +5,8 @@ export default Ember.Component.extend({
   layout,
 
   acl: Ember.inject.service('acl'),
+  settings: Ember.inject.service('settings'),
+
   tagName: 'div',
   classNames: ['admin-menu'],
 
@@ -26,16 +28,20 @@ export default Ember.Component.extend({
     const links = this.get('links');
     const allLinks = this.get('ENV.adminMenu');
     const acl = this.get('acl');
-
-    if (this.get('acl.isAdmin')) {
-      this.set('links', allLinks);
-      return;
-    }
+    const plugins = this.get('settings.data.plugins');
+    const isAdmin = this.get('acl.isAdmin');
 
     for (let i = 0; i < allLinks.length; i++) {
       let link = allLinks[i];
 
-      if (acl.can(link.permission)) {
+      if (link.plugin) {
+        // plugin requirement:
+        if (plugins.indexOf(link.plugin) === -1) {
+          continue;
+        }
+      }
+
+      if (isAdmin || acl.can(link.permission)) {
         links.pushObject(link);
       }
     }

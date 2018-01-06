@@ -13,7 +13,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
 
     return Ember.RSVP.hash({
-      menuLinkSelectorComponents: (ENV.menuLinkSelectorComponents || this.defaultSelectorLinksComponents()),
+      menuLinkSelectorComponents: (
+        ENV.menuLinkSelectorComponents ||
+        this.defaultSelectorLinksComponents()
+      ),
       selectedMenuComponent: 0,
       menuId: params.id,
       menuData: this.getLinks(params.id),
@@ -147,6 +150,25 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     });
     this.set('currentModel.justDragged', draggedModel);
     this.set('currentModel.record.updated', true);
+  },
+
+  /**
+   * Default menu components links list
+   * @return {Array}
+   */
+  defaultSelectorLinksComponents() {
+    return [
+      {
+        name: 'custom',
+        title: 'Links personalizados',
+        componentName: 'menu-custom-link-form'
+      },
+      {
+        name: 'user',
+        title: 'Usuário',
+        componentName: 'menu-user-links-selector'
+      }
+    ];
   },
 
   actions: {
