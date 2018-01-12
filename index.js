@@ -24,5 +24,16 @@ module.exports = {
     fs.emptyDirSync(distFolder);
     // copy:
     fs.copySync(originFolder, distFolder);
+  },
+
+  afterInstall() {
+    return this.addBowerPackageToProject('metisMenu');
+  },
+
+  included(app) {
+    this._super.included.apply(this, arguments);
+
+    app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.js');
+    app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.css');
   }
 };

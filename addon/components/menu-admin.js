@@ -7,8 +7,10 @@ export default Ember.Component.extend({
   acl: Ember.inject.service('acl'),
   settings: Ember.inject.service('settings'),
 
-  tagName: 'div',
-  classNames: ['admin-menu'],
+  tagName: 'ul',
+  classNames: [
+    'nav', ' in'
+  ],
 
   ENV: null,
 
@@ -24,12 +26,21 @@ export default Ember.Component.extend({
     this.set('ENV', ENV);
   },
 
+  didInsertElement() {
+    this._super(...arguments);
+
+    const el = this.$();
+    if (el && el.metisMenu) {
+      this.$().metisMenu();
+    }
+  },
+
   didReceiveAttrs() {
-    const links = this.get('links');
-    const allLinks = this.get('ENV.adminMenu');
-    const acl = this.get('acl');
-    const plugins = this.get('settings.data.plugins');
-    const isAdmin = this.get('acl.isAdmin');
+    const links = this.get('links'),
+      allLinks = this.get('ENV.adminMenu'),
+      acl = this.get('acl'),
+      plugins = this.get('settings.data.plugins'),
+      isAdmin = this.get('acl.isAdmin');
 
     for (let i = 0; i < allLinks.length; i++) {
       let link = allLinks[i];
