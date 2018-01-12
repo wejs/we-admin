@@ -3,13 +3,8 @@
 
 module.exports = {
   name: 'we-admin',
-  included: function(app) {
-    this._super.included(app);
-    app.import('vendor/menu/menu-links-sortable.css');
-    app.import('vendor/Sortable.js');
-  },
 
-  outputReady: function () {
+  outputReady() {
     // only run in production env:
     if (this.app.env !== 'production') {
       return null;
@@ -33,6 +28,8 @@ module.exports = {
   included(app) {
     this._super.included.apply(this, arguments);
 
+    app.import('vendor/menu/menu-links-sortable.css');
+    app.import('vendor/Sortable.js');
     app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.js');
     app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.css');
   }
