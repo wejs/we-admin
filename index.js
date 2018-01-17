@@ -10,8 +10,6 @@ module.exports = {
       return null;
     }
 
-    console.log('this', this);
-
     var fs = this.project.require('fs-extra');
     var originFolder = process.cwd() + '/dist';
     var distFolder = process.cwd() + '/prod';
