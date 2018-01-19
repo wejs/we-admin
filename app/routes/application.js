@@ -120,7 +120,6 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
         err.responseJSON.meta &&
         err.responseJSON.meta.messages
       ) {
-
         err.responseJSON.meta.messages.forEach( (e)=> {
           switch(e.status) {
             case 'warning':
@@ -133,7 +132,24 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
               this.get('notifications').error(e.message);
           }
         });
-
+      } else if (
+        err &&
+        err.responseJSON &&
+        err.responseJSON &&
+        err.responseJSON.messages
+      ) {
+        err.responseJSON.messages.forEach( (e)=> {
+          switch(e.status) {
+            case 'warning':
+              this.get('notifications').warning(e.message);
+              break;
+            case 'success':
+              this.get('notifications').success(e.message);
+              break;
+            default:
+              this.get('notifications').error(e.message);
+          }
+        });
       } else {
         console.error('Unknow query error', err);
       }
