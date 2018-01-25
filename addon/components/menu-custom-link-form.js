@@ -13,6 +13,10 @@ export default Ember.Component.extend({
   init() {
     this._super(...arguments);
 
+    this.resetLink();
+  },
+
+  resetLink() {
     this.set('link', this.get('store').createRecord('link', {
       type: 'custom'
     }));
@@ -20,8 +24,8 @@ export default Ember.Component.extend({
 
   actions: {
     addLink(link) {
+      this.resetLink();
       this.sendAction('addLink', link);
     }
   }
-
 });
