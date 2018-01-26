@@ -5,24 +5,49 @@
 {{/if}}
 
 <form {{action "save" model.record on="submit"}}>
-  <fieldset>
-    <div class="form-group">
-      <label>{{t 'form-term-text'}}*:</label>
-      {{input value=model.record.text class="form-control" placeholder=(t 'form-placeholder-term-text') required="required"}}
+
+  <div class="row">
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t 'content.form.terms.Data'}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>{{t 'form-term-text'}}*:</label>
+              {{input value=model.record.text class="form-control" placeholder=(t 'form-placeholder-term-text') required="required"}}
+            </div>
+            <div class="form-group">
+              <label>{{t 'form-term-description'}}:</label>
+              {{textarea value=model.record.description class="form-control" placeholder=(t 'form-placeholder-term-description')}}
+            </div>
+          </fieldset>
+        </div>
+      </div>
     </div>
-    <div class="form-group">
-      <label>{{t 'form-term-description'}}:</label>
-      {{textarea value=model.record.description class="form-control" placeholder=(t 'form-placeholder-term-description')}}
+
+    <div class="col-md-4 main-sidebar">
+      <div class="panel panel-default">
+        <div class="panel-heading">URL</div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label>URL de acesso*:</label>
+            {{input name="setAlias" value=model.alias.alias class="form-control" placeholder="Ex /sobre" }}
+            <p class="help-block">URL/caminho de acesso à página, use um texto simples sem espaço ou acentuação. Ex /sobre</p>
+          </div>
+        </div>
+      </div>
     </div>
-  </fieldset>
-  <div>
-    <button class="btn btn-primary">
-      <i class="fa fa-save"></i>
-      {{t 'Save'}}
-    </button>
-    <button {{action 'goTo' 'vocabulary.item.terms' model.vocabulary.id}} type="button" class="btn btn-default">
-      <i class="fa fa-step-backward"></i>
-      {{t 'term.find'}}
-    </button>
+
+    <div class="col-md-12">
+      <button class="btn btn-primary">
+        <i class="fa fa-save"></i>
+        {{t 'Save'}}
+      </button>
+      <button {{action 'goTo' 'vocabulary.item.terms' model.vocabulary.id}} type="button" class="btn btn-default">
+        <i class="fa fa-step-backward"></i>
+        {{t 'term.find'}}
+      </button>
+    </div>
   </div>
+
 </form>

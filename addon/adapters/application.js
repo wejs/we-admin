@@ -7,7 +7,7 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   headers: {
     'Accept': 'application/vnd.api+json'
   },
-  init(){
+  init() {
     this._super(...arguments);
 
     const ENV = Ember.getOwner(this).resolveRegistration('config:environment');

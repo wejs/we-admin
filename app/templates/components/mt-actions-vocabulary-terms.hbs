@@ -1,3 +1,13 @@
+<a href="{{ENV.API_HOST}}{{record.linkPermanent}}" class="btn btn-default btn-sm" target="_blank">
+<i class="glyphicon glyphicon-eye-open"></i>
+{{#bs-tooltip placement="top"}}Ver{{/bs-tooltip}}
+</a>
+
+{{#link-to 'vocabulary.item.terms.item' record.vocabulary.id record.id class="btn btn-default btn-sm"}}
+  <i class="glyphicon glyphicon-pencil text-success"></i>
+  {{#bs-tooltip placement="top"}}Editar{{/bs-tooltip}}
+{{/link-to}}
+
 <button {{action 'deleteRecord' record}} type="button" class="btn btn-default btn-sm">
   <i class="glyphicon glyphicon-remove text-danger"></i>
   {{#bs-tooltip placement="top"}}Deletar{{/bs-tooltip}}

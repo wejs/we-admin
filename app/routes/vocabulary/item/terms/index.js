@@ -3,6 +3,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   term: Ember.inject.service(),
+
   model() {
     const vocabulary = this.modelFor('vocabulary.item').record;
     const i18n = this.get('i18n');
@@ -15,28 +16,42 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       columns: [
         {
           propertyName: 'id',
-          title: 'ID'
+          title: 'ID',
+          className: 'mt-c-id'
         },
         {
           propertyName: 'text',
           filteredBy: 'text_starts-with',
-          title: i18n.t('form-term-text')
+          title: i18n.t('form-term-text'),
+          className: 'mt-c-text text-cell'
         },
         {
           propertyName: 'createdAt',
           filteredBy: 'createdAt',
           title: i18n.t('form-term-createdAt'),
-          template: 'partials/list-item-created-at'
+          component: 'mt-list-item-created-at',
+          className: 'mt-c-createdAt'
         },
         {
           propertyName: 'actions',
           disableSorting: true,
           disableFiltering: true,
           title:  i18n.t('Actions'),
+          component: 'mt-actions-vocabulary-terms',
           template: 'vocabulary/item/terms/list-item-actions'
         }
       ]
     });
+  },
+
+  afterModel(model) {
+    if (model.records && Ember.get(model.records, 'length') ) {
+      const length = Ember.get(model.records, 'length');
+      for (let i = 0; i < length; i++) {
+        const record = model.records.objectAt(i);
+        Ember.set(record, 'vocabulary', model.vocabulary);
+      }
+    }
   },
   actions: {
     deleteRecord(record) {
