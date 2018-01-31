@@ -2,7 +2,7 @@ import Ember from 'ember';
 import EmberFlatpickr from 'ember-flatpickr/components/ember-flatpickr';
 
 export default EmberFlatpickr.extend({
-  init: function() {
+  init() {
     const defaults = {
       altFormat: 'j/n/Y H:i',
       enableSeconds: false,
@@ -22,7 +22,7 @@ export default EmberFlatpickr.extend({
       // timeFormat: 'H:i',
       utc: false,
       wrap: false,
-      date: new Date()
+      date: Ember.get(this, 'date') || new Date()
     };
 
     Ember.setProperties(this.attrs, defaults);

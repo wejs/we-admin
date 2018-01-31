@@ -1,5 +1,4 @@
 /* jshint node: true */
-'use strict';
 
 module.exports = {
   name: 'we-admin',
@@ -20,7 +19,8 @@ module.exports = {
   },
 
   afterInstall() {
-    return this.addBowerPackageToProject('metisMenu');
+    return this.addBowerPackageToProject('metisMenu')
+      .then( this.addAddonToProject('@ember-decorators/babel-transforms') );
   },
 
   included(app) {
