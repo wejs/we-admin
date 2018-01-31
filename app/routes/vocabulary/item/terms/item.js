@@ -7,7 +7,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     return Ember.RSVP.hash({
       vocabulary: vocabulary,
-      record: this.get('store').findRecord('term', params.termId, {
+      record: this.get('store').findRecord('term', (params.termId || params.id), {
         adapterOptions: {
           vocabularyName: Ember.get(vocabulary, 'name')
         }
@@ -20,9 +20,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       Ember.set(model.record, 'vocabulary', model.vocabulary);
     }
 
-    if (model.record.linkPermanent) {
-      const linkPermanent = Ember.get(model.record, 'linkPermanent');
+    const linkPermanent = Ember.get(model.record, 'linkPermanent');
 
+    if (linkPermanent) {
       model.alias = this.get('store').query('url-alia', {
         target: linkPermanent,
         limit: 1,
@@ -30,7 +30,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       })
       .then( (r)=> { // get only one alias:
         if (r && r.objectAt && r.objectAt(0)) {
-          return r.objectAt(0);
+          model.alias = r.objectAt(0);
         } else {
           model.alias = this.get('store')
           .createRecord('url-alia', {
@@ -44,8 +44,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     }
   },
   actions: {
-    save(record) {
+    save(record, alias) {
       record.save()
+      .then( function saveAlias(content) {
+        if (!alias) {
+          return content;
+        }
+        alias.alias = record.setAlias;
+        return content;
+      })
       .then( (r)=> {
         this.get('notifications').success('O termo foi salvo.');
         // success

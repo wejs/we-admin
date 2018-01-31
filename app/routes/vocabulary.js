@@ -13,6 +13,25 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           return null;
         });
       }
+    },
+
+    save(record, alias) {
+      record.save()
+      .then( function saveAlias(content) {
+        if (!alias) {
+          return content;
+        }
+        alias.alias = record.setAlias;
+        return content;
+      })
+      .then( (r)=> {
+        this.get('notifications').success('Vocabulário salvo.');
+        // success
+        return r;
+      })
+      .catch( (err)=> {
+        this.send('queryError', err);
+      });
     }
   }
 });

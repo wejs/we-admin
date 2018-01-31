@@ -4,7 +4,7 @@
 <h1 class="page-header">{{t 'term.create'}}</h1>
 {{/if}}
 
-<form {{action "save" model.record on="submit"}}>
+<form {{action "save" model.record model.alias on="submit"}}>
 
   <div class="row">
     <div class="col-md-8">
@@ -26,16 +26,18 @@
     </div>
 
     <div class="col-md-4 main-sidebar">
-      <div class="panel panel-default">
-        <div class="panel-heading">URL</div>
-        <div class="panel-body">
-          <div class="form-group">
-            <label>URL de acesso*:</label>
-            {{input name="setAlias" value=model.alias.alias class="form-control" placeholder="Ex /sobre" }}
-            <p class="help-block">URL/caminho de acesso à página, use um texto simples sem espaço ou acentuação. Ex /sobre</p>
+      {{#if model.record.id}}
+        <div class="panel panel-default">
+          <div class="panel-heading">URL</div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label>URL de acesso*:</label>
+              {{input name="setAlias" value=model.alias.alias class="form-control" placeholder="Ex /sobre" }}
+              <p class="help-block">URL/caminho de acesso à página, use um texto simples sem espaço ou acentuação. Ex /sobre</p>
+            </div>
           </div>
         </div>
-      </div>
+      {{/if}}
     </div>
 
     <div class="col-md-12">

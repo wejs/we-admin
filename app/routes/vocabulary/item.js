@@ -16,7 +16,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         } else {
           return null;
         }
-      }),
+      })
     });
   },
 
@@ -31,19 +31,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       model.alias = this.get('store').createRecord('url-alia', {
         target: '/vocabulary/'+id,
         alias: '/vocabulary/'+id
-      });
-    }
-  },
-  actions: {
-    save(record) {
-      record.save()
-      .then( (r)=> {
-        this.get('notifications').success('Vocabulário salvo.');
-        // success
-        return r;
-      })
-      .catch( (err)=> {
-        this.send('queryError', err);
       });
     }
   }
