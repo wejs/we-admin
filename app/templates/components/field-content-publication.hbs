@@ -1,6 +1,6 @@
 {{#if isPublished}}
   <i class="fa fa-calendar-check-o text-success"></i> <strong>Publicado em:</strong> {{moment-format publicationDate "DD/MM/YYYY h:mm a"}}
-  <button type="button" {{action "unPublish"}} class="btn btn-default btn-sm"><i class="fa fa-window-close text-danger"></i> Despublicar</button>
+  <button type="button" {{action "unPublish"}} class="btn btn-default btn-sm btn-un-publish"><i class="fa fa-window-close text-danger"></i> Despublicar</button>
 {{else}}
   {{#if (eq publishMethod.id 'unPublished')}}<i class="fa fa-calendar-times-o text-danger"></i>{{/if}}
   {{#if (eq publishMethod.id 'on_create')}}<i class="fa fa-calendar-check-o text-success"></i>{{/if}}
