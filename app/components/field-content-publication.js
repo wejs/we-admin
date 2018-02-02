@@ -46,6 +46,10 @@ export default Ember.Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
 
+    let dNow = new Date();
+    dNow.setDate(dNow.getDate() -1);
+    this.set('minDate', dNow);
+
     const publicationDate = this.get('publicationDate');
 
     this.set('newPublicationDate', publicationDate || new Date() );

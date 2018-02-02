@@ -6,9 +6,8 @@ export default Ember.Component.extend({
   session: Ember.inject.service(),
   notifications: Ember.inject.service('notification-messages'),
 
-  init(){
+  init() {
     this._super(...arguments);
-
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
   },
 
