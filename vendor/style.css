@@ -65,3 +65,6 @@
   margin-top: 5px;
 }
 
+.mce-fullscreen {
+  z-index: 2200;
+}
