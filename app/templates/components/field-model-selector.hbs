@@ -1,0 +1,10 @@
+{{#if label}}<label>{{{label}}}</label>{{/if}}
+{{#power-select
+  searchEnabled=true
+  selected=selected
+  search=(action "onSearch")
+  onchange=(action (mut selected))
+  as |record|
+}}
+ [{{record.id}}] {{get record displayValue}}
+{{/power-select}}
