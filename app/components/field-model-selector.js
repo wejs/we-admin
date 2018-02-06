@@ -14,11 +14,6 @@ export default Ember.Component.extend({
     this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
   },
 
-
-  didReceiveAttrs() {
-    this._super(...arguments);
-  },
-
   actions: {
     onSearch(term) {
       return this.search(term);

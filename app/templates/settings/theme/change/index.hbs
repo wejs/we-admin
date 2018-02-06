@@ -1,0 +1,26 @@
+<h1 class="page-header">Mudar tema</h1>
+
+{{settings-menu}}
+
+<form {{action "save" model.settings on="submit"}}>
+  <div class="row">
+    {{#each model.themes as |theme|}}
+      <div class="col-md-4 col-xl-3">
+        <div class="thumbnail">
+          {{#each theme.featuredImage as |image|}}
+            <img src="{{model.ENV.GLOBAL_HOST}}{{image.urls.original}}" />
+          {{/each}}
+          <div class="caption">
+            <h3>{{theme.name}}</h3>
+            <p>{{{theme.description}}}</p>
+            <p>
+              {{#link-to 'settings.theme.change.color' theme.id  class="btn btn-default btn-sm"}}
+                <i class="glyphicon glyphicon-download"></i> Selecionar
+              {{/link-to}}
+            </p>
+          </div>
+        </div>
+      </div>
+    {{/each}}
+  </div>
+</form>

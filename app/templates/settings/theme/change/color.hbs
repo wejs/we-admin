@@ -1,0 +1,28 @@
+<h1 class="page-header">Mudar tema</h1>
+
+{{settings-menu}}
+
+<form {{action "save" model.settings on="submit"}}>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Selecionar cor do tema "{{model.theme.name}}"</h3>
+    </div>
+    {{#each-in model.theme.themejs.configs.colors as |name color|}}
+      <div class="col-md-4 theme-item-color-preview">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">{{name}} {{#each color.colors as |c|}}
+              <span style="background-color:{{c.value}};color:{{c.value}};">&nbsp;&nbsp;&nbsp;</span>
+            {{/each}}</h3>
+          </div>
+          <div class="panel-body">
+            <img class="img-responsive" src="{{model.ENV.GLOBAL_HOST}}/seeds-files/{{model.theme.gitRepositoryName}}/files/public/previews/{{name}}.jpg" />
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-sm btn-default" {{action "installTheme" model.theme color name}}>Selecionar e instalar</button>
+          </div>
+        </div>
+      </div>
+    {{/each-in}}
+  </div>
+</form>
