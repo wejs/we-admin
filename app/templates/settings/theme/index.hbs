@@ -11,14 +11,18 @@
         <div class="panel-body">
           <fieldset>
             <div class="form-group">
-              <label>Cores do site:</label>
-              {{#power-select
-                options=model.themeCollorOptions
-                selected=model.themeCollor
-                searchEnabled=false
-                onchange=(action (mut model.themeCollor) )
-                as |opts|
-              }}[{{opts.id}}] {{opts.label}} {{#each opts.colors as |color|}}{{theme-color-item color=color.value}}{{/each}}{{/power-select}}
+              {{#if model.themeCollorOptions.length}}
+                <label>Cores do site:</label>
+                {{#power-select
+                  options=model.themeCollorOptions
+                  selected=model.themeCollor
+                  searchEnabled=false
+                  onchange=(action (mut model.themeCollor) )
+                  as |opts|
+                }}[{{opts.id}}] {{opts.label}} {{#each opts.colors as |color|}}{{theme-color-item color=color.value}}{{/each}}{{/power-select}}
+              {{else}}
+                Cores do tema: <strong> padrão</strong>
+              {{/if}}
             </div>
           </fieldset>
         </div>

@@ -35,11 +35,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     for (let themeName in ts) {
       const t = ts[themeName];
 
-      if (themeName !== model.themeConfigs.enabled) {
+      if (
+        themeName !== model.themeConfigs.enabled ||
+        !t.configs.colors
+      ) {
         continue;
       }
 
-      if (settings[themeName+'ColorName']) {
+      if (settings[themeName+'ColorName'] && t.configs.colors) {
         // has selected color:
         model.themeCollor = t.configs.colors[settings[themeName+'ColorName']];
       } else {
