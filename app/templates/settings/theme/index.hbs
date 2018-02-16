@@ -35,6 +35,11 @@
         <div class="panel-body">
           <fieldset>
             <p>Tema ativo: <strong>{{model.themeConfigs.enabled}}</strong></p>
+
+            {{#if model.updateAvaible.v}}
+              <p>Update disponível: <strong>{{model.updateAvaible.v}}</strong> <button type="button" class="btn btn-primary btn-sm" {{action 'updateTheme' model.themeConfigs.enabled model.updateAvaible.release}}> <i class="fa fa-download"></i> Atualizar</button>
+              </p>
+            {{/if}}
           </fieldset>
         </div>
       </div>

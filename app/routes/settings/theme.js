@@ -21,6 +21,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       themeCollorOptions: [],
       themeConfigName: null,
       themeCollor: null,
+      updateAvaible: null,
       themeConfigs: this.get('settings').getThemeConfigs()
     });
   },
@@ -60,6 +61,32 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           model.themeCollorOptions.push(c);
         }
       }
+    }
+
+    this.verifyCurrentThemeUpdate(model);
+  },
+
+  verifyCurrentThemeUpdate(model) {
+    const settings = this.get('settings.systemSettings');
+
+    if (
+      !settings.themesToUpdate ||
+      !model.themeConfigs.enabled
+    ) {
+      return null;
+    }
+
+    const name = model.themeConfigs.enabled;
+    let themesToUpdate;
+
+    try {
+      themesToUpdate = JSON.parse(settings.themesToUpdate);
+    } catch(e) {
+      Ember.Logger.error(e);
+    }
+
+    if (themesToUpdate && themesToUpdate[name]) {
+      model.updateAvaible = themesToUpdate[name];
     }
   },
 
@@ -143,6 +170,61 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
 
         this.transitionTo('/settings/theme');
+        return this.refresh();
+      })
+      .catch( (err)=> {
+        this.send('queryError', err);
+      });
+    },
+
+    updateTheme(themeName, release) {
+      return new window.Promise( (resolve, reject)=> {
+
+        if (!release) {
+          Ember.Logger.warn('updateTheme:theme.release is required');
+          return resolve();
+        }
+
+        let headers = { Accept: 'application/vnd.api+json' },
+            accessToken = this.get('session.session.authenticated.access_token');
+
+        if (accessToken) {
+          headers.Authorization = `Basic ${accessToken}`;
+        }
+
+        let url = `${ENV.API_HOST}/admin/theme/${themeName}/update`;
+
+        Ember.$.ajax({
+          url: url,
+          type: 'POST',
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8",
+          data: JSON.stringify({
+            name: themeName,
+            release: release
+          }),
+          headers: headers
+        })
+        .done( (data)=> {
+          if (data && data.themesToUpdate) {
+            this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
+          }
+
+          this.set('currentModel.updateAvaible', false);
+
+          resolve(data);
+          return null;
+        })
+        .fail(reject);
+      })
+      .then( (data)=> {
+        if (data && data.meta && data.meta.messages) {
+          data.meta.messages.forEach( (m)=> {
+            this.get('notifications').success(m.message);
+          });
+        } else {
+          this.get('notifications').success('Tema atualizado com sucesso.');
+        }
         return this.refresh();
       })
       .catch( (err)=> {
