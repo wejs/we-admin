@@ -80,13 +80,18 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     let themesToUpdate;
 
     try {
-      themesToUpdate = JSON.parse(settings.themesToUpdate);
+      if (typeof settings.themesToUpdate === 'string') {
+        themesToUpdate = JSON.parse(settings.themesToUpdate);
+      } else {
+        themesToUpdate = settings.themesToUpdate;
+      }
+
     } catch(e) {
       Ember.Logger.error(e);
     }
 
     if (themesToUpdate && themesToUpdate[name]) {
-      model.updateAvaible = themesToUpdate[name];
+      Ember.set(model, 'updateAvaible', themesToUpdate[name]);
     }
   },
 
@@ -182,6 +187,52 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         }
 
         this.transitionTo('/settings/theme');
+        return this.refresh();
+      })
+      .catch( (err)=> {
+        this.send('queryError', err);
+      });
+    },
+
+    verifyThemesUpdate() {
+      return new window.Promise( (resolve, reject)=> {
+
+        let headers = { Accept: 'application/vnd.api+json' },
+            accessToken = this.get('session.session.authenticated.access_token');
+
+        if (accessToken) {
+          headers.Authorization = `Basic ${accessToken}`;
+        }
+
+        let url = `${ENV.API_HOST}/admin/theme-verify-updates`;
+
+        Ember.$.ajax({
+          url: url,
+          type: 'POST',
+          dataType: 'json',
+          contentType: "application/json; charset=utf-8",
+          headers: headers
+        })
+        .done( (data)=> {
+          if (data && data.themesToUpdate) {
+            this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
+          }
+
+          this.verifyCurrentThemeUpdate(this.get('currentModel'));
+
+          resolve(data);
+          return null;
+        })
+        .fail(reject);
+      })
+      .then( (data)=> {
+        if (data && data.meta && data.meta.messages) {
+          data.meta.messages.forEach( (m)=> {
+            this.get('notifications').success(m.message);
+          });
+        } else {
+          this.get('notifications').success('Temas verificados com sucesso.');
+        }
         return this.refresh();
       })
       .catch( (err)=> {

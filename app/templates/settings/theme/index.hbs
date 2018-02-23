@@ -40,20 +40,25 @@
               <p>Update disponível: <strong>{{model.updateAvaible.v}}</strong> <button type="button" class="btn btn-primary btn-sm" {{action 'updateTheme' model.themeConfigs.enabled model.updateAvaible.release}}> <i class="fa fa-download"></i> Atualizar</button>
               </p>
             {{/if}}
+
           </fieldset>
         </div>
       </div>
     </div>
 
     <div class="col-md-12">
-      <button class="btn btn-primary">
-        <i class="fa fa-save"></i>
-        Salvar
-      </button>
+      <div class="footer-actions">
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          Salvar
+        </button>
 
-      {{#link-to 'settings.theme.change' class="btn btn-default"}}
-        Mudar tema
-      {{/link-to}}
+        {{#link-to 'settings.theme.change' class="btn btn-default"}}
+          Mudar tema
+        {{/link-to}}
+
+        <button type="button" class="btn btn-default" {{action 'verifyThemesUpdate'}}>Buscar atualização</button>
+      </div>
     </div>
 
   </div>
