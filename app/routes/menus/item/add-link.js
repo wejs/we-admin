@@ -3,6 +3,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   session: Ember.inject.service('session'),
+  acl: Ember.inject.service('acl'),
 
   model() {
     let parentModel = this.modelFor('menus.item');
@@ -29,7 +30,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           id: 'createPage',
           text: 'Criar uma nova página'
         }
-      ]
+      ],
+      userRoles: this.get('acl').getRolesArray()
+    });
+  },
+
+  afterModel(model) {
+    model.userRoles.unshift({
+      id: null,
+      name: 'Público'
     });
   },
 

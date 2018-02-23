@@ -69,9 +69,17 @@
           </div>
         <hr>
       {{/if}}
-
-
     {{/if}}
+
+    <div class="form-group">
+      <label>{{t 'form-link-userRole'}}:</label>
+      {{field-role-selector
+        value=model.record.userRole
+        roles=model.userRoles
+        placeholder=(t 'form-placeholder-link-userRole')
+      }}
+      <p class="help-block">{{t 'form-helper-link-userRole'}}</p>
+    </div>
 
     {{#bs-accordion as |acc|}}
       {{#acc.item value="1" title="Campos avançados"}}
@@ -94,6 +102,8 @@
           <label>{{t 'form-link-rel'}}:</label>
           {{input value=model.record.rel class="form-control" placeholder=(t 'form-placeholder-link-rel')}}
         </div>
+
+
       {{/acc.item}}
     {{/bs-accordion}}
     <div class="form-group">

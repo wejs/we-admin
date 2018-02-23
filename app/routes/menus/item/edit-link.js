@@ -3,6 +3,7 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   session: Ember.inject.service('session'),
+  acl: Ember.inject.service('acl'),
 
   model(params) {
     let parentModel = this.modelFor('menus.item');
@@ -11,6 +12,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       menuId: parentModel.menuId,
       menu: parentModel.record,
       record: this.get('store').findRecord('link', params.linkid),
+      userRoles: this.get('acl').getRolesArray()
+    });
+  },
+  afterModel(model) {
+    model.userRoles.unshift({
+      id: null,
+      name: 'Público'
     });
   },
   actions: {

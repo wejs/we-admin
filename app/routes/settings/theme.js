@@ -90,6 +90,18 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     }
   },
 
+  removeUpdatedThemeFromToUpdateList() {
+    const settings = this.get('settings.systemSettings');
+    const model = this.get('currentModel');
+    const name = model.themeConfigs.enabled;
+
+    let themesToUpdate = JSON.parse(settings.themesToUpdate);
+
+    delete themesToUpdate[name];
+
+    this.set('settings.systemSettings.themesToUpdate', JSON.stringify(themesToUpdate));
+  },
+
   actions: {
     save(data) {
       const model = this.get('currentModel');
@@ -208,6 +220,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         .done( (data)=> {
           if (data && data.themesToUpdate) {
             this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
+          } else {
+            this.removeUpdatedThemeFromToUpdateList();
           }
 
           this.set('currentModel.updateAvaible', false);

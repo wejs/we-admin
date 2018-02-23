@@ -1,3 +1,9 @@
-import controller from 'we-admin/controllers/menus/item/index';
+import Ember from 'ember';
 
-export default controller;
+export default Ember.Controller.extend({
+  actions: {
+    onChangeMenuComponent(newV) {
+      Ember.set(this, 'model.selectedMenuComponent', newV);
+    }
+  }
+});
