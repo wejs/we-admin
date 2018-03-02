@@ -4,18 +4,7 @@
   {{bootstrap-loading}}
 {{else}}
   {{#if session.isAuthenticated}}
-    {{#if settings.isManager}}
-      <div id="wrapper">
-        {{partial 'partials/header'}}
-        <div id="page-wrapper">
-          {{outlet}}
-
-          {{image-uploader-browser}}
-        </div>
-      </div>
-    {{else}}
-      {{partial 'partials/home-not-manager'}}
-    {{/if}}
+    {{partial 'partials/home-not-manager'}}
   {{else}}
     {{partial 'partials/home-un-authenticated'}}
   {{/if}}

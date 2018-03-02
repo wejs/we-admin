@@ -12,11 +12,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           title: 'ID'
         },
         {
-          propertyName: 'username',
-          filteredBy: 'username_starts-with',
-          title: 'Username'
-        },
-        {
           propertyName: 'displayName',
           filteredBy: 'displayName_starts-with',
           title: 'Nome'
@@ -24,7 +19,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         {
           propertyName: 'email',
           filteredBy: 'email_starts-with',
-          title: 'Email'
+          title: 'E-mail'
+        },
+        {
+          propertyName: 'fullName',
+          filteredBy: 'fullName_starts-with',
+          title: 'Nome completo'
         },
         {
           propertyName: 'active',

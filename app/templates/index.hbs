@@ -5,6 +5,7 @@
 </div>
 
 <div class="row">
+  {{#acl-can 'update_user'}}
   <div class="col-lg-3 col-md-6">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -27,6 +28,8 @@
       {{/link-to}}
     </div>
   </div>
+  {{/acl-can}}
+  {{#acl-can 'create_news'}}
   <div class="col-lg-3 col-md-6">
     <div class="panel panel-yellow">
       <div class="panel-heading">
@@ -49,10 +52,11 @@
       {{/link-to}}
     </div>
   </div>
+  {{/acl-can}}
 </div>
 <div class="row">
   <div class="col-lg-8">
-
+    {{#acl-can 'create_news'}}
     <div class="panel panel-default">
       <div class="panel-heading">
         <i class="fa fa-file-text"></i> {{t 'admin.dashboard.content.unpublished'}}
@@ -96,7 +100,9 @@
         </div>
       </div>
     </div>
+    {{/acl-can}}
 
+    {{#acl-can 'update_user'}}
     <div class="panel panel-default">
       <div class="panel-heading">
         <i class="fa fa-users"></i> {{t 'user.newest'}}
@@ -140,6 +146,7 @@
         </div>
       </div>
     </div>
+    {{/acl-can}}
 
   </div>
   <div class="col-lg-4">
