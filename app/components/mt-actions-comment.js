@@ -1,1 +1,9 @@
-export { default } from 'we-admin/components/mt-actions-comment';
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  actions: {
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});

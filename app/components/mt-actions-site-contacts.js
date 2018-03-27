@@ -1,3 +1,9 @@
-import component from 'we-admin/components/mt-actions-site-contacts';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+  actions: {
+    changeStatus() {
+      this.sendAction('changeStatus', ...arguments);
+    }
+  }
+});

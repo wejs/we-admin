@@ -1,1 +1,9 @@
-export { default } from 'we-admin/components/mt-actions-email-templates';
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  actions: {
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});

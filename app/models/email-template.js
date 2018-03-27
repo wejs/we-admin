@@ -1,3 +1,13 @@
-import model from 'we-admin/models/email-template';
+import DS from 'ember-data';
 
-export default model;
+export default DS.Model.extend({
+  subject: DS.attr('string'),
+  text: DS.attr('string'),
+  css: DS.attr('string'),
+  html: DS.attr('string'),
+  type: DS.attr('string'),
+  typeSettings: DS.attr('string'),
+  linkPermanent: DS.attr('string'),
+  createdAt: DS.attr('date'),
+  updatedAt: DS.attr('date')
+});

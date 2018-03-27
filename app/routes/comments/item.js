@@ -1,3 +1,10 @@
-import route from 'we-admin/routes/comments/item';
+import Ember from 'ember';
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default route;
+export default Ember.Route.extend(AuthenticatedRouteMixin, {
+  model(params) {
+    return Ember.RSVP.hash({
+      record: this.get('store').findRecord('comment', params.id)
+    });
+  }
+});

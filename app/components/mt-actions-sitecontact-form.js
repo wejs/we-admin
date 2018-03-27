@@ -1,1 +1,12 @@
-export { default } from 'we-admin/components/mt-actions-sitecontact-form';
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  actions: {
+    changePublishedStatus() {
+      this.sendAction('changePublishedStatus', ...arguments);
+    },
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});

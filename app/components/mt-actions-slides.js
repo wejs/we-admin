@@ -1,3 +1,12 @@
-import component from 'we-admin/components/mt-actions-slides';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+  actions: {
+    changePublishedStatus() {
+      this.sendAction('changePublishedStatus', ...arguments);
+    },
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});

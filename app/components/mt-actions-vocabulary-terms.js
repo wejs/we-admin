@@ -1,3 +1,13 @@
-import component from 'we-admin/components/mt-actions-vocabulary-terms';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+  init() {
+    this._super(...arguments);
+    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+  },
+  actions: {
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});

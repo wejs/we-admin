@@ -1,1 +1,3 @@
-export { default } from 'we-admin/components/mt-comment-body';
+import Ember from 'ember';
+
+export default Ember.Component.extend();

@@ -1,3 +1,4 @@
-import component from 'we-admin/components/we-datepicker';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+});

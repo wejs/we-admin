@@ -1,3 +1,23 @@
-import model from 'we-admin/models/slide';
+import DS from 'ember-data';
 
-export default model;
+export default DS.Model.extend({
+  title: DS.attr('string'),
+  highlighted: DS.attr('number', {
+    defaultValue: 0
+  }),
+  description: DS.attr('string'),
+  link: DS.attr('string'),
+  linkText: DS.attr('string'),
+  published: DS.attr('boolean', {
+    defaultValue: true
+  }),
+  publishedAt: DS.attr('date'),
+  slideshowId: DS.attr('string', {
+    defaultValue: 1
+  }),
+  creator: DS.belongsTo('user', {
+    inverse: 'slides'
+  }),
+  linkPermanent: DS.attr('string'),
+  image: DS.attr('array')
+});

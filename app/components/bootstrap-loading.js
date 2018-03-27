@@ -1,3 +1,9 @@
-import component from 'we-admin/components/bootstrap-loading';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+  didInsertElement() {
+    const lw = Ember.$('.loading-wrapper');
+    lw.width(Ember.$( window ).width());
+    lw.height(Ember.$( window ).height());
+  }
+});

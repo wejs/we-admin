@@ -1,3 +1,9 @@
-import component from 'we-admin/components/mt-actions-data-importer-status';
+import Ember from 'ember';
 
-export default component;
+export default Ember.Component.extend({
+  actions: {
+    deleteRecord() {
+      this.sendAction('deleteRecord', ...arguments);
+    }
+  }
+});
