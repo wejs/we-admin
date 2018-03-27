@@ -1,3 +1,3 @@
-import controller from 'we-admin/controllers/comments/item';
+import controller from './item';
 
 export default controller;

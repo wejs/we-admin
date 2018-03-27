@@ -1,3 +1,3 @@
-import controller from 'we-admin/controllers/email-templates/item';
+import controller from './item';
 
 export default controller;
