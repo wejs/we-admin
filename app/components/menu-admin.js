@@ -5,22 +5,20 @@ export default Ember.Component.extend({
   settings: Ember.inject.service('settings'),
 
   tagName: 'ul',
-  classNames: [
-    'nav', ' in'
-  ],
-
   ENV: null,
 
   userRoles: Ember.computed.alias('acl.userRoles'),
-
-  links: Ember.A(),
 
   init() {
     this._super(...arguments);
 
     const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
     this.set('ENV', ENV);
+
+    this.set('links', Ember.A());
+    this.set('classNames', [
+      'nav', ' in'
+    ]);
   },
 
   didInsertElement() {
@@ -33,6 +31,11 @@ export default Ember.Component.extend({
   },
 
   didReceiveAttrs() {
+    if (this.get('links.length')) {
+      // already load
+      return;
+    }
+
     const links = this.get('links'),
       allLinks = this.get('ENV.adminMenu'),
       acl = this.get('acl'),
