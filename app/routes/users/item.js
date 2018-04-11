@@ -86,8 +86,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         console.log('response>', response);
         this.get('notifications').success('Senha alterada com sucesso.');
 
-        model.newPassword = null;
-        model.rNewPassword = null;
+        this.set('currentModel.newPassword', null);
+        this.set('currentModel.rNewPassword', null);
         // success
         return response;
       })
