@@ -6,15 +6,15 @@
       <fieldset>
         <div class="form-group">
           <label>{{t 'form-user-displayName'}}*:</label>
-          {{input value=model.user.displayName class="form-control" placeholder=(t 'form-placeholder-user-displayName') required="required"}}
+          {{input value=model.user.displayName autocomplete="displayName" class="form-control" placeholder=(t 'form-placeholder-user-displayName') required="required"}}
         </div>
         <div class="form-group">
           <label>{{t 'form-user-email'}}*:</label>
-          {{input value=model.user.email class="form-control" placeholder=(t 'form-placeholder-user-email') required="required"}}
+          {{input value=model.user.email autocomplete="email" class="form-control" placeholder=(t 'form-placeholder-user-email') required="required"}}
         </div>
         <div class="form-group">
           <label>{{t 'form-user-biography'}}:</label>
-          {{textarea value=model.user.biography class="form-control" rows="4"}}
+          {{textarea value=model.user.biography autocomplete="biography" class="form-control" rows="4"}}
         </div>
         <div class="form-group">
           <label>{{t 'form-user-language'}}:</label>
@@ -42,7 +42,15 @@
         </button>
 
         <div class="pull-right">
-          {{#if model.user.active}}
+          {{#if model.user.blocked}}
+            <button {{action 'changeBlockStatus' model.user false}} type="button" class="btn btn-default">
+              {{t 'Un Block'}}
+            </button>
+          {{else}}
+            <button {{action 'changeBlockStatus' model.user true}} type="button" class="btn btn-danger">
+              {{t 'Block'}}
+            </button>
+          {{/if}} {{#if model.user.active}}
             <button {{action 'changeActiveStatus' model.user false}} type="button" class="btn btn-warning">
               {{t 'Disable'}}
             </button>

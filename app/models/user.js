@@ -8,6 +8,7 @@ export default DS.Model.extend({
   gender: DS.attr('string'),
   email: DS.attr('string'),
   active: DS.attr('boolean'),
+  blocked: DS.attr('boolean'),
   language: DS.attr('string'),
   roles: DS.attr(),
   contents: DS.hasMany('content', {

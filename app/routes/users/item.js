@@ -61,6 +61,40 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     },
 
+    changeBlockStatus(user, status) {
+     let headers = {
+        Accept: 'application/vnd.api+json'
+      };
+
+      let accessToken = this.get('session.session.authenticated.access_token');
+
+      if (accessToken) {
+        headers.Authorization = `Basic ${accessToken}`;
+      }
+
+      Ember.$.ajax({
+        url: ENV.API_HOST + '/block-user/'+ user.id,
+        type: 'POST',
+        data: { blocked: status },
+        cache: false,
+        headers: headers
+      })
+      .then( (response)=> {
+        user.set('blocked', status);
+
+        if (status) {
+          this.get('notifications').success('Usuário bloqueado.');
+        } else {
+          this.get('notifications').success('Usuário desbloqueado.');
+        }
+
+        return response;
+      })
+      .fail( (err)=> {
+        this.send('queryError', err);
+      });
+    },
+
     changePassword(model) {
      let headers = {
         Accept: 'application/vnd.api+json'
@@ -83,7 +117,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         headers: headers
       })
       .then( (response)=> {
-        console.log('response>', response);
         this.get('notifications').success('Senha alterada com sucesso.');
 
         this.set('currentModel.newPassword', null);
@@ -91,7 +124,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         // success
         return response;
       })
-      .catch( (err)=> {
+      .fail( (err)=> {
         this.send('queryError', err);
       });
     },
