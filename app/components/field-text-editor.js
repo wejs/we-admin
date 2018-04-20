@@ -47,9 +47,32 @@ export default Ember.Component.extend({
       language: this.getEditorLocale(),
       language_url: this.getEditorLocaleUrl(),
 
+      image_description: true,
       image_caption: true,
+      image_advtab: true,
       file_browser_callback_types: 'image',
-      file_picker_callback: this.get('upload').get_file_picker_callback()
+      file_picker_callback: this.get('upload').get_file_picker_callback(),
+
+      // imagetools_toolbar: 'rotateleft rotateright | imageoptions',
+
+      // style_formats: [
+      //   {
+      //     title: 'Image Left',
+      //     selector: 'img',
+      //     styles: {
+      //       'float' : 'left',
+      //       'margin': '0 10px 0 10px'
+      //     }
+      //   },
+      //   {
+      //     title: 'Image Right',
+      //     selector: 'img',
+      //     styles: {
+      //       'float' : 'right',
+      //       'margin': '0 10px 0 10px'
+      //     }
+      //   }
+      // ]
     };
   },
 
