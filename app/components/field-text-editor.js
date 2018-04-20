@@ -47,6 +47,7 @@ export default Ember.Component.extend({
       language: this.getEditorLocale(),
       language_url: this.getEditorLocaleUrl(),
 
+      image_caption: true,
       file_browser_callback_types: 'image',
       file_picker_callback: this.get('upload').get_file_picker_callback()
     };
