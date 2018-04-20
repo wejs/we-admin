@@ -14,7 +14,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       }
     },
     changePublishedStatus(record, status) {
-      record.published = status;
+      record.set('published', status);
       record.save()
       .then( (r)=> {
         if (status) {
@@ -30,7 +30,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     },
     save(record) {
-      record.slideshowId = 1;
+      record.set('slideshowId', 1);
 
       record.save()
       .then( (r)=> {

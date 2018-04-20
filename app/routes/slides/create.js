@@ -9,7 +9,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   actions: {
     save(record) {
-      record.slideshowId = 1; // hardcoded slideshow id
+      record.set('slideshowId', 1); // hardcoded slideshow id
 
       record.save()
       .then( (r)=> {
