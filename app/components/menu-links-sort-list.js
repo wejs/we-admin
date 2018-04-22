@@ -4,6 +4,7 @@ const Sortable = window.Sortable;
 
 export default Ember.Component.extend({
   links: null,
+
   group: 'default',
 
   onSortEnd: 'onSortEnd',
@@ -17,7 +18,6 @@ export default Ember.Component.extend({
   int() {
     if(this.get('parentDepth')) {
       this.set('depth', this.get('parentDepth')+1);
-
     }
   },
 

@@ -17,7 +17,6 @@ export default Ember.Component.extend({
     deleteLink() {
       this.sendAction('deleteLink', ...arguments);
     },
-
     openEditForm(v) {
       this.set('hideForm', v);
     }

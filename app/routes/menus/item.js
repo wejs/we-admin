@@ -22,7 +22,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       menuData: this.getLinks(params.id),
       record: null,
       updated: false,
-      links: [],
+      links: Ember.A(),
       menus: this.get('store').query('menu', {}),
       editingRecord: null,
       menuSelected: null,
@@ -51,7 +51,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
             }
           }
         }
-
       };
     });
 
@@ -203,7 +202,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
       const item = fromComponent.links.objectAt(event.oldIndex);
 
-      fromComponent.links.removeAt(event.oldIndex);
+      fromComponent.links.removeObject(item);
+
+      if (toComponent === fromComponent) {
+
+      } else {
+        event.item.remove(); // remove from DOM
+      }
+
       toComponent.links.insertAt(event.newIndex, item);
 
       this.resetLinksWeight(this.get('currentModel.links.links'), {

@@ -59,17 +59,16 @@
         </form>
       </div>
       <div class="panel-body">
-
         <div class="menu-links">
           <h4>Estrutura do menu / links:</h4>
-
           <div class="menu-links-sortable-wrapper">
             {{#if model.links}}
               <p class="help-block">Clique e arraste cada link abaixo para ordenar os links do menu.
               <br>A ordem só será salva após clicar no botão "Salvar ordem"
               </p>
-
-              {{menu-links-sort-list links=model.links.links onSortEnd="onSortEnd"}}
+              {{menu-links-sort-list
+                links=model.links.links
+                onSortEnd="onSortEnd"}}
             {{/if}}
           </div>
 
