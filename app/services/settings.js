@@ -126,7 +126,6 @@ export default Ember.Service.extend({
     });
   },
 
-
   getThemeConfigs() {
     // const uid = this.get('authenticatedUserId');
     let headers = { Accept: 'application/vnd.api+json' },
@@ -171,5 +170,16 @@ export default Ember.Service.extend({
         componentName: 'menu-tag-selector'
       }
     ];
+  },
+
+  getHeaders() {
+    let headers = { Accept: 'application/vnd.api+json' },
+        accessToken = this.get('session.session.authenticated.access_token');
+
+    if (accessToken) {
+      headers.Authorization = `Basic ${accessToken}`;
+    }
+
+    return headers;
   }
 });
