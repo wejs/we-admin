@@ -20,16 +20,16 @@ export default AjaxService.extend({
       this.set('headers', headers);
     });
 
-    return this._super(url, options).
-      catch((error) => {
-        if (error instanceof UnauthorizedError) {
-          if (this.get('session.isAuthenticated')) {
-            this.get('session').invalidate();
-          }
+    return this._super(url, options)
+    .catch( (error) => {
+      if (error instanceof UnauthorizedError) {
+        if (this.get('session.isAuthenticated')) {
+          this.get('session').invalidate();
         }
-        else {
-          throw error;
-        }
-      });
+      }
+      else {
+        throw error;
+      }
+    });
   }
 });

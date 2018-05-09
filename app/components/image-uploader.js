@@ -67,26 +67,7 @@ export default Ember.Component.extend({
   actions: {
     startUpload() {},
     selected(files) {
-      const file = files[0];
-      this.set('selectedFile', file);
-      const reader = new FileReader();
-
-      reader.onload = (e)=> {
-        // get local file src
-        this.set('previewImageSrc', e.target.result);
-
-        let fileSizeInMB = Math.round(file.size/1024/1024);
-
-        if (fileSizeInMB >= 10) {
-
-          this.get('notifications').error('A imagem selecionada tem '+fileSizeInMB+'MB'+
-            ' e o limite de envio de imagens é 10MB. Selecione uma imagem com menos de 10MB de tamanho.');
-          this.hideUploadModal();
-        } else {
-          this.set('notReadyToUpload', false);
-        }
-      };
-      reader.readAsDataURL(file);
+      this.selected(files);
     },
     progress(uploader, e) {
       this.set('percent', e.percent);
@@ -101,8 +82,6 @@ export default Ember.Component.extend({
     },
     didError(uploader, jqXHR, textStatus, errorThrown) {
       console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
-
-
     },
     removeImage(image) {
       if (confirm(`Tem certeza que deseja remover essa imagem?`)) {
@@ -136,7 +115,39 @@ export default Ember.Component.extend({
 
     onHideUploadModal() {
       this.hideUploadModal();
+    },
+
+    onSelectSalvedImage(image) {
+      const value = this.getValue();
+      value.pushObject(image);
+      this.hideUploadModal();
+      this.set('uploader', null);
+      this.set('description', null);
+      this.set('selectedFile', null);
     }
+  },
+
+  selected(files) {
+    const file = files[0];
+    this.set('selectedFile', file);
+    const reader = new FileReader();
+
+    reader.onload = (e)=> {
+      // get local file src
+      this.set('previewImageSrc', e.target.result);
+
+      let fileSizeInMB = Math.round(file.size/1024/1024);
+
+      if (fileSizeInMB >= 10) {
+
+        this.get('notifications').error('A imagem selecionada tem '+fileSizeInMB+'MB'+
+          ' e o limite de envio de imagens é 10MB. Selecione uma imagem com menos de 10MB de tamanho.');
+        this.hideUploadModal();
+      } else {
+        this.set('notReadyToUpload', false);
+      }
+    };
+    reader.readAsDataURL(file);
   },
 
   hideUploadModal() {

@@ -61,14 +61,22 @@
           </div>
         {{/if}}
       {{else}}
-        {{image-upload
-          uploader=uploader
-          url=url
-          progress='progress'
-          didUpload='didUpload'
-          didError='didError'
-          selected='selected'
-        }}
+
+        {{#bs-tab as |tab|}}
+          {{#tab.pane title="Upload / enviar"}}
+            {{image-upload
+              uploader=uploader
+              url=url
+              progress='progress'
+              didUpload='didUpload'
+              didError='didError'
+              selected='selected'
+            }}
+          {{/tab.pane}}
+          {{#tab.pane title="Selecionar imagem salva"}}
+            {{we-images-to-select onSelectImage=(action 'onSelectSalvedImage')}}
+          {{/tab.pane}}
+        {{/bs-tab}}
       {{/if}}
     {{/if}}
   {{/modal.body}}
