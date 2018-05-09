@@ -36,6 +36,10 @@ export default Ember.Component.extend({
       theme: 'modern',
       convert_urls: false,
       branding: false,
+
+      theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
+      paste_auto_cleanup_on_paste : true,
+
       extended_valid_elements: 'iframe[src|frameborder|style|scrolling|class|width|height|name|align]',
       plugins: [
         'advlist autolink lists link image charmap print hr anchor',

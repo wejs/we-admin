@@ -118,3 +118,7 @@ figure.image figcaption {
   margin: 6px 8px 6px 8px;
   text-align: center;
 }
+
+.mce-container.mce-panel.mce-floatpanel.mce-menu.mce-in {
+  z-index: 165535;
+}
