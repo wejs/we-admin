@@ -3,6 +3,14 @@
 module.exports = {
   name: 'we-admin',
 
+  init() {
+    if (this._super.init) {
+      this._super.init.apply(this, arguments);
+    }
+
+    this._copyPublicFiles();
+  },
+
   outputReady() {
     // only run in production env:
     if (this.app.env !== 'production') {
@@ -12,6 +20,20 @@ module.exports = {
     var fs = this.project.require('fs-extra');
     var originFolder = process.cwd() + '/dist';
     var distFolder = process.cwd() + '/prod';
+    // cleanup:
+    fs.emptyDirSync(distFolder);
+    // copy:
+    fs.copySync(originFolder, distFolder);
+  },
+
+  // preBuild() {
+  //   this._copyPublicFiles();
+  // },
+
+  _copyPublicFiles() {
+    var fs = this.project.require('fs-extra');
+    var originFolder = __dirname + '/public';
+    var distFolder = process.cwd() + '/public/we-admin';
     // cleanup:
     fs.emptyDirSync(distFolder);
     // copy:

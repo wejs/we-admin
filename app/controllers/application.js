@@ -32,5 +32,9 @@ export default Ember.Controller.extend({
     didError(uploader, jqXHR, textStatus, errorThrown) {
       this.get('upload').didError(uploader, jqXHR, textStatus, errorThrown);
     },
+
+    onSelectSalvedImage(image) {
+      this.get('upload').onSelectSalvedImage(image);
+    },
   }
 });

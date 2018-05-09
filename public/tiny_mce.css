@@ -1,0 +1,8 @@
+img[data-mce-style="float: left;"],
+figure.image.align-left {
+  margin: 3px 8px 3px 0px;
+}
+img[data-mce-style="float: right;"],
+figure.image.align-right {
+  margin: 3px 0px 3px 8px;
+}

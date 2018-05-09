@@ -104,15 +104,12 @@ figure.image img {
   margin: 8px 8px 0 8px;
 }
 */
-
 figure.image.align-left {
   margin: 8px 8px 8px 0px;
 }
 figure.image.align-right {
   margin: 8px 0px 8px 8px;
 }
-
-
 
 figure.image figcaption {
   margin: 6px 8px 6px 8px;

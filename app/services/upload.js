@@ -150,5 +150,18 @@ export default Ember.Service.extend({
   },
   didError(uploader, jqXHR, textStatus, errorThrown) {
     Ember.Logger.error('didError>', uploader, jqXHR, textStatus, errorThrown);
+  },
+
+  onSelectSalvedImage(image) {
+    this.hideUploadModal();
+
+    this.get('fileSelectedCallback')(null, {
+      image: image
+    });
+
+    this.set('fileSelectedCallback', null);
+    this.set('uploader', null);
+    this.set('selectedFile', null);
+    this.set('uploadingImage', false);
   }
 });

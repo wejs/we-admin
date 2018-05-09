@@ -32,6 +32,8 @@ export default Ember.Component.extend({
 
   getBigEditor() {
     return {
+      content_css : 'we-admin/tiny_mce.css',
+
       min_height: 400,
       theme: 'modern',
       convert_urls: false,
@@ -57,26 +59,7 @@ export default Ember.Component.extend({
       file_browser_callback_types: 'image',
       file_picker_callback: this.get('upload').get_file_picker_callback(),
 
-      // imagetools_toolbar: 'rotateleft rotateright | imageoptions',
-
-      // style_formats: [
-      //   {
-      //     title: 'Image Left',
-      //     selector: 'img',
-      //     styles: {
-      //       'float' : 'left',
-      //       'margin': '0 10px 0 10px'
-      //     }
-      //   },
-      //   {
-      //     title: 'Image Right',
-      //     selector: 'img',
-      //     styles: {
-      //       'float' : 'right',
-      //       'margin': '0 10px 0 10px'
-      //     }
-      //   }
-      // ]
+      imagetools_toolbar: 'rotateleft rotateright | imageoptions'
     };
   },
 
