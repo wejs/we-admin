@@ -31,8 +31,11 @@ export default Ember.Component.extend({
   },
 
   getBigEditor() {
+    const ENV = this.get('ENV');
+
     return {
-      content_css : 'we-admin/tiny_mce.css',
+      content_css : ENV.API_HOST+
+        '/public/plugin/we-plugin-editor-tinymce/files/tiny_mce.css',
 
       min_height: 400,
       theme: 'modern',

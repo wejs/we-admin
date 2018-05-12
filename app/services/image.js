@@ -1,7 +1,8 @@
 import Ember from 'ember';
+import { inject } from '@ember/service';
 
 export default Ember.Service.extend({
-  settings: Ember.inject.service(),
+  settings: inject(),
 
   getImageData(imageId) {
     const settings = this.get('settings');

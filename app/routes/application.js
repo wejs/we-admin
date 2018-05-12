@@ -2,8 +2,9 @@ import Ember from 'ember';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
-  session: Ember.inject.service('session'),
-  acl: Ember.inject.service('acl'),
+  session: Ember.inject.service(),
+  acl: Ember.inject.service(),
+
   ENV: null,
 
   init() {
@@ -12,10 +13,24 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
   },
 
   beforeModel() {
+    this._super(...arguments);
+
+    const ENV = this.get('ENV');
+
     this.get('notifications').setDefaultAutoClear(true);
     this.get('notifications').setDefaultClearDuration(5200);
 
-    return this.getLocalesFromHost();
+    let jobs = {};
+
+    if (typeof tinymce === 'undefined'){
+      jobs['tinymce'] = Ember.$.getScript(
+        ENV.API_HOST+
+        '/public/plugin/we-plugin-editor-tinymce/files/tinymce.min.js');
+    }
+
+    jobs['locales' ]= this.getLocalesFromHost();
+
+    return Ember.RSVP.hash(jobs);
   },
   model() {
     return Ember.RSVP.hash({
@@ -28,7 +43,7 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     });
   },
   afterModel() {
-    this.set('i18n.locale', this.get('settings.data.activeLocale'));
+    this.set('i18n.locale', this.get('settings.data.activeLocale') || 'pt-br');
 
     document.title = this.get('settings.systemSettings.siteName') + ' | '+document.title;
   },

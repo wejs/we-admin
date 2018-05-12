@@ -62,7 +62,7 @@ export default ServerModelsTable.extend({
   init() {
     this._super();
     const i18n = this.get('i18n');
-    this.set('customMessages', Ember.Object.create({
+    this.set('themeInstance.messages', Ember.Object.create({
       "searchLabel": i18n.t("models.table.search"),
       "searchPlaceholder": "",
       "columns-title": i18n.t("models.table.columns"),
