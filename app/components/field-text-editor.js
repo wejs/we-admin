@@ -14,6 +14,10 @@ export default Ember.Component.extend({
   init() {
     this._super(...arguments);
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+
+    window.tinyMCE.baseURL = ENV.API_HOST+
+        '/public/plugin/we-plugin-editor-tinymce/files';
+
     this.set('ENV', ENV);
   },
 
@@ -33,12 +37,16 @@ export default Ember.Component.extend({
   getBigEditor() {
     const ENV = this.get('ENV');
 
+
+
     return {
       content_css : ENV.API_HOST+
         '/public/plugin/we-plugin-editor-tinymce/files/tiny_mce.css',
 
       min_height: 400,
       theme: 'modern',
+      theme_url: ENV.API_HOST+
+        '/public/plugin/we-plugin-editor-tinymce/files/themes/modern/theme.min.js',
       convert_urls: false,
       branding: false,
 
