@@ -147,7 +147,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       .catch(cb);
     },
     removeUserRole(roleName, user, cb) {
-      const userRoles = user.get('roles');
+      let userRoles = user.get('roles');
+
+      if (!userRoles) {
+        user.set('roles', Ember.A());
+        userRoles = user.get('roles');
+      }
 
       if (userRoles.indexOf(roleName) === -1) {
         // this user dont have the role:
