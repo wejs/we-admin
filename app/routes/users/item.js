@@ -129,7 +129,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     },
     addUserRole(roleName, user, cb) {
-      const userRoles = user.get('roles');
+      let userRoles = user.get('roles');
+
+      if (!userRoles) {
+        user.set('roles', Ember.A());
+        userRoles = user.get('roles');
+      }
 
       if (userRoles.indexOf(roleName) > -1) {
         // this user already have the role:
