@@ -2,6 +2,10 @@ import DS from 'ember-data';
 import Ember from 'ember';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 
+import Inflector from 'ember-inflector';
+const inflector = Inflector.inflector;
+inflector.irregular('modelsterms', 'modelsterm');
+
 export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   authorizer: 'authorizer:custom',
   headers: {
