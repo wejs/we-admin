@@ -1,10 +1,20 @@
 {{#if isPublished}}
-  <i class="fa fa-calendar-check-o text-success"></i> <strong>Publicado em:</strong> {{moment-format publicationDate "DD/MM/YYYY h:mm a"}}
+  <i class="fa fa-calendar-check-o text-success"></i> <strong>Publicado em:</strong>
+  <span class="field-content-publication-date-picker">
+    {{date-time-picker
+        onChange=(action "changeDate")
+        date=(readonly publicationDate)
+    }}
+  </span>
   <button type="button" {{action "unPublish"}} class="btn btn-default btn-sm btn-un-publish"><i class="fa fa-window-close text-danger"></i> Despublicar</button>
 {{else}}
   {{#if (eq publishMethod.id 'unPublished')}}<i class="fa fa-calendar-times-o text-danger"></i>{{/if}}
   {{#if (eq publishMethod.id 'on_create')}}<i class="fa fa-calendar-check-o text-success"></i>{{/if}}
-  {{#if (eq publishMethod.id 'schendule')}}<i class="fa fa-calendar text-primary"></i>{{/if}} <strong>{{publishMethod.text}}</strong> <button type="button" {{action 'openEditor'}} href="javascript:;" class="btn btn-link btn-sm">Editar</button>
+  {{#if (eq publishMethod.id 'schendule')}}
+    <i class="fa fa-calendar text-primary"></i>
+  {{/if}}
+
+  <strong>{{publishMethod.text}}</strong> <button type="button" {{action 'openEditor'}} class="btn btn-link btn-sm">Editar</button>
   {{#if (eq publishMethod.id 'schendule')}}
     <div>Para: {{moment-format publicationDate "DD/MM/YYYY h:mm a"}}</div>
   {{/if}}
