@@ -2,6 +2,11 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
+  model() {
+    return Ember.RSVP.hash({
+      slideshow: this.store.findRecord('slideshow', 1)
+    });
+  },
   actions: {
     deleteRecord(record) {
       if (confirm(`Tem certeza que deseja deletar o slide "${record.get('title')}"? \nEssa ação não pode ser desfeita.`)) {
@@ -30,7 +35,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       });
     },
     save(record) {
-      record.set('slideshowId', 1);
+      if (!record.get('slideshow.id')) {
+        record.set('slideshow', this.get('currentModel.slideshow'));
+      }
+
 
       record.save()
       .then( (r)=> {
@@ -44,9 +52,6 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         this.send('queryError', err);
         return err;
       });
-    },
-    changeDate(x, y, z) {
-      console.log('>', x, y, z);
     }
   }
 });

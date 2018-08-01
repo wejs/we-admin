@@ -3,14 +3,16 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model() {
-    return {
-      record: this.store.createRecord('slide')
-    };
+    const slideshow = this.modelFor('slides').slideshow;
+    return Ember.RSVP.hash({
+      record: this.store.createRecord('slide', {
+        slideshow: slideshow
+      }),
+      slideshow: slideshow
+    });
   },
   actions: {
     save(record) {
-      record.set('slideshowId', 1); // hardcoded slideshow id
-
       record.save()
       .then( (r)=> {
         this.get('notifications').success('Slide adicionado com sucesso.');

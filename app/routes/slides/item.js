@@ -3,8 +3,11 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 
 export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model(params) {
+    const slideshow = this.modelFor('slides').slideshow;
+
     return Ember.RSVP.hash({
-      record: this.get('store').findRecord('slide', params.id)
+      record: this.get('store').findRecord('slide', params.id),
+      slideshow: slideshow
     });
   }
 });
