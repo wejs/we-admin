@@ -5,6 +5,15 @@ let ENV;
 import AjaxService from 'ember-ajax/services/ajax';
 import { UnauthorizedError } from 'ember-ajax/errors';
 
+window.$.ajaxSetup({
+  accepts: {
+    json: 'application/vnd.api+json'
+  },
+  headers: {
+    "Accept": "application/vnd.api+json"
+  }
+});
+
 export default AjaxService.extend({
   session: Ember.inject.service(),
   host: ENV.API_HOST,
