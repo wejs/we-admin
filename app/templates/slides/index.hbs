@@ -7,4 +7,11 @@
 </div>
 <br>
 
-{{conteudos-table data=model.records columns=model.columns pageSize=25 useFilteringByColumns=false deleteRecord='deleteRecord'}}
+{{conteudos-table
+  data=model.records
+  columns=model.columns
+  pageSize=25
+  useFilteringByColumns=false
+  deleteRecord='deleteRecord'
+  changePublishedStatus='changePublishedStatus'
+}}

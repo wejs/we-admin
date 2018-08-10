@@ -1,1 +1,0 @@
-export { default } from 'we-admin/components/menu-links-sortable';
