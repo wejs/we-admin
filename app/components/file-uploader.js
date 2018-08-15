@@ -18,7 +18,7 @@ export default Ember.Component.extend({
   multiple: false,
 
   percent: 0,
-  value: Ember.A([]),
+  value: Ember.A(),
   selectedFile: null,
 
   uploadingFile: false,
@@ -53,7 +53,7 @@ export default Ember.Component.extend({
     if (value) {
       return value;
     } else {
-      this.set('value', Ember.A([]));
+      this.set('value', Ember.A());
       return this.get('value');
     }
   },
@@ -78,6 +78,9 @@ export default Ember.Component.extend({
     },
     didUpload(uploader, e) {
       const value = this.getValue();
+
+      console.log('>>value>>', value);
+
       value.pushObject(e.file);
 
       this.set('uploader', null);
@@ -112,6 +115,7 @@ export default Ember.Component.extend({
     },
 
     openFileUploader() {
+      this.set('error', null);
       this.set('uploadingFile', true);
     },
 

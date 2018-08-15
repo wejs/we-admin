@@ -3,7 +3,7 @@ import Ember from 'ember';
 
 export default DS.Transform.extend({
   deserialize(serialized) {
-    return (Ember.typeOf(serialized) === "array") ? Ember.A(serialized): Ember.A([]);
+    return (Ember.typeOf(serialized) === "array") ? Ember.A(serialized): Ember.A();
   },
 
   serialize(deserialized) {
@@ -15,7 +15,7 @@ export default DS.Transform.extend({
           return Ember.$.trim(item);
       }));
     } else {
-      return [];
+      return Ember.A();
     }
   }
 });
