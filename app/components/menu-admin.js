@@ -52,7 +52,7 @@ export default Ember.Component.extend({
         }
       }
 
-      if (isAdmin || acl.can(link.permission)) {
+      if (isAdmin || (link.permission && acl.can(link.permission)) ) {
         links.pushObject(link);
       }
     }

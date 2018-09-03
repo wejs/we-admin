@@ -42,7 +42,7 @@ export default Ember.Service.extend({
       return false;
     }
 
-    return this.get('permissions')[permission];
+    return permissions[permission];
   },
 
   /**
