@@ -102,7 +102,11 @@
           <label>{{t 'form-link-rel'}}:</label>
           {{input value=model.record.rel class="form-control" placeholder=(t 'form-placeholder-link-rel')}}
         </div>
-
+        <div class="form-group">
+          <label>{{t 'form-link-title'}}:</label>
+          {{input value=model.record.title class="form-control"}}
+          <p class="help-block">Informação que aparece quando um usuário posiciona o mouse em cima do link.</p>
+        </div>
 
       {{/acc.item}}
     {{/bs-accordion}}
