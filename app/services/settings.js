@@ -18,7 +18,7 @@ export default Ember.Service.extend({
 
   accessToken: Ember.computed.alias('session.session.authenticated.access_token'),
 
-  authenticatedUserId: Ember.computed.alias('session.session.authenticated.user.id'),
+  authenticatedUserId: Ember.computed.alias('user.id'),
   user: null,
   // alias for help get current authenticated user roles
   userRoles: Ember.computed.alias('user.roles'),
