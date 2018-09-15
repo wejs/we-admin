@@ -1,7 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 
-export default Ember.Component.extend({
-  acl: Ember.inject.service('acl'),
+export default Component.extend({
+  acl: inject('acl'),
 
   tagName: 'a',
   classNames: ['btn', 'btn-default'],
@@ -10,7 +12,7 @@ export default Ember.Component.extend({
 
   model: null,
 
-  isVisible: Ember.computed('model', function() {
+  isVisible: computed('model', function() {
     return Boolean(this.get('acl').can('create_'+this.get('model')));
   }),
 

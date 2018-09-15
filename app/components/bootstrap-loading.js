@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import $ from 'jquery';
 
-export default Ember.Component.extend({
+export default Component.extend({
   didInsertElement() {
-    const lw = Ember.$('.loading-wrapper');
-    lw.width(Ember.$( window ).width());
-    lw.height(Ember.$( window ).height());
+    const lw = $('.loading-wrapper');
+    lw.width( $( window ).width() );
+    lw.height( $( window ).height() );
   }
 });

@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: ['field-content-publication'],
 
   publicationDate: null,
@@ -30,7 +31,7 @@ export default Ember.Component.extend({
     }
   ],
 
-  showDatePicker: Ember.computed('newPublishMethod', function() {
+  showDatePicker: computed('newPublishMethod', function() {
     if (this.get('newPublishMethod.id') === 'schendule') {
       return true;
     }

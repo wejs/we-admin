@@ -1,7 +1,10 @@
 import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
 
-export default Ember.Component.extend({
-  store: Ember.inject.service('store'),
+export default Component.extend({
+  store: inject('store'),
   classNames: ['field-model-selector'],
   selected: null,
 
@@ -11,7 +14,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this.set('ENV', getOwner(this).resolveRegistration('config:environment'));
   },
 
   actions: {

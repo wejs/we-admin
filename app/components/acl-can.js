@@ -1,10 +1,12 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { computed } from '@ember/object';
 
-export default Ember.Component.extend({
-  acl: Ember.inject.service('acl'),
+export default Component.extend({
+  acl: inject('acl'),
 
   permission: null,
-  can: Ember.computed('permission', function() {
+  can: computed('permission', function() {
     const permission = this.get('permission');
     const acl = this.get('acl');
 

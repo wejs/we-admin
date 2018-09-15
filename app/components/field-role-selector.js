@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: ['field-role-selector'],
 
   selected: null,
@@ -12,7 +13,7 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this.set('ENV', getOwner(this).resolveRegistration('config:environment'));
 
     const roles = this.get('roles');
     const value = this.get('value');

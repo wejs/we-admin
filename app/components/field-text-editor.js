@@ -1,19 +1,21 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
 
 let ENV,editorLocaleCache, editorLocaleUrlCache;
 
-export default Ember.Component.extend({
+export default Component.extend({
   classNames: ['field-text-editor'],
 
-  settings: Ember.inject.service('settings'),
-  upload: Ember.inject.service('upload'),
+  settings: inject('settings'),
+  upload: inject('upload'),
 
   label: null,
   value: null,
 
   init() {
     this._super(...arguments);
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
 
     window.tinyMCE.baseURL = ENV.API_HOST+
         '/public/plugin/we-plugin-editor-tinymce/files';
@@ -36,8 +38,6 @@ export default Ember.Component.extend({
 
   getBigEditor() {
     const ENV = this.get('ENV');
-
-
 
     return {
       content_css : ENV.API_HOST+

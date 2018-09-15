@@ -1,14 +1,17 @@
 import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
 
 let ENV;
 
-export default Ember.Component.extend({
-  session: Ember.inject.service(),
-  notifications: Ember.inject.service('notification-messages'),
+export default Component.extend({
+  session: inject(),
+  notifications: inject('notification-messages'),
 
   init() {
     this._super(...arguments);
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   attributeBindings: ['disabled'],

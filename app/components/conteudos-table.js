@@ -1,11 +1,13 @@
-import Ember from 'ember';
+import { inject } from '@ember/service';
+import { computed, get } from '@ember/object';
+import EmberObject from '@ember/object';
 
 import ServerModelsTable from 'ember-models-table/components/models-table-server-paginated';
 
 // ref https://github.com/onechiporenko/ember-models-table/blob/master/addon/components/models-table-server-paginated.js
 
 export default ServerModelsTable.extend({
-  i18n: Ember.inject.service(),
+  i18n: inject(),
   /**
    * The property on meta to load the pages count from.
    *
@@ -29,9 +31,9 @@ export default ServerModelsTable.extend({
    * @type {number}
    * @name pagesCount
    */
-  pagesCount: Ember.computed('filteredContent.meta', function () {
-    let total = Ember.get(this, 'filteredContent.meta.count');
-    let pageSize = Ember.get(this, 'pageSize');
+  pagesCount: computed('filteredContent.meta', function () {
+    let total = get(this, 'filteredContent.meta.count');
+    let pageSize = get(this, 'pageSize');
 
     return Math.ceil(total/pageSize);
   }),
@@ -62,7 +64,7 @@ export default ServerModelsTable.extend({
   init() {
     this._super();
     const i18n = this.get('i18n');
-    this.set('themeInstance.messages', Ember.Object.create({
+    this.set('themeInstance.messages', EmberObject.create({
       "searchLabel": i18n.t("models.table.search"),
       "searchPlaceholder": "",
       "columns-title": i18n.t("models.table.columns"),

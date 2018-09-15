@@ -1,8 +1,11 @@
 import Ember from 'ember';
-import EmberUploader from 'ember-uploader';
+import { inject } from '@ember/service';
 
-export default EmberUploader.FileField.extend({
-  session: Ember.inject.service('session'),
+import FileField from 'ember-uploader/components/file-field';
+import Uploader from 'ember-uploader/uploaders/uploader';
+
+export default FileField.extend({
+  session: inject('session'),
 
   uploader: null,
 
@@ -22,7 +25,7 @@ export default EmberUploader.FileField.extend({
       return;
     }
 
-    const uploader = EmberUploader.Uploader.create({
+    const uploader = Uploader.create({
       ajaxSettings: {
         headers: this.getHeaders()
       },

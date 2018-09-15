@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import EmberFlatpickr from 'ember-flatpickr/components/ember-flatpickr';
+import { get } from '@ember/object';
 
 export default EmberFlatpickr.extend({
   init() {
@@ -22,7 +23,7 @@ export default EmberFlatpickr.extend({
       // timeFormat: 'H:i',
       utc: false,
       wrap: false,
-      date: Ember.get(this, 'date') || new Date()
+      date: get(this, 'date') || new Date()
     };
 
     Ember.setProperties(this.attrs, defaults);
