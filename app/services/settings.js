@@ -1,29 +1,33 @@
-import Ember from 'ember';
+import Service from '@ember/service';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
+import { computed } from '@ember/object';
+import $ from 'jquery';
 
 let ENV;
 
-export default Ember.Service.extend({
-  store: Ember.inject.service('store'),
-  session: Ember.inject.service('session'),
+export default Service.extend({
+  store: inject('store'),
+  session: inject('session'),
 
   init(){
     this._super(...arguments);
 
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
 
     this.set('ENV', ENV);
   },
 
   data: null,
 
-  accessToken: Ember.computed.alias('session.session.authenticated.access_token'),
+  accessToken: computed.alias('session.session.authenticated.access_token'),
 
-  authenticatedUserId: Ember.computed.alias('user.id'),
+  authenticatedUserId: computed.alias('user.id'),
   user: null,
   // alias for help get current authenticated user roles
-  userRoles: Ember.computed.alias('user.roles'),
+  userRoles: computed.alias('user.roles'),
 
-  isAdmin: Ember.computed('userRoles', function() {
+  isAdmin: computed('userRoles', function() {
     let roles = this.get('userRoles');
     if (!roles || !roles.indexOf) {
       return false;
@@ -31,11 +35,14 @@ export default Ember.Service.extend({
     return (roles.indexOf('administrator') > -1 );
   }),
   // invert isAdmin to use in disabled inputs
-  notIsAdmin: Ember.computed.not('isAdmin'),
+  notIsAdmin: computed.not('isAdmin'),
 
-  systemSettings: Ember.computed.alias('data.systemSettings'),
+  systemSettings: computed.alias('data.systemSettings'),
 
-  imageHost: Ember.computed.alias('ENV.imageHost'),
+  imageHost: computed.alias('ENV.imageHost'),
+
+  defaultClientDateFormat: 'DD/MM/YYYY hh:ss',
+  dateFormat: computed.or('data.date.defaultFormat', 'defaultClientDateFormat'),
 
   themeCollorOptions: [
     { id: 'default', name: 'Cor padrão do tema'},
@@ -51,7 +58,7 @@ export default Ember.Service.extend({
       headers.Authorization = `Basic ${accessToken}`;
     }
 
-    return Ember.$.ajax({
+    return $.ajax({
       url: ENV.API_HOST + '/user-settings?adminMenu=true',
       type: 'GET',
       cache: false,
@@ -113,7 +120,7 @@ export default Ember.Service.extend({
       headers.Authorization = `Basic ${accessToken}`;
     }
 
-    return Ember.$.ajax({
+    return $.ajax({
       url: ENV.API_HOST + '/system-settings',
       type: 'POST',
       cache: false,
@@ -135,7 +142,7 @@ export default Ember.Service.extend({
       headers.Authorization = `Basic ${accessToken}`;
     }
 
-    return Ember.$.ajax({
+    return $.ajax({
       url: ENV.API_HOST + '/theme',
       type: 'get',
       cache: false,
