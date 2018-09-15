@@ -1,7 +1,7 @@
 {
   "name": "we-admin",
   "private": true,
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "We.js + Ember.js admin integration.",
   "directories": {
     "doc": "doc",
