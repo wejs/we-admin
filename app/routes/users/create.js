@@ -1,11 +1,14 @@
-import Ember from 'ember';
-import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  notifications: Ember.inject.service('notification-messages'),
+import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject } from '@ember/service';
+
+export default Route.extend(AuthenticatedRouteMixin, {
+  notifications: inject('notification-messages'),
 
   model() {
-    return Ember.RSVP.hash({
+    return hash({
       user: {}
     });
   },
@@ -15,7 +18,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
       const record = this.store.createRecord('user', data);
 
-      record.active = true;
+      record.set('active', true);
 
       record.save()
       .then( (r)=> {

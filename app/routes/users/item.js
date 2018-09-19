@@ -1,5 +1,9 @@
 import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import { inject } from '@ember/service';
+
 import ENV from "../../config/environment";
 
 const userMenuTabs = [
@@ -8,9 +12,9 @@ const userMenuTabs = [
   'userTabPaneRoles'
 ];
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  notifications: Ember.inject.service('notification-messages'),
-  acl: Ember.inject.service('acl'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  notifications: inject('notification-messages'),
+  acl: inject('acl'),
 
   queryParams: {
     tab: { refreshModel: false }
@@ -22,7 +26,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       params.tab = 'userTabPaneData';
     }
 
-    return Ember.RSVP.hash({
+    return hash({
       user: this.get('store').findRecord('user', params.id),
       roles: this.get('acl').getRolesArray(),
       newPassword: null,
