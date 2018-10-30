@@ -40,7 +40,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
   afterModel(model) {
     model.emailTypes.forEach((et)=> {
-      et.emailTemplate = this.get('store').query('email-template', {
+      const p = this.get('store').query('email-template', {
         type: et.id
       })
       .then((r)=> {
@@ -49,6 +49,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           return r.get('firstObject');
         }
       });
+
+      set(et, 'emailTemplate', p);
     });
   },
 

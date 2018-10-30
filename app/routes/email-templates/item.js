@@ -17,7 +17,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     if (type) {
       const emailTypes = this.modelFor('email-templates').emailTypes;
-      model.selectedEmailType = emailTypes[type];
+      set(model, 'selectedEmailType', emailTypes[type]);
     }
   },
 
