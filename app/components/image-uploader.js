@@ -1,34 +1,31 @@
 import Ember from 'ember';
+import { inject } from '@ember/service';
 
 let ENV;
 
 export default Ember.Component.extend({
-  notifications: Ember.inject.service('notification-messages'),
+  notifications: inject('notification-messages'),
+  upload: inject(),
 
   init() {
     this._super(...arguments);
-
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
     this.set('url', `${ENV.API_HOST}/api/v1/image`);
   },
 
+  willInsertElement() {
+    this._super(...arguments);
+    this.get('upload').initUploadMecanism();
+  },
+
   isLOading: false,
-  url: null,
-  uploader: null,
+  url: null, // upload url
 
   multiple: false,
 
-  percent: 0,
   value: Ember.A([]),
   selectedFile: null,
   previewImageSrc: null,
-
-  notReadyToUpload: true,
-  error: null,
-
-  uploadingImage: false,
-  description: null,
 
   canAddMore: Ember.computed('value.length', 'multiple', function() {
     const isMultiple = this.get('multiple');
@@ -43,6 +40,28 @@ export default Ember.Component.extend({
     } else {
       return false;
     }
+  }),
+
+  canSelectMore: Ember.computed(
+    'upload.imagesToUpload.length',
+    'upload.filesToUpload.length',
+    'multiple',
+  function() {
+    const isMultiple = this.get('multiple');
+
+    if (isMultiple) {
+      return true;
+    }
+
+    if (this.get('upload.imagesToUpload.length')) {
+      return false;
+    }
+
+    if (this.get('upload.filesToUpload.length')) {
+      return false;
+    }
+
+    return true;
   }),
 
   fileToShow: Ember.computed('value', function() {
@@ -65,50 +84,54 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    startUpload() {},
-    selected(files) {
-      this.selected(files);
-    },
-    progress(uploader, e) {
-      this.set('percent', e.percent);
-    },
-    didUpload(uploader, e) {
-      const value = this.getValue();
-      value.pushObject(e.image);
+    // selected(files) {
+    //   this.selected(files);
+    // },
+    // progress(uploader, e) {
+    //   this.set('percent', e.percent);
+    // },
+    // didUpload(uploader, e) {
+    //   const value = this.getValue();
+    //   value.pushObject(e.image);
 
-      this.set('uploader', null);
-      this.set('description', null);
-      this.set('selectedFile', null);
-    },
-    didError(uploader, jqXHR, textStatus, errorThrown) {
-      console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
-    },
+    //   this.set('uploaderOld', null);
+    //   this.set('description', null);
+    //   this.set('selectedFile', null);
+    // },
+    // didError(uploader, jqXHR, textStatus, errorThrown) {
+    //   console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
+    // },
     removeImage(image) {
       if (confirm(`Tem certeza que deseja remover essa imagem?`)) {
         const value = this.getValue();
         value.removeObject(image);
-        this.set('uploader', null);
+        this.set('uploaderOld', null);
         this.set('selectedFile', null);
       }
     },
     upload() {
-      this.get('uploader')
-      .upload(this.get('selectedFile'), {
-        description: (this.get('description') || '')
-      })
-      .then( (r)=> {
-        this.set('uploader', null);
-        this.set('selectedFile', null);
-        this.set('uploadingImage', false);
-        return r;
+      this.set('isLOading', true);
+
+      this.get('upload')
+      .uploadImages()
+      .then( (results)=> {
+        const value = this.getValue();
+
+        results.forEach( (image)=> {
+          value.pushObject(image);
+        });
+
+        this.set('isLOading', false);
+        this.hideUploadModal();
       })
       .catch( (err)=> {
-        console.log('erro no upload', err);
+        this.get('notifications').error('Erro ao enviar a imagem para o servidor, tente novamente mais tarde');
+        Ember.Logger.error(err);
+        this.set('isLOading', false);
       });
     },
 
     openImageUploader() {
-      this.set('notReadyToUpload', true);
       this.set('error', null);
       this.set('uploadingImage', true);
     },
@@ -117,11 +140,14 @@ export default Ember.Component.extend({
       this.hideUploadModal();
     },
 
+    /**
+     * Select one salved image:
+     */
     onSelectSalvedImage(image) {
       const value = this.getValue();
       value.pushObject(image);
       this.hideUploadModal();
-      this.set('uploader', null);
+      this.set('uploaderOld', null);
       this.set('description', null);
       this.set('selectedFile', null);
     }
@@ -143,8 +169,6 @@ export default Ember.Component.extend({
         this.get('notifications').error('A imagem selecionada tem '+fileSizeInMB+'MB'+
           ' e o limite de envio de imagens é 10MB. Selecione uma imagem com menos de 10MB de tamanho.');
         this.hideUploadModal();
-      } else {
-        this.set('notReadyToUpload', false);
       }
     };
     reader.readAsDataURL(file);
@@ -155,9 +179,8 @@ export default Ember.Component.extend({
       this.set('uploadingImage', false);
     }
 
-    this.set('notReadyToUpload', true);
     this.set('error', null);
-    this.set('uploader', null);
+    this.set('uploaderOld', null);
     this.set('selectedFile', null);
     this.set('description', null);
     this.set('uploadingImage', false);

@@ -119,3 +119,71 @@ figure.image figcaption {
 .mce-container.mce-panel.mce-floatpanel.mce-menu.mce-in {
   z-index: 165535;
 }
+
+.input-file-container {
+  position: relative;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  width: 165px;
+}
+.input-file-container .input-file-trigger {
+  display: block;
+  padding: 14px 45px;
+  background: #39D2B4;
+  color: #fff;
+  font-size: 1em;
+  transition: all .4s;
+  cursor: pointer;
+}
+.input-file-container .input-file {
+  position: absolute;
+  top: 0; left: 0;
+  width: 165px;
+  opacity: 0;
+  padding: 14px 0;
+  cursor: pointer;
+}
+.input-file-container .input-file:hover + .input-file-trigger,
+.input-file-container .input-file:focus + .input-file-trigger,
+.input-file-container .input-file-trigger:hover,
+.input-file-container .input-file-trigger:focus {
+  background: #34495E;
+  color: #39D2B4;
+}
+
+.file-return {
+  margin: 0;
+}
+.file-return:not(:empty) {
+  margin: 1em 0;
+}
+.input-file-container .file-return {
+  font-style: italic;
+  font-size: .9em;
+  font-weight: bold;
+}
+.input-file-container .file-return:not(:empty):before {
+  content: "Selected file: ";
+  font-style: normal;
+  font-weight: normal;
+}
+
+.image-to-upload {
+  padding: 10px;
+  margin: 5px 5px;
+  border: 1px dashed #ccc;
+}
+
+.image-uploader-tr-description label,
+.image-to-upload label {
+  font-size: 13px;
+  color: #777;
+}
+
+.image-uploader-tr-description .form-control {
+  margin-bottom: 5px;
+}
+
+.image-uploader-tr-description textarea {
+  font-size: 13px;
+}
