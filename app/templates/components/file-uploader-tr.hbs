@@ -1,0 +1,24 @@
+<td class="file-uploader-tr-thumbnail">
+  {{file.name}}
+</td>
+<td class="file-uploader-tr-description">
+  <div class="form-group">
+    <label>Descrição / alt:</label>
+    {{textarea value=file.description class="form-control" rows="2"}}
+  </div>
+
+  <div class="form-group">
+    {{#bs-button
+      onClick=(action "updateDescription")
+      icon="glyphicon glyphicon-edit"
+      size="xs"
+    }}
+      Salvar
+    {{/bs-button}}
+  </div>
+</td>
+<td class="file-uploader-tr-actions">
+  <button class="btn btn-sm btn-default" {{action 'removeFile' file}}>
+    <i class="glyphicon glyphicon-remove text-danger"></i> {{t 'file.remove'}}
+  </button>
+</td>

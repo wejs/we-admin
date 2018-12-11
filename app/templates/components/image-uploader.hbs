@@ -1,7 +1,10 @@
 <table class="table table-bordered image-uploader-table">
   <tbody>
   {{#each value as |image|}}
-    {{image-uploader-tr image=image}}
+    {{image-uploader-tr
+      image=image
+      removeImage="removeImage"
+    }}
   {{/each}}
   </tbody>
   {{#if canAddMore}}
@@ -32,41 +35,24 @@
     {{#if error}}
       <div class="alert alert-danger text-center" role="alert">{{{error}}}</div>
     {{else}}
-      {{#if uploader}}
-        {{#if uploader.isUploading}}
-          {{#bs-progress as |p|}}
-            {{p.bar value=percent minValue=0 maxValue=100 roundDigits=percent showLabel=true animate=true type="success" striped=true}}
-          {{/bs-progress}}
-        {{else}}
-          <div class="row">
-            <div class="col-md-2">
-              <img src={{previewImageSrc}} class="content-image preview"/>
-            </div>
-            <div class="col-md-10">
-              {{textarea value=description class="form-control" placeholder="Clique aqui para adicionar uma descrição para a imagem"}}
-              <p class="help-block">Descrição da imagem. Essa descrição é usada como informação alternativa para leitores de tela.</p>
-            </div>
+
+      {{#bs-tab as |tab|}}
+        {{#tab.pane title="Upload / enviar"}}
+
+          <div class="image-selected-list">
+            {{#each upload.imagesToUpload as |item|}}
+              {{file-upload-image-item item=item}}
+            {{/each}}
           </div>
-        {{/if}}
-      {{else}}
-        {{#bs-tab as |tab|}}
-          {{#tab.pane title="Upload / enviar"}}
+          {{#if canSelectMore}}
+            {{file-upload-image-selector multiple=multiple}}
+          {{/if}}
 
-            <div class="image-selected-list">
-              {{#each upload.imagesToUpload as |item|}}
-                {{file-upload-image-item item=item}}
-              {{/each}}
-            </div>
-            {{#if canSelectMore}}
-              {{file-upload-image-selector}}
-            {{/if}}
-
-          {{/tab.pane}}
-          {{#tab.pane title="Selecionar imagem salva"}}
-            {{we-images-to-select onSelectImage=(action 'onSelectSalvedImage')}}
-          {{/tab.pane}}
-        {{/bs-tab}}
-      {{/if}}
+        {{/tab.pane}}
+        {{#tab.pane title="Selecionar imagem salva"}}
+          {{we-images-to-select onSelectImage=(action 'onSelectSalvedImage')}}
+        {{/tab.pane}}
+      {{/bs-tab}}
 
     {{/if}}
   {{/modal.body}}

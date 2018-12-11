@@ -42,7 +42,8 @@ export default Ember.Service.extend({
 
     ENV = getOwner(this).resolveRegistration('config:environment');
 
-    this.set('url', `${ENV.API_HOST}/api/v1/image`);
+    this.set('imageURL', `${ENV.API_HOST}/api/v1/image`);
+    this.set('fileURL', `${ENV.API_HOST}/api/v1/file`);
   },
 
   // image methods:
@@ -61,10 +62,11 @@ export default Ember.Service.extend({
         headers: this.getHeaders()
       },
       paramName: 'image',
-      url: this.get('url')
+      url: this.get('imageURL')
     }));
 
     set(f, 'percent', 0);
+
     /**
      * Start upload of this file:
      */
@@ -79,7 +81,75 @@ export default Ember.Service.extend({
         set(f, 'uploadError', null);
         set(f, 'uploadSuccess', false);
 
-        console.log('TODO! Upload', this);
+        uploader.on('progress', e => {
+          if (!e.percent) {
+            e.percent = 0;
+          }
+          set(f, 'percent', Math.floor(e.percent));
+        });
+
+        uploader.on('didUpload', ()=> {
+          set(f, 'barType', 'success');
+          set(f, 'isInAction', false);
+        });
+
+        uploader.on('didError', (jqXHR, textStatus, errorThrown) => {
+          set(f, 'barType', 'danger');
+          set(f, 'isInAction', false);
+        });
+
+        uploader.upload(file, {
+          description: (this.description || '')
+        })
+        .then( (r)=> {
+          set(f, 'uploadSuccess', true);
+          resolve(r);
+        })
+        .catch( (err)=> {
+          set(f, 'uploadSuccess', false);
+          set(f, 'uploadError', err);
+          Ember.Logger.error('service:upload.upload:Erro on upload', err);
+          reject(err);
+        });
+      });
+    }
+    .bind(f);
+
+    this.get('imagesToUpload').pushObject(f);
+  },
+  removeImageFromUploadList(image) {
+    this.get('imagesToUpload').removeObject(image);
+  },
+
+  // file methods:
+
+  addFileToUpload(f) {
+    if (!f || typeof f !== 'object') {
+      return;
+    }
+    set(f, 'isUploading', false);
+    set(f, 'uploader', Uploader.create({
+      ajaxSettings: {
+        headers: this.getHeaders()
+      },
+      paramName: 'file',
+      url: this.get('fileURL')
+    }));
+
+    set(f, 'percent', 0);
+    /**
+     * Start upload of this file:
+     */
+    f.upload = function startFileUpload() {
+      return new window.Promise( (resolve, reject)=> {
+        let uploader = this.uploader;
+        let file = this;
+
+        set(f, 'isUploading', true);
+        set(f, 'isInAction', true);
+        set(f, 'barType', 'info');
+        set(f, 'uploadError', null);
+        set(f, 'uploadSuccess', false);
 
         uploader.on('progress', e => {
           if (!e.percent) {
@@ -99,40 +169,18 @@ export default Ember.Service.extend({
         uploader.on('didError', (jqXHR, textStatus, errorThrown) => {
           set(f, 'barType', 'danger');
           set(f, 'isInAction', false);
-          console.log('didError', errorThrown);
-
-          // if (!this.isDestroyed) {
-          //   // Handle unsuccessful upload
-          //   this.sendAction('didError',uploader, jqXHR, textStatus, errorThrown);
-          // }
         });
 
         uploader.upload(file, {
           description: (this.description || '')
         })
         .then( (r)=> {
-          // set(f, 'isUploading', false);
           set(f, 'uploadSuccess', true);
-
-          console.log('success>uploader.upload.then');
-
-          // this.get('fileSelectedCallback')(null, r);
-
-          // this.set('fileSelectedCallback', null);
-
-          // this.set('uploader', null);
-          // this.set('selectedFile', null);
-          // this.set('uploadingImage', false);
           resolve(r);
         })
         .catch( (err)=> {
-          // set(f, 'isUploading', false);
           set(f, 'uploadSuccess', false);
           set(f, 'uploadError', err);
-
-          // this.get('fileSelectedCallback')(err);
-          // this.set('fileSelectedCallback', null);
-          // this.hideUploadModal();
           Ember.Logger.error('service:upload.upload:Erro on upload', err);
           reject(err);
         });
@@ -140,16 +188,10 @@ export default Ember.Service.extend({
     }
     .bind(f);
 
-    this.get('imagesToUpload').pushObject(f);
+    this.get('filesToUpload').pushObject(f);
   },
-  removeImageFromUploadList(image) {
-    this.get('imagesToUpload').removeObject(image);
-  },
-
-  // file methods:
-
-  addFileToUpload(f) {
-    console.log('>>todo!>', f);
+  removeFileFromUploadList(file) {
+    this.get('filesToUpload').removeObject(file);
   },
 
   // Cancel upload and reset lists:
@@ -167,8 +209,6 @@ export default Ember.Service.extend({
       }
 
       imagesToUpload.reduce( function (prom, ITU) {
-        console.log('>>ITU>>', prom, ITU);
-
         return prom.then(function() {
           return ITU.upload()
           .then( (result)=> {
@@ -184,12 +224,55 @@ export default Ember.Service.extend({
       },
         Ember.RSVP.resolve()
       )
-      .then( ()=> {
-        console.log('DONE ALL', results);
+      .then( ()=> { // after all
+        this.set('imagesToUpload', A());
+        this.set('filesToUpload', A());
         resolve(results);
-        //all executed
+
       })
-      .catch(reject);
+      .catch( (err)=> {
+        this.set('imagesToUpload', A());
+        this.set('filesToUpload', A());
+        reject(err);
+      });
+    });
+  },
+
+  uploadFiles() {
+    return new window.Promise( (resolve, reject)=> {
+      let results = [];
+      let filesToUpload = this.get('filesToUpload');
+      if (!filesToUpload || !filesToUpload.length) {
+        return resolve();
+      }
+
+      filesToUpload.reduce( function (prom, ITU) {
+        return prom.then(function() {
+          return ITU.upload()
+          .then( (result)=> {
+            if (result && result.file) {
+              results.push(result.file);
+            }
+          })
+          .catch( (err)=> {
+            console.log('err>', err);
+            return err;
+          });
+        });
+      },
+        Ember.RSVP.resolve()
+      )
+      .then( ()=> { // after all
+        this.set('imagesToUpload', A());
+        this.set('filesToUpload', A());
+        resolve(results);
+
+      })
+      .catch( (err)=> {
+        this.set('imagesToUpload', A());
+        this.set('filesToUpload', A());
+        reject(err);
+      });
     });
   },
 

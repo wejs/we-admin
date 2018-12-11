@@ -24,8 +24,6 @@ export default Ember.Component.extend({
   multiple: false,
 
   value: Ember.A([]),
-  selectedFile: null,
-  previewImageSrc: null,
 
   canAddMore: Ember.computed('value.length', 'multiple', function() {
     const isMultiple = this.get('multiple');
@@ -44,7 +42,6 @@ export default Ember.Component.extend({
 
   canSelectMore: Ember.computed(
     'upload.imagesToUpload.length',
-    'upload.filesToUpload.length',
     'multiple',
   function() {
     const isMultiple = this.get('multiple');
@@ -54,10 +51,6 @@ export default Ember.Component.extend({
     }
 
     if (this.get('upload.imagesToUpload.length')) {
-      return false;
-    }
-
-    if (this.get('upload.filesToUpload.length')) {
       return false;
     }
 
@@ -84,23 +77,6 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    // selected(files) {
-    //   this.selected(files);
-    // },
-    // progress(uploader, e) {
-    //   this.set('percent', e.percent);
-    // },
-    // didUpload(uploader, e) {
-    //   const value = this.getValue();
-    //   value.pushObject(e.image);
-
-    //   this.set('uploaderOld', null);
-    //   this.set('description', null);
-    //   this.set('selectedFile', null);
-    // },
-    // didError(uploader, jqXHR, textStatus, errorThrown) {
-    //   console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
-    // },
     removeImage(image) {
       if (confirm(`Tem certeza que deseja remover essa imagem?`)) {
         const value = this.getValue();

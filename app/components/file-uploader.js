@@ -1,28 +1,29 @@
 import Ember from 'ember';
+import { inject } from '@ember/service';
 
 let ENV;
 
 export default Ember.Component.extend({
-  init(){
+  notifications: inject('notification-messages'),
+  upload: inject(),
+
+  init () {
     this._super(...arguments);
-
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
     this.set('url', `${ENV.API_HOST}/api/v1/file`);
+  },
+
+  willInsertElement() {
+    this._super(...arguments);
+    this.get('upload').initUploadMecanism();
   },
 
   isLOading: false,
   url: null,
-  uploader: null,
 
   multiple: false,
 
-  percent: 0,
   value: Ember.A(),
-  selectedFile: null,
-
-  uploadingFile: false,
-  description: null,
 
   canAddMore: Ember.computed('value.length', 'multiple', function() {
     const isMultiple = this.get('multiple');
@@ -38,6 +39,24 @@ export default Ember.Component.extend({
       return false;
     }
   }),
+
+  canSelectMore: Ember.computed(
+    'upload.filesToUpload.length',
+    'multiple',
+  function() {
+    const isMultiple = this.get('multiple');
+
+    if (isMultiple) {
+      return true;
+    }
+
+    if (this.get('upload.filesToUpload.length')) {
+      return false;
+    }
+
+    return true;
+  }),
+
 
   fileToShow: Ember.computed('value', function() {
     const value = this.get('value');
@@ -59,37 +78,6 @@ export default Ember.Component.extend({
   },
 
   actions: {
-    startUpload() {},
-    selected(files) {
-      const file = files[0];
-      this.set('selectedFile', file);
-      const reader = new FileReader();
-
-      console.log('reader>', reader);
-
-      // reader.onload = (e)=> {
-      //   // get local file src
-      //   this.set('previewFileSrc', e.target.result);
-      // };
-      // reader.readAsDataURL(file);
-    },
-    progress(uploader, e) {
-      this.set('percent', e.percent);
-    },
-    didUpload(uploader, e) {
-      const value = this.getValue();
-
-      console.log('>>value>>', value);
-
-      value.pushObject(e.file);
-
-      this.set('uploader', null);
-      this.set('description', null);
-      this.set('selectedFile', null);
-    },
-    didError(uploader, jqXHR, textStatus, errorThrown) {
-      console.log('didError>', uploader, jqXHR, textStatus, errorThrown);
-    },
     removeFile(file) {
       if (confirm(`Tem certeza que deseja remover esse arquivo?`)) {
         const value = this.getValue();
@@ -99,18 +87,24 @@ export default Ember.Component.extend({
       }
     },
     upload() {
-      this.get('uploader')
-      .upload(this.get('selectedFile'), {
-        description: (this.get('description') || '')
-      })
-      .then( (r)=> {
-        this.set('uploader', null);
-        this.set('selectedFile', null);
-        this.set('uploadingFile', false);
-        return r;
+      this.set('isLOading', true);
+
+      this.get('upload')
+      .uploadFiles()
+      .then( (results)=> {
+        const value = this.getValue();
+
+        results.forEach( (file)=> {
+          value.pushObject(file);
+        });
+
+        this.set('isLOading', false);
+        this.hideUploadModal();
       })
       .catch( (err)=> {
-        console.log('erro no upload', err);
+        this.get('notifications').error('Erro ao enviar o arquivo para o servidor, tente novamente mais tarde');
+        Ember.Logger.error(err);
+        this.set('isLOading', false);
       });
     },
 
@@ -120,14 +114,17 @@ export default Ember.Component.extend({
     },
 
     onHideUploadModal() {
-      if (this.get('uploadingFile')) {
-        this.set('uploadingFile', false);
-      }
+      this.hideUploadModal();
+    }
+  },
 
-      this.set('uploader', null);
-      this.set('selectedFile', null);
-      this.set('description', null);
+  hideUploadModal() {
+    if (this.get('uploadingFile')) {
       this.set('uploadingFile', false);
     }
+
+    this.set('uploader', null);
+    this.set('selectedFile', null);
+    this.set('uploadingFile', false);
   }
 });

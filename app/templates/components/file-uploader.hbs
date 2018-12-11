@@ -57,29 +57,16 @@
     {{#if error}}
       <div class="alert alert-danger text-center" role="alert">{{{error}}}</div>
     {{else}}
-      {{#if uploader}}
-        {{#if uploader.isUploading}}
-          {{#bs-progress as |p|}}
-            {{p.bar value=percent minValue=0 maxValue=100 roundDigits=percent showLabel=true animate=true type="success" striped=true}}
-          {{/bs-progress}}
-        {{else}}
-          <div class="row">
-            <div class="col-md-10">
-              {{textarea value=description class="form-control" placeholder="Clique aqui para adicionar a descrição do arquivo"}}
-              <p class="help-block">Descrição do arquivo.</p>
-            </div>
-          </div>
-        {{/if}}
-      {{else}}
-        {{file-upload
-          uploader=uploader
-          url=url
-          progress='progress'
-          didUpload='didUpload'
-          didError='didError'
-          selected='selected'
-        }}
+
+      <div class="file-selected-list">
+        {{#each upload.filesToUpload as |item|}}
+          {{file-upload-file-item item=item}}
+        {{/each}}
+      </div>
+      {{#if canSelectMore}}
+        {{file-upload-file-selector multiple=multiple}}
       {{/if}}
+
     {{/if}}
   {{/modal.body}}
   {{#modal.footer as |footer|}}
