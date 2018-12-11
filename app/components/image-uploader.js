@@ -151,14 +151,7 @@ export default Ember.Component.extend({
   },
 
   hideUploadModal() {
-    if (this.get('uploadingImage')) {
-      this.set('uploadingImage', false);
-    }
-
     this.set('error', null);
-    this.set('uploaderOld', null);
-    this.set('selectedFile', null);
-    this.set('description', null);
-    this.set('uploadingImage', false);
+    this.get('upload').cancel();
   }
 });

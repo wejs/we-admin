@@ -196,8 +196,8 @@ export default Ember.Service.extend({
 
   // Cancel upload and reset lists:
   cancel() {
-    this.set('imagesToUpload', null);
-    this.set('filesToUpload', null);
+    this.set('imagesToUpload', A());
+    this.set('filesToUpload', A());
   },
 
   uploadImages() {
