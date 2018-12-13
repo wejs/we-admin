@@ -119,6 +119,7 @@ export default Ember.Component.extend({
   },
 
   hideUploadModal() {
+    this.set('uploadingFile', false);
     this.get('upload').cancel();
   }
 });
