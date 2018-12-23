@@ -5,7 +5,7 @@ export default Base.extend({
   ajax: Ember.inject.service(),
 
   restore(data) {
-    return new Ember.RSVP.Promise((resolve, reject) => {
+    return new Ember.RSVP.Promise( (resolve, reject) => {
       if (
         !Ember.isEmpty(Ember.get(data, 'email')) ||
         !Ember.isEmpty(Ember.get(data, 'id'))
@@ -20,7 +20,7 @@ export default Base.extend({
     const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
 
     if (data) {
-      return new Ember.RSVP.Promise((resolve) => {
+      return new Ember.RSVP.Promise( (resolve) => {
         resolve({ id: data, email: email });
       });
     }
@@ -31,14 +31,17 @@ export default Base.extend({
         password: password
       }
     }).
-    then( ()=> {
-      return { email: email };
+    then( (r)=> {
+      if (r && r.user && r.user.id) {
+        return { email: email, id: r.user.id };
+      } else {
+        return { email: email };
+      }
     });
   },
 
   invalidate() {
     const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
-
     return this.get('ajax').request(ENV.API_HOST + '/auth/logout');
   }
 });

@@ -1,4 +1,6 @@
 import Ember from 'ember';
+import { getOwner } from '@ember/application';
+import { inject } from '@ember/service';
 
 let ENV;
 
@@ -9,13 +11,13 @@ const systemRoles = [
 ];
 
 export default Ember.Service.extend({
-  session: Ember.inject.service('session'),
-  settings: Ember.inject.service('settings'),
+  session: inject('session'),
+  settings: inject('settings'),
 
   init() {
     this._super(...arguments);
 
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   userRoles: Ember.computed.alias('settings.userRoles'),

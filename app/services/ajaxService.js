@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import { inject } from '@ember/service';
 
 let ENV;
 
@@ -10,24 +11,26 @@ window.$.ajaxSetup({
     json: 'application/vnd.api+json'
   },
   headers: {
-    "Accept": "application/vnd.api+json"
+    'Accept': 'application/vnd.api+json'
+  },
+  crossDomain: true,
+  xhrFields: {
+    withCredentials: true
   }
 });
 
 export default AjaxService.extend({
-  session: Ember.inject.service(),
+  settings: inject(),
   host: ENV.API_HOST,
 
-  init(){
+  init() {
     this._super(...arguments);
 
     ENV = Ember.getOwner(this).resolveRegistration('config:environment');
   },
 
   request(url, options) {
-    this.get('session').authorize('authorizer:custom', (headers) => {
-      this.set('headers', headers);
-    });
+    this.set('headers', this.get('settings').getHeaders());
 
     return this._super(url, options)
     .catch( (error) => {
@@ -35,8 +38,7 @@ export default AjaxService.extend({
         if (this.get('session.isAuthenticated')) {
           this.get('session').invalidate();
         }
-      }
-      else {
+      } else {
         throw error;
       }
     });

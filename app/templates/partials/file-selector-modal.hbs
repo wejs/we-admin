@@ -14,39 +14,25 @@
     {{#if upload.error}}
       <div class="alert alert-danger text-center" role="alert">{{{upload.error}}}</div>
     {{else}}
-      {{#if upload.uploader}}
-        {{#if upload.uploader.isUploading}}
-          {{#bs-progress as |p|}}
-            {{p.bar value=upload.percent minValue=0 maxValue=100 roundDigits=upload.percent showLabel=true animate=true type="success" striped=true}}
-          {{/bs-progress}}
-        {{else}}
-          <div class="row">
-            <div class="col-md-2">
-              <img src={{upload.previewImageSrc}} class="content-image preview"/>
-            </div>
-            <div class="col-md-10">
-              {{textarea value=upload.description class="form-control" placeholder="Clique aqui e descreve a imagem"}}
-              <p class="help-block">Descrição da imagem. Essa descrição é usada como informação alternativa para leitores de tela.</p>
-            </div>
+
+      {{#bs-tab as |tab|}}
+        {{#tab.pane title="Upload / enviar"}}
+
+          <div class="image-selected-list">
+            {{#each upload.imagesToUpload as |item|}}
+              {{file-upload-image-item item=item}}
+            {{/each}}
           </div>
-        {{/if}}
-      {{else}}
-        {{#bs-tab as |tab|}}
-          {{#tab.pane title="Upload / enviar"}}
-            {{image-upload
-              uploader=upload.uploader
-              url=upload.url
-              progress='progress'
-              didUpload='didUpload'
-              didError='didError'
-              selected='selected'
-            }}
-          {{/tab.pane}}
-          {{#tab.pane title="Selecionar imagem salva"}}
-            {{we-images-to-select onSelectImage=(action 'onSelectSalvedImage')}}
-          {{/tab.pane}}
-        {{/bs-tab}}
-      {{/if}}
+          {{#unless upload.imagesToUpload.length}}
+            {{file-upload-image-selector}}
+          {{/unless}}
+
+        {{/tab.pane}}
+        {{#tab.pane title="Selecionar imagem salva"}}
+          {{we-images-to-select onSelectImage=(action 'onSelectSalvedImage')}}
+        {{/tab.pane}}
+      {{/bs-tab}}
+
     {{/if}}
   {{/modal.body}}
   {{#modal.footer as |footer|}}
@@ -54,7 +40,7 @@
       {{t 'Cancel'}}
     {{/bs-button}}
     {{#bs-button onClick=(action modal.submit) type="primary" disabled=upload.notReadyToUpload class="submit-image-btn"}}
-      {{t 'image.Add'}}
+      Salvar imagens e adicionar
     {{/bs-button}}
   {{/modal.footer}}
 {{/bs-modal}}

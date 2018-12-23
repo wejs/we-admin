@@ -1,20 +1,24 @@
+import { inject } from '@ember/service';
 import DS from 'ember-data';
 import Ember from 'ember';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import { isPresent } from '@ember/utils';
+import { getOwner } from '@ember/application';
 
 import Inflector from 'ember-inflector';
 const inflector = Inflector.inflector;
 inflector.irregular('modelsterms', 'modelsterm');
 
 export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
-  authorizer: 'authorizer:custom',
+  session: inject(),
+
   headers: {
     'Accept': 'application/vnd.api+json'
   },
   init() {
     this._super(...arguments);
 
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
     this.set('host', ENV.API_HOST);
   },
@@ -27,6 +31,15 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   pathForType(modelName) {
     return modelName;
   },
+
+  authorize(xhr) {
+    let token = this.get('session.token');
+    if (this.get('session.isAuthenticated') && isPresent(token)) {
+      xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      xhr.setRequestHeader('X-CSRF-Token', token);
+    }
+  },
+
   urlForQuery (query) {
     if (!query.vocabularyName) {
       // default vocabulary name:

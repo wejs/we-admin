@@ -365,26 +365,24 @@ export default Ember.Service.extend({
     // this.set('selectedFile', null);
   },
 
-  upload() {
-    // // done upload...
-    // this.get('uploader').upload(this.get('selectedFile'), {
-    //   description: (this.get('description') || '')
-    // })
-    // .then( (r)=> {
-    //   this.get('fileSelectedCallback')(null, r);
-    //   this.set('fileSelectedCallback', null);
+  uploadForTextEditor() {
+    this.set('isLOading', true);
 
-    //   this.set('uploader', null);
-    //   this.set('selectedFile', null);
-    //   this.set('uploadingImage', false);
-    //   return r;
-    // })
-    // .catch( (err)=> {
-    //   this.get('fileSelectedCallback')(err);
-    //   this.set('fileSelectedCallback', null);
-    //   this.hideUploadModal();
-    //   Ember.Logger.error('service:upload.upload:Erro on upload', err);
-    // });
+    this.uploadImages()
+    .then( (results)=> {
+      this.fileSelectedCallback(null, {
+        image: results[0]
+      });
+
+      this.set('isLOading', false);
+      this.onHideUploadModal();
+
+    })
+    .catch( (err)=> {
+      this.get('notifications').error('Erro ao enviar a imagem para o servidor, tente novamente mais tarde');
+      Ember.Logger.error(err);
+      this.set('isLOading', false);
+    });
   },
   didError(uploader, jqXHR, textStatus, errorThrown) {
     Ember.Logger.error('didError>', uploader, jqXHR, textStatus, errorThrown);

@@ -12,7 +12,7 @@ export default Ember.Controller.extend({
   actions: {
     // UPLOAD ACTIONS:
     upload() {
-      this.get('upload').upload();
+      this.get('upload').uploadForTextEditor();
     },
 
     selected() {

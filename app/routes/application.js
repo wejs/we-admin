@@ -1,14 +1,19 @@
 import Ember from 'ember';
+import { getOwner } from '@ember/application';
+import $ from 'jquery';
+import { hash } from 'rsvp';
+import { inject } from '@ember/service';
+import Route from '@ember/routing/route';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
 
-export default Ember.Route.extend(ApplicationRouteMixin, {
-  session: Ember.inject.service(),
-  acl: Ember.inject.service(),
+export default Route.extend(ApplicationRouteMixin, {
+  session: inject(),
+  acl: inject(),
 
   ENV: null,
 
   init() {
-    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this.set('ENV', getOwner(this).resolveRegistration('config:environment'));
     this._super(...arguments);
   },
 
@@ -23,17 +28,17 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
     let jobs = {};
 
     if (typeof tinymce === 'undefined'){
-      jobs['tinymce'] = Ember.$.getScript(
+      jobs['tinymce'] = $.getScript(
         ENV.API_HOST+
         '/public/plugin/we-plugin-editor-tinymce/files/tinymce.min.js');
     }
 
     jobs['locales' ]= this.getLocalesFromHost();
 
-    return Ember.RSVP.hash(jobs);
+    return hash(jobs);
   },
   model() {
-    return Ember.RSVP.hash({
+    return hash({
       loadedSettings: this.get('settings').getUserSettings(),
       minimumLoadingDelay: new window.Promise( (resolve)=> {
         setTimeout( ()=> {
@@ -53,10 +58,10 @@ export default Ember.Route.extend(ApplicationRouteMixin, {
    *
    */
   getLocalesFromHost() {
-    const  ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const  ENV = getOwner(this).resolveRegistration('config:environment');
 
     return new window.Promise( (resolve, reject)=> {
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/i18n/get-all-locales`,
         type: 'GET'
       })

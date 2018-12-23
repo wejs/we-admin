@@ -4,16 +4,14 @@ export function initialize(instance) {
   // const settings         = instance.lookup('service:settings');
 
   session.on('authenticationSucceeded', function() {
-    window.location.reload();
-    // TODO! add suport for dinamicaly set context
-    // // get user settings ,,,
-    // settings.getUserSettings()
-    // .then( ()=> {
-    //   applicationRoute.transitionTo('index');
-    // });
+    setTimeout( ()=> {
+      window.location.reload();
+    }, 900);
   });
   session.on('invalidationSucceeded', function() {
-    window.location.reload();
+    setTimeout( ()=> {
+      window.location.reload();
+    }, 900);
   });
 }
 

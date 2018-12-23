@@ -37,7 +37,7 @@
     "ember-export-application-global": "^2.0.0",
     "ember-i18n": "5.2.0",
     "ember-load-initializers": "^1.0.0",
-    "ember-models-table": "^2.5.0",
+    "ember-models-table": "^2.6.0",
     "ember-moment": "7.6.0",
     "ember-power-select": "2.0.0-beta.3",
     "ember-resolver": "^4.5.5",
