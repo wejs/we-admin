@@ -374,6 +374,9 @@ export default Ember.Service.extend({
         image: results[0]
       });
 
+      this.set('imagesToUpload', A());
+      this.set('filesToUpload', A());
+
       this.set('isLOading', false);
       this.onHideUploadModal();
 
