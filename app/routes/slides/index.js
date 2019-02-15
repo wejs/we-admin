@@ -6,8 +6,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model() {
     const i18n = this.get('i18n');
 
+    // const slideshow = this.modelFor('slides').slideshow;
+
     return  Ember.RSVP.hash({
-      records: this.get('store').query('slide', {}),
+      records: this.get('store').query('slide', {
+        // slideshowId: slideshow.id
+      }),
       columns: [
         {
           propertyName: 'id',

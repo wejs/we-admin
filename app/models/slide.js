@@ -1,23 +1,28 @@
 import DS from 'ember-data';
+import Inflector from 'ember-inflector';
+
+const inflector = Inflector.inflector;
+inflector.irregular('slide', 'slide');
+inflector.uncountable('slide');
 
 export default DS.Model.extend({
   title: DS.attr('string'),
-  highlighted: DS.attr('number', {
-    defaultValue: 0
-  }),
   description: DS.attr('string'),
   link: DS.attr('string'),
   linkText: DS.attr('string'),
-  published: DS.attr('boolean', {
-    defaultValue: true
-  }),
+  published: DS.attr('boolean'),
   publishedAt: DS.attr('date'),
-  slideshowId: DS.attr('string', {
-    defaultValue: 1
-  }),
+  image: DS.attr('array'),
+  linkPermanent: DS.attr(),
+  metadata: DS.attr(),
+  setAlias: DS.attr(),
+  createdAt: DS.attr('date'),
+  updatedAt: DS.attr('date'),
   creator: DS.belongsTo('user', {
-    inverse: 'slides'
+    async: true
   }),
-  linkPermanent: DS.attr('string'),
-  image: DS.attr('array')
+  slideshow: DS.belongsTo('slideshow', {
+    async: true,
+    inverse:'slides'
+  })
 });
