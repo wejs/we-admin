@@ -187,3 +187,11 @@ figure.image figcaption {
 .image-uploader-tr-description textarea {
   font-size: 13px;
 }
+
+
+.i18n-live-translator-btn {
+  position: fixed;
+  left: 1px;
+  bottom: 1px;
+  z-index: 1001;
+}

@@ -1,0 +1,59 @@
+{{#if model.record.id}}
+  <h1 class="page-header">{{t "t.edit" title=model.record.s s=model.record.s}}</h1>
+{{else}}
+  <h1 class="page-header">{{t "t.create"}}</h1>
+{{/if}}
+
+<form {{action "save" model.record on="submit"}}>
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t "content.form.terms.Data"}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <label>{{t "form-t-s"}}*:</label>
+              {{input value=model.record.s class="form-control" placeholder=(t "form-placeholder-t-s") required="required"}}
+            </div>
+            <div class="form-group">
+              <label>{{t "form-t-t"}}*:</label>
+              {{input value=model.record.t class="form-control" placeholder=(t "form-placeholder-t-t") required="required"}}
+            </div>
+            <div class="form-group">
+              <label>{{t "form-t-l"}}*:</label>
+              {{input value=model.record.l class="form-control" placeholder=(t "form-placeholder-t-l") required="required"}}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">{{t "content.form.terms.Dates"}}</div>
+        <div class="panel-body">
+          <fieldset>
+            <div class="form-group">
+              <strong>{{t "form-content-updatedAt"}}: </strong> {{moment-format model.record.updatedAt "DD/MM/YYYY HH:mm"}}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-12">
+      <div class="footer-actions">
+        <button class="btn btn-primary">
+          <i class="fa fa-save"></i>
+          {{t "t.Save"}}
+        </button>
+        <button {{action "goTo" "t.index"}} type="button" class="btn btn-default">
+          <i class="fa fa-step-backward"></i>
+          {{t "t.find"}}
+        </button>
+      </div>
+    </div>
+
+  </div>{{!-- /row --}}
+
+</form>

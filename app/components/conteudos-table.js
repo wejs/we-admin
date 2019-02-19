@@ -3,6 +3,8 @@ import { computed, get } from '@ember/object';
 import EmberObject from '@ember/object';
 
 import ServerModelsTable from 'ember-models-table/components/models-table-server-paginated';
+import Bs3Theme from 'ember-models-table/themes/bootstrap3';
+
 
 // ref https://github.com/onechiporenko/ember-models-table/blob/master/addon/components/models-table-server-paginated.js
 
@@ -48,6 +50,8 @@ export default ServerModelsTable.extend({
     page: 'page',
     pageSize: 'limit'
   },
+
+  themeInstance: Bs3Theme.create(),
 
   actions: {
     deleteRecord(record) {

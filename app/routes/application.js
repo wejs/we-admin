@@ -9,6 +9,7 @@ import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mi
 export default Route.extend(ApplicationRouteMixin, {
   session: inject(),
   acl: inject(),
+  intl: inject(),
 
   ENV: null,
 
@@ -21,6 +22,9 @@ export default Route.extend(ApplicationRouteMixin, {
     this._super(...arguments);
 
     const ENV = this.get('ENV');
+
+    // change default intl.t to send errors to console and dont stop page execution
+    this.set('intl.t', this.get('i18n.t'));
 
     this.get('notifications').setDefaultAutoClear(true);
     this.get('notifications').setDefaultClearDuration(5200);
@@ -48,7 +52,18 @@ export default Route.extend(ApplicationRouteMixin, {
     });
   },
   afterModel() {
-    this.set('i18n.locale', this.get('settings.data.activeLocale') || 'pt-br');
+    let i18n = this.get('i18n');
+    let intl = this.get('intl');
+
+    if (i18n.setLocale) {
+      // new api:
+      i18n.setLocale(
+        this.get('settings.data.defaultLocale') || 'en-us'
+      );
+      intl.setLocale(
+        this.get('settings.data.defaultLocale') || 'en-us'
+      );
+    }
 
     document.title = this.get('settings.systemSettings.siteName') + ' | '+document.title;
   },
@@ -60,6 +75,9 @@ export default Route.extend(ApplicationRouteMixin, {
   getLocalesFromHost() {
     const  ENV = getOwner(this).resolveRegistration('config:environment');
 
+    let rg1 = new RegExp('{{', 'g');
+    let rg2 = new RegExp('}}', 'g');
+
     return new window.Promise( (resolve, reject)=> {
       $.ajax({
         url: `${ENV.API_HOST}/i18n/get-all-locales`,
@@ -69,6 +87,17 @@ export default Route.extend(ApplicationRouteMixin, {
         if (data && data.locales) {
           // load locales with ember-i18n
           for(let name in data.locales) {
+
+            let langLocs = data.locales[name];
+
+            for(let s in langLocs) {
+              if (langLocs[s].indexOf('{{') > -1) {
+                langLocs[s] = langLocs[s]
+                  .replace(rg1, '{')
+                  .replace(rg2, '}');
+              }
+            }
+
             this.get('i18n').addTranslations(name, data.locales[name]);
           }
         }
