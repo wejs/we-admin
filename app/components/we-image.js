@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import Component from '@ember/component';
 
 /**
  * Ember.js image component visualizer
@@ -7,7 +8,7 @@ import Ember from 'ember';
  * @examples
  *   {{we-image file=imageModel size="medium"}}
  */
-export default Ember.Component.extend({
+export default Component.extend({
   tagName: 'img',
   attributeBindings: ['src:src'],
 
@@ -18,8 +19,6 @@ export default Ember.Component.extend({
 
   init() {
     this._super();
-
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
 
     let file = this.get('file');
 
@@ -36,7 +35,7 @@ export default Ember.Component.extend({
       return ;
     }
 
-    let src = ENV.imageHost + Ember.get(file, 'urls.'+this.get('size'));
+    let src = Ember.get(file, 'urls.'+this.get('size'));
     this.set('src', src);
   }
 });
