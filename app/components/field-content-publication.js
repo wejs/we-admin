@@ -94,7 +94,10 @@ export default Component.extend({
       this.set('publicationDate', this.get('newPublicationDate'));
 
       const publishMethodId = this.get('publishMethod.id');
-      if (publishMethodId === 'unPublished' || publishMethodId === 'schendule') {
+      if (publishMethodId === 'unPublished') {
+        this.set('isPublished', false);
+        this.set('publicationDate', null);
+      } else if (publishMethodId === 'schendule') {
         this.set('isPublished', false);
       } else if(publishMethodId === 'on_create') {
         this.set('isPublished', true);
