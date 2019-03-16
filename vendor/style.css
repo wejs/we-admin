@@ -195,3 +195,8 @@ figure.image figcaption {
   bottom: 1px;
   z-index: 1001;
 }
+
+td.mt-c-published {
+  width: 150px;
+  font-size: 0.8em;
+}
