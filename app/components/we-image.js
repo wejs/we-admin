@@ -1,5 +1,7 @@
-import Ember from 'ember';
 import Component from '@ember/component';
+import { isArray } from '@ember/array';
+import { get } from '@ember/object';
+import { inject } from '@ember/service';
 
 /**
  * Ember.js image component visualizer
@@ -9,6 +11,8 @@ import Component from '@ember/component';
  *   {{we-image file=imageModel size="medium"}}
  */
 export default Component.extend({
+  settings: inject(),
+
   tagName: 'img',
   attributeBindings: ['src:src'],
 
@@ -22,9 +26,9 @@ export default Component.extend({
 
     let file = this.get('file');
 
-    if (Ember.isArray(file)) {
+    if (isArray(file)) {
       if (file.firstObject) {
-        file = Ember.get(file, 'firstObject');
+        file = get(file, 'firstObject');
       } else {
         file = file[0];
       }
@@ -35,7 +39,12 @@ export default Component.extend({
       return ;
     }
 
-    let src = Ember.get(file, 'urls.'+this.get('size'));
-    this.set('src', src);
+    let src = get(file, 'urls.'+this.get('size'));
+
+    if (src.startsWith('HTT')) {
+      this.set('src', src);
+    } else {
+      this.set('src', this.get('settings.ENV.imageHost') + src);
+    }
   }
 });
