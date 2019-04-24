@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 
 export default Component.extend({
-  roleName: null, // set role.id, rolaNme is deprecated for associations
+  roleName: null, // set role.id, rolaName is deprecated for associations
   roleId: null,
   user: null,
   have: null,
@@ -42,14 +42,14 @@ export default Component.extend({
     if (this.get('have')) {
       this.sendAction(
         'addUserRole',
-        (this.get('roleName') || this.get('roleId')),
+        (this.get('roleId') || this.get('roleName')),
         this.get('user'),
         this.requestDoneCallback.bind(this)
       );
     } else {
       this.sendAction(
         'removeUserRole',
-        (this.get('roleName') || this.get('roleId')),
+        (this.get('roleId') || this.get('roleName')),
         this.get('user'),
         this.requestDoneCallback.bind(this)
       );

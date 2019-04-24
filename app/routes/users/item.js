@@ -157,6 +157,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
     },
     removeUserRole(roleName, user, cb) {
       let userRoles = user.get('roles');
+      const acl = this.get('acl');
 
       if (!userRoles) {
         user.set('roles', Ember.A());
@@ -173,8 +174,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
         userRoles.splice( index, 1 );
       }
 
-      return this.get('acl')
-      .updateUserRoles(userRoles, user.id)
+      return acl.updateUserRoles(userRoles, user.id)
       .then( ()=> {
         cb();
         return null;
