@@ -50,7 +50,9 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         if (!alias) {
           return content;
         }
-        alias.alias = record.setAlias;
+
+        Ember.set(alias, 'alias', record.setAlias);
+
         return content;
       })
       .then( (r)=> {

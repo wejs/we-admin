@@ -48,7 +48,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
     },
 
     changeActiveStatus(user, status) {
-      user.active = status;
+      user.set('active', status);
       user.save()
       .then( (r)=> {
         if (status) {
