@@ -1,0 +1,10 @@
+<h1 class="page-header">{{t "Images"}}</h1>
+<br>
+{{conteudos-table
+  data=model.records
+  columns=model.columns
+  pageSize=25
+  useFilteringByColumns=true
+  showGlobalFilter=false
+  deleteRecord="deleteRecord"
+}}
