@@ -1,9 +1,11 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import { get, set } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model(params) {
-    return Ember.RSVP.hash({
+    return hash({
       record: this.get('store').findRecord('vocabulary', params.id),
       alias: this.get('store').query('url-alia', {
         target: '/vocabulary/'+params.id,
@@ -21,12 +23,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   afterModel(model) {
-    let id = Ember.get(model, 'record.id');
+    let id = get(model, 'record.id');
 
     if (
       model.alias && model.alias.alias && model.record && model.record.id
     ) {
-      Ember.set(model.record, 'setAlias', Ember.get(model.alias,'alias'));
+      set(model.record, 'setAlias', get(model.alias,'alias'));
     } else {
       model.alias = this.get('store').createRecord('url-alia', {
         target: '/vocabulary/'+id,

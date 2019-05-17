@@ -1,17 +1,20 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { hash } from 'rsvp';
+import { get, set } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  term: Ember.inject.service(),
+export default Route.extend(AuthenticatedRouteMixin, {
+  term: inject(),
 
   model() {
     const vocabulary = this.modelFor('vocabulary.item').record;
     const i18n = this.get('i18n');
 
-    return  Ember.RSVP.hash({
+    return  hash({
       vocabulary: vocabulary,
       records: this.get('store').query('term', {
-        vocabularyName: Ember.get(vocabulary,'name')
+        vocabularyName: get(vocabulary,'name')
       }),
       columns: [
         {
@@ -45,11 +48,11 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   afterModel(model) {
-    if (model.records && Ember.get(model.records, 'length') ) {
-      const length = Ember.get(model.records, 'length');
+    if (model.records && get(model.records, 'length') ) {
+      const length = get(model.records, 'length');
       for (let i = 0; i < length; i++) {
         const record = model.records.objectAt(i);
-        Ember.set(record, 'vocabulary', model.vocabulary);
+        set(record, 'vocabulary', model.vocabulary);
       }
     }
   },

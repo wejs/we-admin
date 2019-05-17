@@ -1,6 +1,5 @@
 import { inject } from '@ember/service';
 import DS from 'ember-data';
-import Ember from 'ember';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
@@ -9,11 +8,12 @@ export default DS.JSONAPIAdapter.extend(
 DataAdapterMixin, {
   session: inject(),
 
-  headers: {
-    'Accept': 'application/vnd.api+json'
-  },
   init() {
     this._super(...arguments);
+
+    this.set('headers', {
+      'Accept': 'application/vnd.api+json'
+    });
 
     const ENV = getOwner(this).resolveRegistration('config:environment');
 

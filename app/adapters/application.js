@@ -7,11 +7,12 @@ import { getOwner } from '@ember/application';
 export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   session: inject(),
 
-  headers: {
-    'Accept': 'application/vnd.api+json'
-  },
   init() {
     this._super(...arguments);
+
+    this.set('headers', {
+      'Accept': 'application/vnd.api+json'
+    });
 
     const ENV = getOwner(this).resolveRegistration('config:environment');
 

@@ -1,6 +1,6 @@
-import Ember from 'ember';
 import EmberFlatpickr from 'ember-flatpickr/components/ember-flatpickr';
 import { get } from '@ember/object';
+import { setProperties } from '@ember/object';
 
 export default EmberFlatpickr.extend({
   init() {
@@ -26,8 +26,8 @@ export default EmberFlatpickr.extend({
       date: get(this, 'date') || new Date()
     };
 
-    Ember.setProperties(this.attrs, defaults);
-    Ember.setProperties(this, defaults);
+    // setProperties(this.attrs, defaults);
+    setProperties(this, defaults);
 
     this._super(...arguments);
   }

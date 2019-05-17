@@ -1,6 +1,10 @@
-import Ember from 'ember';
 import { getOwner } from '@ember/application';
 import { inject } from '@ember/service';
+import Service from '@ember/service';
+import { alias } from '@ember/object/computed';
+import $ from 'jquery';
+import { A } from '@ember/array';
+import { debug } from '@ember/debug';
 
 let ENV;
 
@@ -10,7 +14,7 @@ const systemRoles = [
   'unAuthenticated'
 ];
 
-export default Ember.Service.extend({
+export default Service.extend({
   session: inject('session'),
   settings: inject('settings'),
 
@@ -20,9 +24,9 @@ export default Ember.Service.extend({
     ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
-  userRoles: Ember.computed.alias('settings.userRoles'),
-  isAdmin: Ember.computed.alias('settings.isAdmin'),
-  permissions: Ember.computed.alias('settings.data.userPermissions'),
+  userRoles: alias('settings.userRoles'),
+  isAdmin: alias('settings.isAdmin'),
+  permissions: alias('settings.data.userPermissions'),
 
   /**
    * Check if current user can do something
@@ -61,7 +65,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/permission`,
         type: 'GET',
         headers: headers
@@ -84,7 +88,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/permission`,
         type: 'GET',
         headers: headers
@@ -104,7 +108,7 @@ export default Ember.Service.extend({
   getRolesArray() {
     return this.getRoles()
     .then( (data)=> {
-      const roles = Ember.A([]);
+      const roles = A([]);
 
       for (let name in data) {
         if (systemRoles.indexOf(name) >-1 ) {
@@ -131,7 +135,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/user/${userId}/roles`,
         type: 'GET',
         headers: headers
@@ -159,7 +163,7 @@ export default Ember.Service.extend({
 
       const data = { userRoles: roleNames };
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/user/${userId}/roles`,
         type: 'POST',
         dataType: 'json',
@@ -168,7 +172,7 @@ export default Ember.Service.extend({
         headers: headers
       })
       .done( (data)=> {
-        console.log('result>', data);
+        debug('result>', data);
         resolve(data.data);
         return null;
       })
@@ -191,7 +195,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/role/${roleName}/permissions/${permissionName}`,
         type: 'DELETE',
         headers: headers
@@ -215,7 +219,7 @@ export default Ember.Service.extend({
 
       role.action = 'create';
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/role`,
         type: 'POST',
         dataType: 'json',
@@ -241,7 +245,7 @@ export default Ember.Service.extend({
 
       role.action = 'delete';
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/role`,
         type: 'POST',
         dataType: 'json',
@@ -270,7 +274,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/role/${roleName}/permissions/${permissionName}`,
         type: 'POST',
         dataType: 'json',
@@ -297,7 +301,7 @@ export default Ember.Service.extend({
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/acl/role/${roleName}/permissions/${permissionName}`,
         type: 'DELETE',
         dataType: 'json',

@@ -1,10 +1,14 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
-const set = Ember.set;
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import $ from 'jquery';
+import { set } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+import { getOwner } from '@ember/application';
+
+export default Route.extend(AuthenticatedRouteMixin, {
   model() {
-    return Ember.RSVP.hash({
+    return hash({
       emailTypes: this.getEmailTypes()
     });
   },
@@ -13,16 +17,15 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     return new window.Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' };
 
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+      const ENV = getOwner(this).resolveRegistration('config:environment');
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/email-template-type`,
         type: 'GET',
         headers: headers
       })
       .done( (r)=> {
         resolve(r.emailTypes);
-        return null;
       })
       .fail(reject);
     });

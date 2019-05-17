@@ -1,5 +1,9 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { hash } from 'rsvp';
+import { A } from '@ember/array';
+import { debug } from '@ember/debug';
 
 const systemRoles = [
   'administrator',
@@ -7,14 +11,14 @@ const systemRoles = [
   'unAuthenticated'
 ];
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
-  acl: Ember.inject.service('acl'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  session: inject('session'),
+  acl: inject('acl'),
 
   model() {
-    return Ember.RSVP.hash({
+    return hash({
       data: this.get('acl').getRoles(),
-      roles: Ember.A([]),
+      roles: A([]),
       newRole: {}
     });
   },
@@ -43,7 +47,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         this.resetNewRole();
       })
       .catch( (err)=> {
-        console.log(err);
+        debug(err);
       });
     },
     deleteRole(role) {
@@ -60,7 +64,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         delete roles[role.name];
       })
       .catch( (err)=> {
-        console.log(err);
+        debug(err);
       });
     }
   },

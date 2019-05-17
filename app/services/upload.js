@@ -5,10 +5,13 @@ import Uploader from 'ember-uploader/uploaders/uploader';
 import { getOwner } from '@ember/application';
 import { inject } from '@ember/service';
 import $ from 'jquery';
+import Service from '@ember/service';
+import { eResolve } from 'rsvp';
+import { bind } from '@ember/runloop';
 
 let ENV;
 
-export default Ember.Service.extend({
+export default Service.extend({
   notifications: inject('notification-messages'),
   session: inject(),
 
@@ -93,7 +96,8 @@ export default Ember.Service.extend({
           set(f, 'isInAction', false);
         });
 
-        uploader.on('didError', (jqXHR, textStatus, errorThrown) => {
+        // (jqXHR,    textStatus,   errorThrown) =>
+        uploader.on('didError', () => {
           set(f, 'barType', 'danger');
           set(f, 'isInAction', false);
         });
@@ -159,14 +163,15 @@ export default Ember.Service.extend({
           // Use `e.percent` to get percentage
           set(f, 'percent', Math.floor(e.percent));
         });
-
-        uploader.on('didUpload', e => {
+        // (e)=>
+        uploader.on('didUpload', ()=> {
           set(f, 'barType', 'success');
           set(f, 'isInAction', false);
-          console.log('didUpload', e);
+          // console.log('didUpload', e);
         });
 
-        uploader.on('didError', (jqXHR, textStatus, errorThrown) => {
+        // (jqXHR,    textStatus,   errorThrown)=>
+        uploader.on('didError', () => {
           set(f, 'barType', 'danger');
           set(f, 'isInAction', false);
         });
@@ -217,12 +222,12 @@ export default Ember.Service.extend({
             }
           })
           .catch( (err)=> {
-            console.log('err>', err);
+            // console.log('err>', err);
             return err;
           });
         });
       },
-        Ember.RSVP.resolve()
+        eResolve()
       )
       .then( ()=> { // after all
         this.set('imagesToUpload', A());
@@ -255,12 +260,12 @@ export default Ember.Service.extend({
             }
           })
           .catch( (err)=> {
-            console.log('err>', err);
+            // console.log('err>', err);
             return err;
           });
         });
       },
-        Ember.RSVP.resolve()
+        eResolve()
       )
       .then( ()=> { // after all
         this.set('imagesToUpload', A());
@@ -328,9 +333,13 @@ export default Ember.Service.extend({
     this.set('description', null);
     this.set('uploadingImage', false);
   },
-
-  selected(files) {
-    console.log('DEPRECATED! old upload.selected');
+  /**
+   * Deprecated selected method
+   *
+   * @param  {Array} files
+   */
+  selected() {
+    // console.log('DEPRECATED! old upload.selected');
     // const file = files[0];
     // this.set('selectedFile', file);
     // const reader = new FileReader();
@@ -425,11 +434,15 @@ export default Ember.Service.extend({
       }
     })
     .then( ()=> {
-      this.get('notifications').success('Descrição atualizada com sucesso');
+      bind(this, function() {
+        this.get('notifications').success('Descrição atualizada com sucesso');
+      });
     })
     .catch( ()=> {
-      this.get('notifications')
-      .error('Erro ao atualizar a descrição, tente novamente mais tarde ou entre em contato com um administrador');
+      bind(this, function() {
+        this.get('notifications')
+        .error('Erro ao atualizar a descrição, tente novamente mais tarde ou entre em contato com um administrador');
+      });
     });
   },
 

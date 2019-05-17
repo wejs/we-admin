@@ -1,13 +1,17 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
+import { hash } from 'rsvp';
+import { debug } from '@ember/debug';
 
 let ENV;
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  ajax: Ember.inject.service(),
+export default Route.extend(AuthenticatedRouteMixin, {
+  ajax: inject(),
   init() {
     this._super(...arguments);
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   model(params) {
@@ -15,7 +19,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
     const themeModel = this.modelFor('settings.theme');
 
-    return Ember.RSVP.hash({
+    return hash({
       ENV: ENV,
       settings: systemSettings,
       themeModel: themeModel,
@@ -32,7 +36,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
   actions: {
     save(data) {
-      console.log('TODO! save', data);
+      debug('TODO! save', data);
     }
   }
 });

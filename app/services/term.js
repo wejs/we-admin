@@ -1,15 +1,18 @@
-import Ember from 'ember';
+import Service from '@ember/service';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
+import $ from 'jquery';
 
 let ENV;
 
-export default Ember.Service.extend({
-  session: Ember.inject.service(),
-  ajax: Ember.inject.service(),
+export default Service.extend({
+  session: inject(),
+  ajax: inject(),
 
   init(){
     this._super(...arguments);
 
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   query(vocabularyId, opts) {
@@ -20,7 +23,7 @@ export default Ember.Service.extend({
       headers.Authorization = `Basic ${accessToken}`;
     }
 
-    return Ember.$.ajax({
+    return $.ajax({
       url: `${ENV.API_HOST}/vocabulary/${vocabularyId}/term`,
       type: 'GET',
       headers: headers,

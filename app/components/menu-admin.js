@@ -1,21 +1,25 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
+import { getOwner } from '@ember/application';
+import { A } from '@ember/array';
 
-export default Ember.Component.extend({
-  acl: Ember.inject.service('acl'),
-  settings: Ember.inject.service('settings'),
+export default Component.extend({
+  acl: inject('acl'),
+  settings: inject('settings'),
 
   tagName: 'ul',
   ENV: null,
 
-  userRoles: Ember.computed.alias('acl.userRoles'),
+  userRoles: alias('acl.userRoles'),
 
   init() {
     this._super(...arguments);
 
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
     this.set('ENV', ENV);
 
-    this.set('links', Ember.A());
+    this.set('links', A());
     this.set('classNames', [
       'nav', ' in'
     ]);

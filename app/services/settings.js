@@ -3,6 +3,8 @@ import { inject } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { computed } from '@ember/object';
 import $ from 'jquery';
+import { debug } from '@ember/debug';
+import { bind } from '@ember/runloop';
 
 let ENV;
 
@@ -12,6 +14,11 @@ export default Service.extend({
 
   init(){
     this._super(...arguments);
+
+    this.set('themeCollorOptions', [
+      { id: 'default', name: 'Cor padrão do tema'},
+      // { id: 'dark', name: 'Tema escuro'}
+    ]);
 
     ENV = getOwner(this).resolveRegistration('config:environment');
 
@@ -44,10 +51,7 @@ export default Service.extend({
   defaultClientDateFormat: 'DD/MM/YYYY hh:ss',
   dateFormat: computed.or('data.date.defaultFormat', 'defaultClientDateFormat'),
 
-  themeCollorOptions: [
-    { id: 'default', name: 'Cor padrão do tema'},
-    // { id: 'dark', name: 'Tema escuro'}
-  ],
+  themeCollorOptions: null,
 
   getUserSettings() {
     // const uid = this.get('authenticatedUserId');
@@ -68,7 +72,7 @@ export default Service.extend({
       // sync authe between site and admin:
       if (response.authenticatedUser) {
         if (!this.get('session.isAuthenticated')) {
-          console.log('should be authenticated...');
+          debug('should be authenticated...');
           // authenticate ...
           return this.get('session')
           .authenticate(
@@ -112,6 +116,7 @@ export default Service.extend({
   },
 
   setSystemSettings(newData) {
+    const self = this;
     // const uid = this.get('authenticatedUserId');
     let headers = { Accept: 'application/vnd.api+json' },
         accessToken = this.get('accessToken');
@@ -128,8 +133,11 @@ export default Service.extend({
       data: newData
     })
     .then( (response)=> {
-      this.set('systemSettings', response);
-      return response;
+      bind(this, function() {
+        self.set('systemSettings', response);
+        return response;
+      });
+
     });
   },
 

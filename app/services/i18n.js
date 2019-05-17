@@ -1,9 +1,14 @@
 import intl from 'ember-intl/services/intl';
-
+import { debug } from '@ember/debug';
 import { assign } from '@ember/polyfills';
 
 export default intl.extend({
-  localesToTranslate: [],
+  localesToTranslate: null,
+
+  init () {
+    this._super(...arguments);
+    this.set('localesToTranslate', []);
+  },
 
   /** @public **/
   t(key, options = {}) {
@@ -23,7 +28,7 @@ export default intl.extend({
       try {
         return this.formatMessage(msg, options);
       } catch(e) {
-        console.error('i18n:Error on run formatMessage method', e);
+        debug('i18n:Error on run formatMessage method', e);
         return msg;
       }
 

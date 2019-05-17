@@ -43,14 +43,6 @@ export default ServerModelsTable.extend({
   showGlobalFilter: false,
   showColumnsDropdown: false,
 
-  filterQueryParameters: {
-    globalFilter: 'q',
-    sort: 'sort',
-    sortDirection: 'sortDirection',
-    page: 'page',
-    pageSize: 'limit'
-  },
-
   themeInstance: Bs3Theme.create(),
 
   actions: {
@@ -80,5 +72,13 @@ export default ServerModelsTable.extend({
       "allColumnsAreHidden": i18n.t('models.table.all.columns.are.hidden'),
       "noDataToShow": i18n.t('models.table.no.records.to.show')
     }));
+
+    this.set('filterQueryParameters', {
+      globalFilter: 'q',
+      sort: 'sort',
+      sortDirection: 'sortDirection',
+      page: 'page',
+      pageSize: 'limit'
+    });
   }
 });

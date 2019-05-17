@@ -6,30 +6,8 @@ export default Component.extend({
 
   publicationDate: null,
   isPublished: false,
-  newPublicationDate: new Date(),
 
-  minDate: new Date(),
-
-  publishMethod: {
-    id: 'unPublished',
-    text: 'Manter despublicado'
-  },
   newPublishMethod: null,
-
-  publishMethods: [
-    {
-      id: 'unPublished',
-      text: 'Manter despublicado'
-    },
-    {
-      id: 'on_create',
-      text: 'Publicar ao salvar'
-    },
-    {
-      id: 'schendule',
-      text: 'Publicação agendada'
-    }
-  ],
 
   showDatePicker: computed('newPublishMethod', function() {
     if (this.get('newPublishMethod.id') === 'schendule') {
@@ -41,6 +19,29 @@ export default Component.extend({
 
   init() {
     this._super(...arguments);
+
+    this.set('newPublicationDate', new Date());
+    this.set('minDate', new Date());
+    this.set('publishMethods', [
+      {
+        id: 'unPublished',
+        text: 'Manter despublicado'
+      },
+      {
+        id: 'on_create',
+        text: 'Publicar ao salvar'
+      },
+      {
+        id: 'schendule',
+        text: 'Publicação agendada'
+      }
+    ]);
+
+    this.set('publishMethod', {
+      id: 'unPublished',
+      text: 'Manter despublicado'
+    });
+
     this.resetChanges();
   },
 

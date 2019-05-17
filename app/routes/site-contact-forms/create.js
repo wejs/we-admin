@@ -1,10 +1,10 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model() {
     return {
-      record: this.store.createRecord('sitecontact-form')
+      record: this.get('store').createRecord('sitecontact-form')
     };
   },
   actions: {

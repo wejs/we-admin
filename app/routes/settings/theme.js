@@ -3,7 +3,10 @@ import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-rout
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import { hash } from 'rsvp';
-import { set } from '@ember/object';
+import { set, get } from '@ember/object';
+import { getOwner } from '@ember/application';
+import $ from 'jquery';
+import { bind } from '@ember/runloop';
 
 let ENV;
 
@@ -13,7 +16,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
   init() {
     this._super(...arguments);
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   model() {
@@ -136,7 +139,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
     },
 
     installTheme(theme, color, colorName) {
-      const release = Ember.get(theme, 'release');
+      const release = get(theme, 'release');
 
       if (!colorName) {
         colorName = 'default';
@@ -157,7 +160,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
         let url = `${ENV.API_HOST}/admin/theme/${theme.gitRepositoryName}/install`;
 
-        Ember.$.ajax({
+        $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
@@ -170,13 +173,14 @@ export default Route.extend(AuthenticatedRouteMixin, {
           headers: headers
         })
         .done( (data)=> {
-          if (data && data.meta && data.meta.updatedSettings) {
+          bind(this, function() {
+            if (data && data.meta && data.meta.updatedSettings) {
 
-            this.get('settings').set('systemSettings', data.meta.updatedSettings);
-          }
+              this.get('settings').set('systemSettings', data.meta.updatedSettings);
+            }
 
-          resolve(data);
-          return null;
+            resolve(data);
+          });
         })
         .fail(reject);
       })
@@ -209,7 +213,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
         let url = `${ENV.API_HOST}/admin/theme-verify-updates`;
 
-        Ember.$.ajax({
+        $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
@@ -217,14 +221,15 @@ export default Route.extend(AuthenticatedRouteMixin, {
           headers: headers
         })
         .done( (data)=> {
-          if (data && data.themesToUpdate) {
-            this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
-          }
+          bind(this, function() {
+            if (data && data.themesToUpdate) {
+              this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
+            }
 
-          this.verifyCurrentThemeUpdate(this.get('currentModel'));
+            this.verifyCurrentThemeUpdate(this.get('currentModel'));
 
-          resolve(data);
-          return null;
+            resolve(data);
+          });
         })
         .fail(reject);
       })
@@ -260,7 +265,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
         let url = `${ENV.API_HOST}/admin/theme/${themeName}/update`;
 
-        Ember.$.ajax({
+        $.ajax({
           url: url,
           type: 'POST',
           dataType: 'json',
@@ -272,16 +277,17 @@ export default Route.extend(AuthenticatedRouteMixin, {
           headers: headers
         })
         .done( (data)=> {
-          if (data && data.themesToUpdate) {
-            this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
-          } else {
-            this.removeUpdatedThemeFromToUpdateList();
-          }
+          bind(this, function() {
+            if (data && data.themesToUpdate) {
+              this.set('settings.systemSettings.themesToUpdate', data.themesToUpdate);
+            } else {
+              this.removeUpdatedThemeFromToUpdateList();
+            }
 
-          this.set('currentModel.updateAvaible', false);
+            this.set('currentModel.updateAvaible', false);
 
-          resolve(data);
-          return null;
+            resolve(data);
+          });
         })
         .fail(reject);
       })

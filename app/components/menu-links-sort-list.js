@@ -1,8 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
 
 const Sortable = window.Sortable;
 
-export default Ember.Component.extend({
+export default Component.extend({
   links: null,
 
   group: 'default',
@@ -36,7 +37,7 @@ export default Ember.Component.extend({
         // evt.oldIndex;  // element's old index within old parent
         // evt.newIndex;  // element's new index within new parent
 
-        const viewRegistry = Ember.getOwner(this).lookup('-view-registry:main');
+        const viewRegistry = getOwner(this).lookup('-view-registry:main');
 
         const toComponent = viewRegistry[evt.to.id];
         const fromComponent = viewRegistry[evt.from.id];

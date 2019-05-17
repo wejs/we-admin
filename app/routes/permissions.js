@@ -1,12 +1,14 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { hash } from 'rsvp';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
-  acl: Ember.inject.service('acl'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  session: inject('session'),
+  acl: inject('acl'),
 
   model() {
-    return Ember.RSVP.hash({
+    return hash({
       data: this.getPermissionsAndRoles()
     });
   },

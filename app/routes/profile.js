@@ -1,12 +1,15 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import ENV from "../config/environment";
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import $ from 'jquery';
+import { bind } from '@ember/runloop';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model() {
     const settings = this.get('settings');
 
-    return Ember.RSVP.hash({
+    return hash({
       user: settings.get('user'),
       oldPassword: null,
       newPassword: null,
@@ -35,7 +38,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: ENV.API_HOST + '/auth/change-password',
         type: 'POST',
         data: {
@@ -46,15 +49,14 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         cache: false,
         headers: headers
       })
-      .then( (response)=> {
-        console.log('response>', response);
-        this.get('notifications').success('Senha alterada com sucesso.');
+      .then( ()=> {
+        bind(this, function() {
+          this.get('notifications').success('Senha alterada com sucesso.');
 
-        model.oldPassword = null;
-        model.newPassword = null;
-        model.rNewPassword = null;
-        // success
-        return response;
+          model.oldPassword = null;
+          model.newPassword = null;
+          model.rNewPassword = null;
+        });
       })
       .fail( (err)=> {
         this.send('queryError', err);

@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { get } from '@ember/object';
 
-const get = Ember.get;
-
-export default Ember.Component.extend({
-  store: Ember.inject.service(),
+export default Component.extend({
+  store: inject(),
 
   addLink: 'addLink',
 
@@ -13,44 +13,48 @@ export default Ember.Component.extend({
 
   recentPages: null,
 
-  options: [
-    {
-      id: 'view.profile',
-      text: 'Ver perfil',
-      role: 'authenticated',
-      linkPermanent: '/user-goto?action=view'
-    },
-    {
-      id: 'edit.profile',
-      text: 'Editar perfil',
-      role: 'authenticated',
-      linkPermanent: '/user-goto?action=edit'
-    },
-    {
-      id: 'edit.profile.privacity',
-      text: 'Privacidade',
-      role: 'authenticated',
-      linkPermanent: '/user-goto?action=privacity'
-    },
-    {
-      id: 'password.change',
-      text: 'Mudar senha',
-      role: 'authenticated',
-      linkPermanent: '/auth/change-password'
-    },
-    {
-      id: 'login',
-      text: 'Entrar',
-      role: 'unAuthenticated',
-      linkPermanent: '/login'
-    },
-    {
-      id: 'logout',
-      text: 'Sair',
-      role: 'authenticated',
-      linkPermanent: '/logout'
-    }
-  ],
+  init() {
+    this._super(...arguments);
+
+    this.set('options', [
+      {
+        id: 'view.profile',
+        text: 'Ver perfil',
+        role: 'authenticated',
+        linkPermanent: '/user-goto?action=view'
+      },
+      {
+        id: 'edit.profile',
+        text: 'Editar perfil',
+        role: 'authenticated',
+        linkPermanent: '/user-goto?action=edit'
+      },
+      {
+        id: 'edit.profile.privacity',
+        text: 'Privacidade',
+        role: 'authenticated',
+        linkPermanent: '/user-goto?action=privacity'
+      },
+      {
+        id: 'password.change',
+        text: 'Mudar senha',
+        role: 'authenticated',
+        linkPermanent: '/auth/change-password'
+      },
+      {
+        id: 'login',
+        text: 'Entrar',
+        role: 'unAuthenticated',
+        linkPermanent: '/login'
+      },
+      {
+        id: 'logout',
+        text: 'Sair',
+        role: 'authenticated',
+        linkPermanent: '/logout'
+      }
+    ]);
+  },
 
   actions: {
     selectPage(page) {

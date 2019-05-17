@@ -1,9 +1,9 @@
-import Ember from 'ember';
-
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  session: inject('session'),
   afterModel: function() {
     this.get('session').invalidate();
 

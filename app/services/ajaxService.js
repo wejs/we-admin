@@ -1,5 +1,5 @@
-import Ember from 'ember';
 import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
 
 let ENV;
 
@@ -26,7 +26,7 @@ export default AjaxService.extend({
   init() {
     this._super(...arguments);
 
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
   },
 
   request(url, options) {

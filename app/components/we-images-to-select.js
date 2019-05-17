@@ -1,8 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { A } from '@ember/array';
 
-export default Ember.Component.extend({
-  image: Ember.inject.service('image'),
-  images: Ember.A(),
+export default Component.extend({
+  image: inject('image'),
+  images: A(),
   onSelectImage: null,
 
   didReceiveAttrs() {

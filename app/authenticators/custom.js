@@ -1,14 +1,18 @@
-import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
+import { inject } from '@ember/service';
+import { Promise } from 'rsvp';
+import { isEmpty } from '@ember/utils';
+import { get } from '@ember/object';
+import { getOwner } from '@ember/application';
 
 export default Base.extend({
-  ajax: Ember.inject.service(),
+  ajax: inject(),
 
   restore(data) {
-    return new Ember.RSVP.Promise( (resolve, reject) => {
+    return new Promise( (resolve, reject) => {
       if (
-        !Ember.isEmpty(Ember.get(data, 'email')) ||
-        !Ember.isEmpty(Ember.get(data, 'id'))
+        !isEmpty(get(data, 'email')) ||
+        !isEmpty(get(data, 'id'))
       ) {
         resolve(data);
       } else {
@@ -17,10 +21,10 @@ export default Base.extend({
     });
   },
   authenticate(email, password, data) {
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
     if (data) {
-      return new Ember.RSVP.Promise( (resolve) => {
+      return new Promise( (resolve) => {
         resolve({ id: data, email: email });
       });
     }
@@ -41,7 +45,7 @@ export default Base.extend({
   },
 
   invalidate() {
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
     return this.get('ajax').request(ENV.API_HOST + '/auth/logout');
   }
 });

@@ -1,13 +1,14 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { get } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model() {
     const vocabulary = this.modelFor('vocabulary.item').record;
     return {
       vocabulary: vocabulary,
       record: this.store.createRecord('term', {
-        vocabularyName: Ember.get(vocabulary,'name')
+        vocabularyName: get(vocabulary,'name')
       })
     };
   },

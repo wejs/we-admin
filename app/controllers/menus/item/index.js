@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { set } from '@ember/object';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   actions: {
     onChangeMenuComponent(newV) {
-      Ember.set(this, 'model.selectedMenuComponent', newV);
+      set(this, 'model.selectedMenuComponent', newV);
     }
   }
 });

@@ -1,10 +1,10 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
 
-const set = Ember.set;
-const get = Ember.get;
+import { get, set } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   queryParams: {
     type: {
       refreshModel: true
@@ -13,7 +13,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   model(params) {
     const emailTypes = this.modelFor('email-templates').emailTypes;
 
-    return Ember.RSVP.hash({
+    return hash({
       emailTypes: this.getEmailTypesArray(),
       selectedEmailType: emailTypes[params.type],
       allowChangeType: !params.type,

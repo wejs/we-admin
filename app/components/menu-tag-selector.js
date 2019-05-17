@@ -1,9 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { get } from '@ember/object';
+import { inject } from '@ember/service';
 
-const get = Ember.get;
-
-export default Ember.Component.extend({
-  store: Ember.inject.service(),
+export default Component.extend({
+  store: inject(),
 
   addLink: 'addLink',
 

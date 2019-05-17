@@ -1,10 +1,15 @@
-import Ember from 'ember';
 import ENV from "../config/environment";
+
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import $ from 'jquery';
+import { bind } from '@ember/runloop';
+import { debug } from '@ember/debug';
 
 import UnauthenticatedRouteMixin from 'ember-simple-auth/mixins/unauthenticated-route-mixin';
 
-export default Ember.Route.extend(UnauthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
+export default Route.extend(UnauthenticatedRouteMixin, {
+  session: inject('session'),
 
   model() {
     return {
@@ -16,13 +21,13 @@ export default Ember.Route.extend(UnauthenticatedRouteMixin, {
       const email = this.get('currentModel.email');
 
       if (!email) {
-        console.log('email is required');
+        debug('email is required');
         return;
       }
 
       let headers = { Accept: 'application/json' };
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/auth/forgot-password`,
         type: 'POST',
         headers: headers,
@@ -31,20 +36,22 @@ export default Ember.Route.extend(UnauthenticatedRouteMixin, {
         }
       })
       .done( (result)=> {
-        // reset email:
-        this.set('currentModel.email', '');
-        // then show the result as notification:
-        if (result && result.messages) {
-          result.messages.forEach( (m)=> {
-            if (m.status === 'success') {
-              this.get('notifications').success(m.message);
-            } else {
-              this.get('notifications').error(m.message);
-            }
-          });
-        } else {
-          Ember.Logger.log('Unknow success response on forgot-password page');
-        }
+        bind(this, function() {
+          // reset email:
+          this.set('currentModel.email', '');
+          // then show the result as notification:
+          if (result && result.messages) {
+            result.messages.forEach( (m)=> {
+              if (m.status === 'success') {
+                this.get('notifications').success(m.message);
+              } else {
+                this.get('notifications').error(m.message);
+              }
+            });
+          } else {
+            debug('Unknow success response on forgot-password page');
+          }
+        });
       })
       .fail( (err)=> {
         this.send('queryError', err);

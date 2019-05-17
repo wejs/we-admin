@@ -23,8 +23,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
       s.setSystemSettings(data)
       .then( (result) => {
         set(s, 'systemSettings', result.settings);
-
-        console.log('success');
         this.get('notifications').success('As configurações de email do sistema foram salvas.');
         this.send('scrollToTop');
       })

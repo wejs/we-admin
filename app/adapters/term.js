@@ -1,9 +1,9 @@
 import { inject } from '@ember/service';
 import DS from 'ember-data';
-import Ember from 'ember';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
 import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
+import { get } from '@ember/object';
 
 import Inflector from 'ember-inflector';
 const inflector = Inflector.inflector;
@@ -12,11 +12,12 @@ inflector.irregular('modelsterms', 'modelsterm');
 export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   session: inject(),
 
-  headers: {
-    'Accept': 'application/vnd.api+json'
-  },
   init() {
     this._super(...arguments);
+
+    this.set('headers', {
+      'Accept': 'application/vnd.api+json'
+    });
 
     const ENV = getOwner(this).resolveRegistration('config:environment');
 
@@ -49,8 +50,8 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   },
   urlForFindRecord(id, modelName, snapshot) {
     let vocabularyName = (
-      Ember.get(snapshot.record, 'vocabularyName') ||
-      Ember.get(snapshot.adapterOptions, 'vocabularyName') ||
+      get(snapshot.record, 'vocabularyName') ||
+      get(snapshot.adapterOptions, 'vocabularyName') ||
       'Tags'
     );
 
@@ -58,17 +59,17 @@ export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
   },
   urlForCreateRecord(modelName, snapshot) {
     let vocabularyName = (
-      Ember.get(snapshot.record, 'vocabularyName') ||
-      Ember.get(snapshot.adapterOptions, 'vocabularyName') ||
+      get(snapshot.record, 'vocabularyName') ||
+      get(snapshot.adapterOptions, 'vocabularyName') ||
       'Tags'
     );
 
     return `${this.get('host')}/vocabulary/${vocabularyName}/term`;
   },
   urlForUpdateRecord(id, modelName, snapshot) {
-    return `${this.get('host')}/vocabulary/${Ember.get(snapshot.record, 'vocabularyName')}/term/${id}`;
+    return `${this.get('host')}/vocabulary/${get(snapshot.record, 'vocabularyName')}/term/${id}`;
   },
   urlForDeleteRecord(id, modelName, snapshot) {
-    return `${this.get('host')}/vocabulary/${Ember.get(snapshot, 'record.vocabularyName')}/term/${id}`;
+    return `${this.get('host')}/vocabulary/${get(snapshot, 'record.vocabularyName')}/term/${id}`;
   }
 });

@@ -5,6 +5,7 @@ import { hash } from 'rsvp';
 import { inject } from '@ember/service';
 import Route from '@ember/routing/route';
 import ApplicationRouteMixin from 'ember-simple-auth/mixins/application-route-mixin';
+import { debug } from '@ember/debug';
 
 export default Route.extend(ApplicationRouteMixin, {
   session: inject(),
@@ -131,7 +132,7 @@ export default Route.extend(ApplicationRouteMixin, {
         err.responseJSON.error === 'invalid_grant' &&
         err.responseJSON.error_context === 'authentication'
       ) {
-        console.log('TODO add message for invalid token invalid_grant', err);
+        debug('TODO add message for invalid token invalid_grant', err);
         this.get('session').invalidate();
         return;
       } else if(
@@ -200,7 +201,7 @@ export default Route.extend(ApplicationRouteMixin, {
           }
         });
       } else {
-        console.error('Unknow query error', err);
+        debug('Unknow query error', err);
       }
     },
 

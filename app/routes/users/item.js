@@ -1,9 +1,10 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { hash } from 'rsvp';
 import { inject } from '@ember/service';
-
+import $ from 'jquery';
+import { A } from '@ember/array';
+import { bind } from '@ember/runloop';
 import ENV from "../../config/environment";
 
 const userMenuTabs = [
@@ -76,26 +77,28 @@ export default Route.extend(AuthenticatedRouteMixin, {
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: ENV.API_HOST + '/block-user/'+ user.id,
         type: 'POST',
         data: { blocked: status },
         cache: false,
         headers: headers
       })
-      .then( (response)=> {
-        user.set('blocked', status);
+      .then( ()=> {
+        bind(this, function() {
+          user.set('blocked', status);
 
-        if (status) {
-          this.get('notifications').success('Usuário bloqueado.');
-        } else {
-          this.get('notifications').success('Usuário desbloqueado.');
-        }
-
-        return response;
+          if (status) {
+            this.get('notifications').success('Usuário bloqueado.');
+          } else {
+            this.get('notifications').success('Usuário desbloqueado.');
+          }
+        });
       })
       .fail( (err)=> {
-        this.send('queryError', err);
+        bind(this, function() {
+          this.send('queryError', err);
+        });
       });
     },
 
@@ -110,7 +113,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: ENV.API_HOST + '/auth/'+ model.user.id +'/new-password',
         type: 'POST',
         data: {
@@ -121,22 +124,26 @@ export default Route.extend(AuthenticatedRouteMixin, {
         headers: headers
       })
       .then( (response)=> {
-        this.get('notifications').success('Senha alterada com sucesso.');
+        bind(this, function() {
+          this.get('notifications').success('Senha alterada com sucesso.');
 
-        this.set('currentModel.newPassword', null);
-        this.set('currentModel.rNewPassword', null);
-        // success
-        return response;
+          this.set('currentModel.newPassword', null);
+          this.set('currentModel.rNewPassword', null);
+          // success
+          return response;
+        });
       })
       .fail( (err)=> {
-        this.send('queryError', err);
+        bind(this, function() {
+          this.send('queryError', err);
+        });
       });
     },
     addUserRole(roleName, user, cb) {
       let userRoles = user.get('roles');
 
       if (!userRoles) {
-        user.set('roles', Ember.A());
+        user.set('roles', A());
         userRoles = user.get('roles');
       }
 
@@ -160,7 +167,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
       const acl = this.get('acl');
 
       if (!userRoles) {
-        user.set('roles', Ember.A());
+        user.set('roles', A());
         userRoles = user.get('roles');
       }
 

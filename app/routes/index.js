@@ -1,14 +1,16 @@
-import Ember from 'ember';
-
+import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
+import { hash } from 'rsvp';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  ajax: Ember.inject.service(),
+export default Route.extend(AuthenticatedRouteMixin, {
+  ajax: inject(),
 
   model() {
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
-    return Ember.RSVP.hash({
+    return hash({
       contentCount: this.get('ajax')
         .request(`${ENV.API_HOST}/content/count`)
         .then((json) => json.count ),

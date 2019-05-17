@@ -1,10 +1,12 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import { inject } from '@ember/service';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  term: Ember.inject.service(),
+export default Route.extend(AuthenticatedRouteMixin, {
+  term: inject(),
   model(params) {
-    return Ember.RSVP.hash({
+    return hash({
       record: this.get('store').findRecord('sitecontact', params.id),
     });
   }

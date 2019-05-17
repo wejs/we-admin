@@ -1,11 +1,13 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import { get } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model() {
     const i18n = this.get('i18n');
 
-    return  Ember.RSVP.hash({
+    return  hash({
       records: this.get('store').query('menu', {}),
       columns: [
         {
@@ -35,8 +37,8 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   afterModel(model) {
-    const menus = Ember.get(model, 'records');
-    if (Ember.get(menus, 'length')) {
+    const menus = get(model, 'records');
+    if (get(menus, 'length')) {
       this.transitionTo('/menus/'+ menus.get('firstObject.id'));
     } else {
       this.transitionTo('/menus/create');

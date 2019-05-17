@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { debug } from '@ember/debug';
 
-export default Ember.Controller.extend({
+export default Controller.extend({
   advancedFieldsCollapsed: true,
 
   actions: {
@@ -19,11 +20,11 @@ export default Ember.Controller.extend({
     },
 
     searchPages() {
-      console.log('>>>>');
+      debug('>>>>');
     },
 
     searchPage() {
-      console.log('2222222222222');
+      debug('2222222222222');
     }
   }
 });

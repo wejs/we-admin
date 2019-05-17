@@ -1,12 +1,11 @@
-import Ember from 'ember';
+import Route from '@ember/routing/route';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { hash } from 'rsvp';
+import { get, set } from '@ember/object';
 
-const get = Ember.get;
-const set = Ember.set;
-
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model(params) {
-    return Ember.RSVP.hash({
+    return hash({
       emailTypes: this.getEmailTypesArray(),
       selectedEmailType: null,
       record: this.get('store').findRecord('email-template', params.id)

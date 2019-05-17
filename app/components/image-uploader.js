@@ -1,15 +1,20 @@
 import Ember from 'ember';
 import { inject } from '@ember/service';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
+import { A } from '@ember/array';
+import { computed } from '@ember/object';
+import { isArray } from '@ember/array';
 
 let ENV;
 
-export default Ember.Component.extend({
+export default Component.extend({
   notifications: inject('notification-messages'),
   upload: inject(),
 
   init() {
     this._super(...arguments);
-    ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    ENV = getOwner(this).resolveRegistration('config:environment');
     this.set('url', `${ENV.API_HOST}/api/v1/image`);
   },
 
@@ -23,9 +28,9 @@ export default Ember.Component.extend({
 
   multiple: false,
 
-  value: Ember.A([]),
+  value: A([]),
 
-  canAddMore: Ember.computed('value.length', 'multiple', function() {
+  canAddMore: computed('value.length', 'multiple', function() {
     const isMultiple = this.get('multiple');
 
     if (
@@ -40,7 +45,7 @@ export default Ember.Component.extend({
     }
   }),
 
-  canSelectMore: Ember.computed(
+  canSelectMore: computed(
     'upload.imagesToUpload.length',
     'multiple',
   function() {
@@ -57,9 +62,9 @@ export default Ember.Component.extend({
     return true;
   }),
 
-  fileToShow: Ember.computed('value', function() {
+  fileToShow: computed('value', function() {
     const value = this.get('value');
-    if (Ember.isArray(value)) {
+    if (isArray(value)) {
       return value[0];
     } else {
       return null;
@@ -71,7 +76,7 @@ export default Ember.Component.extend({
     if (value) {
       return value;
     } else {
-      this.set('value', Ember.A([]));
+      this.set('value', A([]));
       return this.get('value');
     }
   },

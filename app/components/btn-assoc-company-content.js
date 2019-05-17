@@ -2,6 +2,7 @@ import Ember from 'ember';
 import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { getOwner } from '@ember/application';
+import $ from 'jquery';
 
 let ENV;
 
@@ -72,7 +73,7 @@ export default Component.extend({
 
     const companyid = this.get('companyid');
 
-    return Ember.$.ajax({
+    return $.ajax({
       url: `${ENV.API_HOST}/company/${companyid}/scan-and-associate-contents`,
       type: 'POST',
       headers: headers

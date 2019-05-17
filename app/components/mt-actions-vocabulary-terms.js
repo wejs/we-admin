@@ -1,9 +1,10 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
 
-export default Ember.Component.extend({
+export default Component.extend({
   init() {
     this._super(...arguments);
-    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this.set('ENV', getOwner(this).resolveRegistration('config:environment'));
   },
   actions: {
     deleteRecord() {

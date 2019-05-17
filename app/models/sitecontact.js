@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { computed } from '@ember/object';
 
 export default DS.Model.extend({
   name: DS.attr('string'),
@@ -16,7 +16,7 @@ export default DS.Model.extend({
 
   linkPermanent: DS.attr('string'),
 
-  isClosed: Ember.computed('status', function() {
+  isClosed: computed('status', function() {
     return (this.get('status') === 'closed');
   })
 });

@@ -1,14 +1,19 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { hash } from 'rsvp';
+import { get } from '@ember/object';
+import { getOwner } from '@ember/application';
+import $ from 'jquery';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
-  acl: Ember.inject.service('acl'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  session: inject('session'),
+  acl: inject('acl'),
 
   model() {
     let parentModel = this.modelFor('menus.item');
 
-    return Ember.RSVP.hash({
+    return hash({
       menuId: parentModel.menuId,
       menu: parentModel.record,
       record: this.store.createRecord('link'),
@@ -56,7 +61,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         // save page before save the link:
         return this.savePage(page)
         .then( (page)=> {
-          link.href = Ember.get(page, 'linkPermanent');
+          link.href = get(page, 'linkPermanent');
           this.saveRecord(link, menu);
           return null;
         })
@@ -114,7 +119,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
    */
   checkIfHaveOnePage(url) {
     return new window.Promise( (resolve, reject)=> {
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+      const ENV = getOwner(this).resolveRegistration('config:environment');
 
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
@@ -127,7 +132,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         url = '/' + url;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}${url}`,
         type: 'GET',
         headers: headers

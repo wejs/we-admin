@@ -1,6 +1,7 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
 
-export default Ember.Component.extend({
+export default Component.extend({
   showActionBar: true,
   isLoading: false,
 
@@ -20,7 +21,7 @@ export default Ember.Component.extend({
       }
     },
     searchCategoryTerms(term) {
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+      const ENV = getOwner(this).resolveRegistration('config:environment');
 
       let url = `${ENV.API_HOST}/api/v1/term-texts?term=${term}&vocabularyName=Category`;
       return this.get('ajax')
@@ -28,7 +29,7 @@ export default Ember.Component.extend({
       .then((json) => json.term );
     },
     searchTagsTerms(term) {
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+      const ENV = getOwner(this).resolveRegistration('config:environment');
 
       let url = `${ENV.API_HOST}/api/v1/term-texts?term=${term}&vocabularyName=Tags`;
       return this.get('ajax')

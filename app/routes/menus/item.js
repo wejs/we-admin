@@ -1,18 +1,23 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import { get, set } from '@ember/object';
+import Route from '@ember/routing/route';
+import { inject } from '@ember/service';
+import { getOwner } from '@ember/application';
+import { hash } from 'rsvp';
+import { A } from '@ember/array';
+import $ from 'jquery';
+import { bind } from '@ember/runloop';
+import { debug } from '@ember/debug';
 
-const get = Ember.get;
-const set = Ember.set;
-
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
-  session: Ember.inject.service('session'),
+export default Route.extend(AuthenticatedRouteMixin, {
+  session: inject('session'),
 
   model(params) {
     const systemSettings = this.get('settings').get('systemSettings');
 
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
-    return Ember.RSVP.hash({
+    return hash({
       menuLinkSelectorComponents: (
         ENV.menuLinkSelectorComponents ||
         this.defaultSelectorLinksComponents()
@@ -22,7 +27,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
       menuData: this.getLinks(params.id),
       record: null,
       updated: false,
-      links: Ember.A(),
+      links: A(),
       menus: this.get('store').query('menu', {}),
       editingRecord: null,
       menuSelected: null,
@@ -79,12 +84,12 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     const tree = {
       isMenu: true,
       text: 'Menu: '+name,
-      links: Ember.A()
+      links: A()
     };
 
     links.forEach( (item)=> {
       // reset sublinks:
-      item.set('links', Ember.A());
+      item.set('links', A());
     });
 
     // get root links:
@@ -96,13 +101,13 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         if (parentRecord) {
           let links = parentRecord.get('links');
           if (!links) {
-            parentRecord.links = Ember.A();
+            parentRecord.links = A();
             links = parentRecord.links;
           }
 
           links.push(item);
         } else {
-          console.log('Parent record not found:', item.id, parent);
+          debug('Parent record not found:', item.id, parent);
         }
       } else {
         // root item:
@@ -117,7 +122,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
 
   getLinks(menuId) {
-    const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
     return new window.Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/json' },
@@ -127,7 +132,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/link?menuId=${menuId}&order=depth ASC`,
         type: 'GET',
         headers: headers
@@ -217,7 +222,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         depth: 0
       }, null);
 
-      Ember.set(this, 'currentModel.record.updated', true);
+      set(this, 'currentModel.record.updated', true);
     },
 
     saveLinksOrder() {
@@ -333,7 +338,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         return new window.Promise( (resolve, reject)=> {
           s.setSystemSettings(settingsToUpdate)
           .then( (result) => {
-            Ember.set(s, 'systemSettings', result.settings);
+            set(s, 'systemSettings', result.settings);
             this.get('notifications').success('Configurações do menu salvas');
             resolve(r);
           })
@@ -403,7 +408,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
 
   saveLinksOrder() {
     return new window.Promise((resolve, reject)=> {
-      const ENV = Ember.getOwner(this).resolveRegistration('config:environment');
+      const ENV = getOwner(this).resolveRegistration('config:environment');
 
       const menuId = this.get('currentModel.record.id'),
         data = this.getLinksInFormDataFormat();
@@ -415,21 +420,21 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
         headers.Authorization = `Basic ${accessToken}`;
       }
 
-      Ember.$.ajax({
+      $.ajax({
         url: `${ENV.API_HOST}/admin/menu/${menuId}/sort-links`,
         type: 'POST',
         headers: headers,
         data: data
       })
       .done( (result)=> {
-        this.get('notifications').success('Ordem salva');
-        resolve(result);
-        return null;
+        bind(this, function(){
+          this.get('notifications').success('Ordem salva');
+          resolve(result);
+        });
       })
       .fail( (err)=> {
         this.get('notifications').error('Erro ao salvar a ordem dos links');
         reject(err);
-        return null;
       });
     });
   },
@@ -457,7 +462,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     data[prefix+'-parent'] = link.get('parent');
 
     const subLinks = link.get('links');
-    if (subLinks && Ember.get(subLinks, 'length')) {
+    if (subLinks && get(subLinks, 'length')) {
       // this menu link have sublinks:
       this.convertLinksAttrsTo(subLinks, data);
     }
@@ -498,7 +503,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
     link.set('depth', ctx.depth);
 
     const subLinks = link.get('links');
-    if (subLinks && Ember.get(subLinks, 'length')) {
+    if (subLinks && get(subLinks, 'length')) {
       ctx.depth++;
       // this menu link have sublinks:
       this.resetLinksWeight(subLinks, ctx, link.id);

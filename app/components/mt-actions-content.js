@@ -1,9 +1,9 @@
-import Ember from 'ember';
-
-export default Ember.Component.extend({
+import Component from '@ember/component';
+import { getOwner } from '@ember/application';
+export default Component.extend({
   init() {
     this._super(...arguments);
-    this.set('ENV', Ember.getOwner(this).resolveRegistration('config:environment'));
+    this.set('ENV', getOwner(this).resolveRegistration('config:environment'));
   },
   actions: {
     changePublishedStatus() {

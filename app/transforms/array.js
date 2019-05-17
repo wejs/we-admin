@@ -1,21 +1,23 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { typeOf } from '@ember/utils';
+import { A } from '@ember/array';
+import $ from 'jquery';
 
 export default DS.Transform.extend({
   deserialize(serialized) {
-    return (Ember.typeOf(serialized) === "array") ? Ember.A(serialized): Ember.A();
+    return (typeOf(serialized) === "array") ? A(serialized): A();
   },
 
   serialize(deserialized) {
-    let type = Ember.typeOf(deserialized);
+    let type = typeOf(deserialized);
     if (type === 'array') {
-      return Ember.A(deserialized);
+      return A(deserialized);
     } else if (type === 'string') {
-      return Ember.A(deserialized.split(',').map(function (item) {
-          return Ember.$.trim(item);
+      return A(deserialized.split(',').map(function (item) {
+          return $.trim(item);
       }));
     } else {
-      return Ember.A();
+      return A();
     }
   }
 });

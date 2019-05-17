@@ -1,13 +1,15 @@
-import Ember from 'ember';
+import Controller from '@ember/controller';
+import { inject } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
-export default Ember.Controller.extend({
-  settings: Ember.inject.service('settings'),
-  upload: Ember.inject.service('upload'),
+export default Controller.extend({
+  settings: inject('settings'),
+  upload: inject('upload'),
 
-  settingsLoaded: Ember.computed.alias('settings.loaded'),
-  appName: Ember.computed.alias('settings.data.appName'),
-  appLogo: Ember.computed.alias('settings.data.appLogo'),
-  fileSelectorModalOpen: Ember.computed.alias('upload.modalOpen'),
+  settingsLoaded: alias('settings.loaded'),
+  appName: alias('settings.data.appName'),
+  appLogo: alias('settings.data.appLogo'),
+  fileSelectorModalOpen: alias('upload.modalOpen'),
 
   actions: {
     // UPLOAD ACTIONS:

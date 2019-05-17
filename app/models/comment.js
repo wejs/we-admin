@@ -1,9 +1,9 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { computed } from '@ember/object';
 
 export default DS.Model.extend({
   body: DS.attr('string'),
-  teaser: Ember.computed('body', function() {
+  teaser: computed('body', function() {
     const body = this.get('body');
 
     if (!body || !body.trim) {
@@ -14,7 +14,6 @@ export default DS.Model.extend({
     if (!teaser) {
       return '';
     }
-
 
     return trimText(removeTags(body), 150);
   }),

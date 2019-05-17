@@ -1,7 +1,5 @@
-import Ember from 'ember';
-
+import { isEmpty } from '@ember/utils';
 import FileField from 'ember-uploader/components/file-field';
-
 import { inject } from '@ember/service';
 
 export default FileField.extend({
@@ -12,7 +10,7 @@ export default FileField.extend({
   uploader: null,
 
   filesDidChange(files) {
-    if (Ember.isEmpty(files)) {
+    if (isEmpty(files)) {
       this.set('uploader', null);
       return;
     }

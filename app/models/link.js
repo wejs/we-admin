@@ -1,8 +1,10 @@
 import DS from 'ember-data';
-import Ember from 'ember';
+import { A } from '@ember/array';
+import { computed } from '@ember/object';
+import { htmlSafe } from '@ember/template';
 
 function isExternal(url) {
-    var match = url.match(/^([^:\/?#]+:)?(?:\/\/([^\/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
+    let match = url.match(/^([^:/?#]+:)?(?:\/\/([^/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
     if (typeof match[1] === "string" && match[1].length > 0 && match[1].toLowerCase() !== location.protocol) {
       return true;
     }
@@ -31,13 +33,13 @@ export default DS.Model.extend({
   weight: DS.attr('number'),
   parent: DS.attr('number'),
   links: DS.attr('array', {
-    defaultValue() { return Ember.A(); }
+    defaultValue() { return A(); }
   }),
   menu: DS.belongsTo('menu', {
     inverse: 'links',
     async: true
   }),
-  identation: Ember.computed('depth', function() {
+  identation: computed('depth', function() {
     const depth = this.get('depth');
     let identation = '';
 
@@ -47,10 +49,10 @@ export default DS.Model.extend({
       }
     }
 
-    return Ember.String.htmlSafe(identation);
+    return htmlSafe(identation);
   }),
 
-  isInternalLink: Ember.computed('href', function() {
+  isInternalLink: computed('href', function() {
     const href = this.get('href');
     if (!href) {
       return false;

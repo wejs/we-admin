@@ -1,15 +1,17 @@
-import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
+import Route from '@ember/routing/route';
+import { hash } from 'rsvp';
+import { get, set } from '@ember/object';
 
-export default Ember.Route.extend(AuthenticatedRouteMixin, {
+export default Route.extend(AuthenticatedRouteMixin, {
   model(params) {
     const vocabulary = this.modelFor('vocabulary.item').record;
 
-    return Ember.RSVP.hash({
+    return hash({
       vocabulary: vocabulary,
       record: this.get('store').findRecord('term', (params.termId || params.id), {
         adapterOptions: {
-          vocabularyName: Ember.get(vocabulary, 'name')
+          vocabularyName: get(vocabulary, 'name')
         }
       }),
       alias: null
@@ -17,10 +19,10 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
   },
   afterModel(model) {
     if (model.record && model.record.id && model.vocabulary) {
-      Ember.set(model.record, 'vocabulary', model.vocabulary);
+      set(model.record, 'vocabulary', model.vocabulary);
     }
 
-    const linkPermanent = Ember.get(model.record, 'linkPermanent');
+    const linkPermanent = get(model.record, 'linkPermanent');
 
     if (linkPermanent) {
       model.alias = this.get('store').query('url-alia', {
@@ -51,7 +53,7 @@ export default Ember.Route.extend(AuthenticatedRouteMixin, {
           return content;
         }
 
-        Ember.set(alias, 'alias', record.setAlias);
+        set(alias, 'alias', record.setAlias);
 
         return content;
       })

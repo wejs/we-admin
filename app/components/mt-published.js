@@ -3,7 +3,7 @@ import { computed } from '@ember/object';
 import moment from 'moment';
 
 export default Component.extend({
-  publishStatus: computed('record.publishedAt', 'record.published', function() {
+  publishStatus: computed('record.{publishedAt,published}', function() {
     let publishedAt = this.get('record.publishedAt');
     let published = this.get('record.published');
 

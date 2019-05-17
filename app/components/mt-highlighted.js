@@ -1,15 +1,18 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { inject } from '@ember/service';
+import { get, set } from '@ember/object';
+import { not } from '@ember/object/computed';
 
-export default Ember.Component.extend({
-  notifications: Ember.inject.service('notification-messages'),
+export default Component.extend({
+  notifications: inject('notification-messages'),
 
-  cantDecrease: Ember.computed.not('record.highlighted'),
+  cantDecrease: not('record.highlighted'),
 
   actions: {
     increaseHighlighted(record) {
-      let currentValue = (Ember.get(record, 'highlighted') || 0);
+      let currentValue = (get(record, 'highlighted') || 0);
 
-      Ember.set(record, 'highlighted', currentValue+1);
+      set(record, 'highlighted', currentValue+1);
 
       record.save().then( ()=> {
         this.get('notifications').success('Prioridade de exibição aumentada.', {
@@ -20,13 +23,13 @@ export default Ember.Component.extend({
       });
     },
     decreaseHighlighted(record) {
-      let currentValue = (Ember.get(record, 'highlighted') || 0);
+      let currentValue = (get(record, 'highlighted') || 0);
 
       if (!currentValue) {
         return;
       }
 
-      Ember.set(record, 'highlighted', currentValue-1);
+      set(record, 'highlighted', currentValue-1);
 
       record.save().then( ()=> {
         this.get('notifications').success('Prioridade de exibição reduzida.', {
