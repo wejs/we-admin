@@ -15,12 +15,12 @@ export default Route.extend(AuthenticatedRouteMixin, {
         },
         {
           propertyName: 'alias',
-          filteredBy: 'alias',
+          filteredBy: 'alias_contains',
           title: i18n.t('form-urlAlias-alias')
         },
         {
           propertyName: 'target',
-          filteredBy: 'targer',
+          filteredBy: 'target_contains',
           title: i18n.t('form-urlAlias-target')
         },
         {
