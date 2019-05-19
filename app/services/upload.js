@@ -6,7 +6,7 @@ import { getOwner } from '@ember/application';
 import { inject } from '@ember/service';
 import $ from 'jquery';
 import Service from '@ember/service';
-import { eResolve } from 'rsvp';
+import { resolve as eResolve } from 'rsvp';
 import { bind } from '@ember/runloop';
 
 let ENV;
