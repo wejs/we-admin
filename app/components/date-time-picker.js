@@ -26,7 +26,7 @@ export default EmberFlatpickr.extend({
       date: get(this, 'date') || new Date()
     };
 
-    // setProperties(this.attrs, defaults);
+    setProperties(this.attrs, defaults);
     setProperties(this, defaults);
 
     this._super(...arguments);
