@@ -85,6 +85,26 @@
   padding: 4px 8px;
 }
 
+img.align-right {
+  float: right;
+  margin-left: 9px;
+}
+
+img.align-left {
+  float: left;
+  margin-right: 9px;
+}
+
+img.align-center {
+  float: none;
+  margin: 9px;
+}
+
+img.align-justify {
+  margin-left: 9px;
+  margin-right: 9px;
+}
+
 figure.image {
   display: inline-block;
   border: 1px solid gray;

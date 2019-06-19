@@ -52,5 +52,7 @@ module.exports = {
     app.import('vendor/Sortable.js');
     app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.js');
     app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.css');
+
+    app.import('vendor/we-admin-style.css');
   }
 };
