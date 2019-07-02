@@ -58,8 +58,6 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
     if (images && images.firstObject) {
       image = get(images, 'firstObject');
-    } else {
-      return;
     }
 
     if (image && image.urls && image.urls.large) {
