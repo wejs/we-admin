@@ -3,6 +3,14 @@ import Component from '@ember/component';
 import { inject } from '@ember/service';
 import { getOwner } from '@ember/application';
 
+/**
+ *  {{field-model-selector
+      selected=object
+      modelName="content"
+      filterParam="title"
+    }}
+ */
+
 export default Component.extend({
   store: inject('store'),
   classNames: ['field-model-selector'],
