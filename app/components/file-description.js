@@ -4,13 +4,12 @@ import { inject } from '@ember/service';
 export default Component.extend({
   upload: inject('upload'),
 
-  classNames: ['file-uploader-tr'],
-  tagName: 'tr',
-  image: null,
+  file: null,
 
   actions: {
-    removeFile(file) {
-      this.sendAction('removeFile', file);
+    updateDescription() {
+      let file = this.get('file');
+      this.get('upload').updateFileDescription(file, file.description);
     }
   }
 });
