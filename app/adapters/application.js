@@ -1,10 +1,10 @@
 import { inject } from '@ember/service';
-import DS from 'ember-data';
 import DataAdapterMixin from 'ember-simple-auth/mixins/data-adapter-mixin';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
 import { isPresent } from '@ember/utils';
 import { getOwner } from '@ember/application';
 
-export default DS.JSONAPIAdapter.extend(DataAdapterMixin, {
+export default JSONAPIAdapter.extend(DataAdapterMixin, {
   session: inject(),
 
   init() {

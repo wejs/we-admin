@@ -18,17 +18,17 @@ export default function missingMessage(key, locales /*, options */) {
 
   const localeNames = locales.join(', ');
 
-  let i18nService = getOwner(this).lookup('service:i18n');
-  let localesToTranslate = i18nService.get('localesToTranslate');
+  // let i18nService = getOwner(this).lookup('service:i18n');
+  // let localesToTranslate = i18nService.get('localesToTranslate');
 
-  localesToTranslate.pushObject({
-    key: key,
-    locales: locales
-  });
-
-  // warn(`[ember-intl] translation: "${key}" on locale: "${localeNames}" was not found.`, false, {
-  //   id: 'ember-intl-missing-translation'
+  // localesToTranslate.pushObject({
+  //   key: key,
+  //   locales: locales
   // });
+
+  warn(`[ember-intl] translation: "${key}" on locale: "${localeNames}" was not found.`, false, {
+    id: 'ember-intl-missing-translation'
+  });
 
   return `Missing translation "${key}" for locale "${localeNames}"`;
 }
