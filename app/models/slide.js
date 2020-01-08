@@ -18,6 +18,9 @@ export default DS.Model.extend({
   setAlias: DS.attr(),
   createdAt: DS.attr('date'),
   updatedAt: DS.attr('date'),
+  highlighted: DS.attr('number', {
+    defaultValue: 0
+  }),
   creator: DS.belongsTo('user', {
     async: true
   }),
