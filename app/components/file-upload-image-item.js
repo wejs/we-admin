@@ -30,6 +30,17 @@ export default Component.extend({
   },
 
   readURL(item) {
+    if (
+      item.type === 'image/heif' ||
+      item.type === 'image/heic'
+    ) {
+      return this.readUrl_heif(item);
+    }
+
+    return this.readURL_default(item);
+  },
+
+  readURL_default(item) {
     let self = this;
     let reader = new FileReader();
 
@@ -40,6 +51,11 @@ export default Component.extend({
     };
 
     reader.readAsDataURL(item);
+  },
+
+  readUrl_heif(item) {
+    // TODO! item
+    console.log('heif>', item);
   },
 
   actions: {

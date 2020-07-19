@@ -4,8 +4,7 @@ import { inject } from '@ember/service';
 
 export default FileField.extend({
   session: inject('session'),
-
-  accept: "image/*",
+  accept: "image/*|image/heic|image/heif",
 
   uploader: null,
 
