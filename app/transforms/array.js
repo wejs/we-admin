@@ -1,12 +1,11 @@
-import DS from 'ember-data';
+import Transform from '@ember-data/serializer/transform';
 import { typeOf } from '@ember/utils';
 import { A } from '@ember/array';
-import $ from 'jquery';
 
-export default DS.Transform.extend({
+export default class ArrayTransform extends Transform {
   deserialize(serialized) {
     return (typeOf(serialized) === "array") ? A(serialized): A();
-  },
+  }
 
   serialize(deserialized) {
     let type = typeOf(deserialized);
@@ -14,10 +13,14 @@ export default DS.Transform.extend({
       return A(deserialized);
     } else if (type === 'string') {
       return A(deserialized.split(',').map(function (item) {
-          return $.trim(item);
+        if (item && item.trim) {
+          return item.trim();
+        }
+
+        return item;
       }));
     } else {
       return A();
     }
   }
-});
+}

@@ -1,0 +1,27 @@
+{{#if isLoading}}
+  Loading...
+{{else}}
+  <h4 class="d-flex justify-content-between align-items-center mb-3">
+    <span class="text-muted">{{t 'Selected plan'}}:</span>
+    {{!-- <span class="badge badge-secondary badge-pill">3</span> --}}
+  </h4>
+
+  <Plan::Card @plan={{selectedPlan}} />
+
+  <br>
+
+  <div class="form-group row">
+    <label for="changePlanSelector" class="col-sm-4 col-form-label">{{t 'Change plan'}}:</label>
+    <div class="col-sm-8">
+      <PowerSelect
+      id="changePlanSelector"
+      class="form-control"
+      @options={{this.plans}}
+      @selected={{this.selectedPlan}}
+      @onChange={{this.onChangePlan}}
+      as |plan|>
+        {{plan.name}}
+      </PowerSelect>
+    </div>
+  </div>
+{{/if}}

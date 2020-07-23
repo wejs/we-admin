@@ -1,0 +1,31 @@
+{{#if isLoading}}
+  Loading...
+{{else}}
+  <h4 class="text-center">{{t 'Select plan'}}</h4>
+  <p class="small text-center mb-5 ">Clique no plano de desejar e depois clique no botão avançar</p>
+
+  <div class="row">
+    {{#each plans as |plan|}}
+      <div class="col-12 col-sm-6 col-md-4">
+        <Plan::Card
+          @plan={{plan}}
+          @onSelectPlan={{onClickInPlan}}
+          @selectedPlanId={{selectedPlanId}}
+        />
+      </div>
+    {{/each}}
+  </div>
+
+  <br>
+  <div class="text-center">
+    <button
+      {{on "click" choiceSelectedPlan}}
+      class="btn btn-primary btn-lg"
+      type="button"
+      disabled={{hasSelectedPlanId}}
+    >{{t 'form-login-submit'}}</button>
+  </div>
+
+  <br>
+
+{{/if}}

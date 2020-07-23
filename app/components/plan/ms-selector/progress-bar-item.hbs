@@ -1,0 +1,10 @@
+{{#if args.step}}
+<li class={{liClass}} >
+  {{#if args.step.done}}
+    <i class="fas fa-check"></i>
+  {{else}}
+    {{{args.step.icon}}}
+  {{/if}}
+  <strong>{{t args.step.i18nString}}</strong>
+</li>
+{{/if}}

@@ -1,0 +1,13 @@
+{{#if included}}
+  <li>
+    <span class="fa-li">
+      <i class="fas fa-check"></i>
+    </span>{{yield}}
+  </li>
+{{else}}
+  <li class="text-muted">
+    <span class="fa-li">
+      <i class="fas fa-times"></i>
+    </span>{{yield}}
+  </li>
+{{/if}}

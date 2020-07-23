@@ -1,7 +1,0 @@
-{{#if record.urls}}
-
-  {{#each-in record.urls as |key value|}}
-    <div><strong>{{key}}:</strong> <a href="{{ENV.API_HOST}}{{value}}" target="_blank">{{ENV.API_HOST}}{{value}}</a></div>
-  {{/each-in}}
-
-{{/if}}

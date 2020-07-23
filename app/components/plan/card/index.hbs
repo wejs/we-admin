@@ -1,0 +1,30 @@
+{{#if plan}}
+<div class="card-selectable">
+<div class={{if isSelected "card mb-2 selected" "card mb-2"}} {{on "click" (fn this.onSelectPlan)}}>
+  <div class="card-body">
+    <h5 class="card-title text-muted text-uppercase text-center">{{plan.name}}</h5>
+    <h6 class="card-price text-center">{{plan.currencySymbol}}{{plan.price}}<span class="period">/mês</span></h6>
+    <hr>
+    <ul class="fa-ul">
+      <Plan::Card::Item @included={{true}} >{{plan.userLimit}} usuários</Plan::Card::Item>
+      <Plan::Card::Item @included={{true}} >Instalação inclusa</Plan::Card::Item>
+      <Plan::Card::Item @included={{true}} >Tema clean e responsivo</Plan::Card::Item>
+      <Plan::Card::Item @included={{true}} >{{plan.storageLimitInGB}}GB HD</Plan::Card::Item>
+      <Plan::Card::Item @included={{true}} >Instalação inclusa</Plan::Card::Item>
+      <Plan::Card::Item @included={{true}} >Tema clean e responsivo</Plan::Card::Item>
+      {{#if plan.triallDays}}
+        <Plan::Card::Item @included={{true}} >{{plan.triallDays}} dias de teste</Plan::Card::Item>
+      {{/if}}
+      <Plan::Card::Item @included={{plan.canEnableDomain}} >Domínio próprio</Plan::Card::Item>
+      <Plan::Card::Item @included={{plan.paymentSystem}} >Sistema de pagamentos por curso</Plan::Card::Item>
+      {{#if plan.techSupport}}
+        <Plan::Card::Item @included={{true}} >{{plan.techSupport}}hs de consultoria técnica</Plan::Card::Item>
+      {{else}}
+        <Plan::Card::Item @included={{false}} >Consultoria técnica</Plan::Card::Item>
+      {{/if}}
+      <Plan::Card::Item @included={{plan.monthlyReports}} >Relatório de status mensal</Plan::Card::Item>
+    </ul>
+  </div>
+</div>
+</div>
+{{/if}}

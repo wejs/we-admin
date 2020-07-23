@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <Auth::LoginWithGoogle::Btn class="btn btn-google btn-user btn-block" />
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <Auth::LoginWithFacebook::Btn class="btn btn-facebook btn-user btn-block" />
+  </div>
+</div>
+
+<hr>
+
+<form id="SignupForm" name="register"
+  class="form"
+  {{action 'submitForm' on='submit'}}
+>
+<div class="we-form-fields">
+  <div class="form-group ">
+    <label for="SignupForm-fullName">{{t 'form-register-fullName'}}*</label>
+    <Input id="SignupForm-fullName" name="fullName"
+      class="form-control"
+      @value={{values.fullName}}
+      required="required"
+      disabled={{posting}}
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="SignupForm-displayName">{{t 'form-user-displayName'}}</label>
+    <Input id="SignupForm-displayName" name="displayName"
+      class="form-control"
+      @value={{values.displayName}}
+      disabled={{posting}}
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="SignupForm-password">{{t 'form-register-password'}} *</label>
+    <Input id="SignupForm-password" name="password"
+      type="password"
+      class="form-control"
+      @value={{values.password}}
+      required="required"
+      disabled={{posting}}
+    />
+  </div>
+  <div class="form-group">
+    <label for="SignupForm-confirmPassword">{{t 'form-register-confirmPassword'}} *</label>
+    <Input id="SignupForm-confirmPassword" name="confirmPassword"
+      type="password"
+      class="form-control"
+      @value={{values.confirmPassword}}
+      required="required"
+      disabled={{posting}}
+    />
+  </div>
+  <div class="form-group">
+    <label for="SignupForm-email">{{t 'form-register-email'}} *</label>
+    <Input id="SignupForm-email" name="email"
+      type="email"
+      class="form-control"
+      @value={{values.email}}
+      required="required"
+      disabled={{posting}}
+    />
+  </div>
+  <div class="form-group ">
+    <label for="SignupForm-confirmEmail">{{t 'form-register-confirmEmail'}} *
+    </label>
+    <Input id="SignupForm-confirmEmail" name="email"
+      type="email"
+      class="form-control"
+      @value={{values.confirmEmail}}
+      required="required"
+      disabled={{posting}}
+    />
+  </div>
+  <div class="we-form-actions">
+    <hr>
+    <div class="checkbox ">
+      <label>
+        <p><TermsOfServiceLink /></p>
+        <Input id="SignupForm-acceptTerms" @type="checkbox" name="acceptTerms"
+          @checked={{this.values.acceptTerms}} rquired="required" /> Você aceita os termos de uso do sistema? *
+      </label>
+    </div>
+    <hr>
+
+    <button type="submit" class="btn btn-primary" name="submit" value="">Enviar</button>
+  </div>
+</div></form>

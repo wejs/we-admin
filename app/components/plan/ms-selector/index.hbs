@@ -1,0 +1,66 @@
+<div id="msform">
+  <Plan::MsSelector::ProgressBar
+    @steps={{steps}}
+    @currentStep={{currentStep}}
+  />
+  
+  <section class={{if (eq currentStepName "log-in") "active"}} >
+    <div class="form-card">
+
+      <BsTab class="nav-fill" as |tab|>
+        <tab.pane @title={{t 'Log in'}}>
+          <LogInForm />
+        </tab.pane>
+        <tab.pane @title={{t 'Register'}}>
+          <SignupForm @onSignup={{onSignup}} />
+        </tab.pane>
+        <tab.pane @title={{t 'auth.forgot-password.reset-password'}}>
+          <ResetPasswordForm @onResetPassword={{onResetPassword}} />
+        </tab.pane>
+      </BsTab>
+
+    </div>
+  </section>
+  <section class={{if (eq currentStepName "project") "active"}} >
+    <div class="form-card">
+      <h2>{{t 'project.create'}}</h2>
+      <Project::Form
+        @onSelectProject={{selectProject}}
+        @values={{selectedProject}}
+        @onSubmit={{onSubmitProject}}
+      />
+    </div>
+  </section>
+  <section class={{if (eq currentStepName "plan") "active"}} >
+    <div class="form-card">
+      <Plan::SelectorClick
+        @selectedPlanId={{selectedPlanId}}
+        @onSelectPlanId={{onSelectPlanId}}
+      />
+    </div>
+  </section>
+  <section class={{if (eq currentStepName "payment") "active"}} >
+    <div class="form-card">
+      <Plan::CheckoutForm
+        @selectedPlanId={{selectedPlanId}}
+        @onSelectPlanId={{onSelectPlanId}}
+        @submitSubscribeForm={{onSubmitSubscribeForm}}
+        @values={{projectSubscriptionData}}
+        @posting={{posting}}
+      />
+    </div>
+  </section>
+  {{!-- <fieldset>
+    <div class="form-card">
+      <h2 class="fs-title text-center">Success !</h2> <br><br>
+      <div class="row justify-content-center">
+        <div class="col-3"> <img src="https://img.icons8.com/color/96/000000/ok--v2.png" class="fit-image"> </div>
+      </div> <br><br>
+      <div class="row justify-content-center">
+        <div class="col-7 text-center">
+          <h5>You Have Successfully Signed Up</h5>
+        </div>
+      </div>
+    </div>
+  </fieldset> --}}
+</div>

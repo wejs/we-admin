@@ -40,18 +40,18 @@ module.exports = {
     fs.copySync(originFolder, distFolder);
   },
 
-  afterInstall() {
-    return this.addBowerPackageToProject('metisMenu')
-      .then( this.addAddonToProject('@ember-decorators/babel-transforms') );
-  },
+  // afterInstall() {
+  //   return this.addBowerPackageToProject('metisMenu')
+  //     .then( this.addAddonToProject('@ember-decorators/babel-transforms') );
+  // },
 
   included(app) {
     this._super.included.apply(this, arguments);
 
-    app.import('vendor/menu/menu-links-sortable.css');
-    app.import('vendor/Sortable.js');
-    app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.js');
-    app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.css');
+    // app.import('vendor/menu/menu-links-sortable.css');
+    // app.import('vendor/Sortable.js');
+    // app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.js');
+    // app.import(app.bowerDirectory + '/metisMenu/dist/metisMenu.css');
 
     app.import('vendor/we-admin-style.css');
   }

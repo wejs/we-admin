@@ -1,0 +1,23 @@
+{{yield}}
+
+<ul class={{listClass}} id="accordionSidebar">
+  <WeSidebar::Brand />
+
+  <hr class="sidebar-divider my-0">
+
+  {{#each adminMenu as |link|}}
+    <li class="nav-item">
+      <LinkTo @route={{link.linkTo}} class="nav-link">
+        {{{link.icon}}} <span> {{link.text}}</span>
+      </LinkTo>
+    </li>
+  {{/each}}
+
+  <!-- Divider -->
+  {{!-- <hr class="sidebar-divider d-none d-md-block"> --}}
+
+  <!-- Sidebar Toggler (Sidebar) -->
+  {{!-- <div class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  </div> --}}
+</ul>

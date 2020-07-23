@@ -1,11 +1,9 @@
 import { isEmpty } from '@ember/utils';
 import { warn } from '@ember/debug';
-import links from 'ember-intl/utils/links';
-import { getOwner } from '@ember/application';
 
 export default function missingMessage(key, locales /*, options */) {
   if (isEmpty(locales)) {
-    warn(`[ember-intl] no locale has been set. Documentation: ${links.unsetLocale}`, false, {
+    warn(`[ember-intl] no locale has been set.`, false, {
       id: 'ember-intl-no-locale-set'
     });
 

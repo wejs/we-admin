@@ -1,0 +1,9 @@
+<LinkTo @route="dash" class="sidebar-brand d-flex align-items-center justify-content-center">
+  {{#if logoURL}}
+    <div class="sidebar-brand-icon">
+      <img class="img-fluid" src={{logoURL}} />
+    </div>
+  {{else}}
+    <div class="sidebar-brand-text mx-3">{{siteName}}</div>
+  {{/if}}
+</LinkTo>

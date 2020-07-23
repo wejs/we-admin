@@ -1,0 +1,120 @@
+<h4 class="mb-3">{{t 'Billing address'}}</h4>
+
+<p class="small">Dados para emissão de nota fiscal.</p>
+<form id="CheckoutFormForm" class="needs-validation"
+  {{action 'submitSubscribeForm' on='submit'}}
+>
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <label for="fullName">{{t 'form-register-fullName'}}</label>
+      <Input id="fullName" name="fullName"
+        class="form-control"
+        @value={{values.fullName}}
+        required="required"
+        disabled={{posting}}
+      />
+      {{!-- <div class="invalid-feedback">
+        Valid first name is required.
+      </div> --}}
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 mb-3">
+      <label for="cpf">{{t 'CPF'}}</label>
+      <OneWayInputMask
+        id="cpf"
+        @mask='999.999.999-99'
+        class="form-control"
+        @value={{values.cpf}}
+        @update={{onUpdateCPF}}
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+  </div>
+  {{!--
+  <div class="mb-3">
+    <label for="email">{{t 'E-mail'}}</label>
+    <Input id="email" type="email" class="form-control" @value="" required="required" />
+  </div> --}}
+
+  <hr>
+
+  <div class="row">
+    <div class="col-md-4 mb-3">
+      <label for="state">State</label>
+      <Input id="state" name="state"
+        class="form-control"
+        @value={{values.state}}
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="city">{{t 'City'}}</label>
+      <Input id="city" name="city" class="form-control"
+        @value={{values.city}}
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="zip">Zip</label>
+      <OneWayInputMask
+        id="zip"
+        @mask='99.999-999'
+        class="form-control"
+        @value={{values.zip}}
+        @update={{onUpdateZip}}
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2 order-md-1 mb-3">
+      <label for="addressNumber">{{t 'Address number'}}</label>
+      <Input id="addressNumber" name="addressNumber" class="form-control"
+        @value={{values.addressNumber}}
+        placeholder="Rua..."
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+
+    <div class="col-md-10 order-md-2 mb-3">
+      <label for="address">{{t 'Address'}}</label>
+      <Input id="address" name="address" class="form-control"
+        @value={{values.address}}
+        placeholder="Rua..."
+        required="required"
+        disabled={{posting}}
+      />
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="addressComplement">{{t 'complement'}} <span class="text-muted">({{t 'Optional'}})</span></label>
+    <Input id="addressComplement" name="addressComplement"
+      class="form-control"
+      @value={{values.addressComplement}}
+      disabled={{posting}}
+    />
+  </div>
+
+  <hr class="mb-4">
+  {{#unless selectedPlanId}}
+    <div class="alert alert-danger" role="alert">
+      {{t 'plan.checkout.form.planId.required.message'}}
+    </div>
+  {{/unless}}
+  <button class="btn btn-primary btn-lg"
+    type="submit"
+    disabled={{disabled}}
+  >{{t 'Continue to checkout'}}</button>
+
+  {{!-- <Paypal::Subscription::Btn
+    @selectedPlanId={{selectedPlanId}}
+  /> --}}
+</form>

@@ -1,0 +1,26 @@
+<form
+  name="forgot-password-form"
+  class="form"
+  {{action 'submitForm' on='submit'}}
+>
+  <p>{{t 'forgot.password.description'}}</p>
+  <div class="we-form-fields">
+    <div class="form-group ">
+      <label for="ForgotPasswordForm-email">{{t 'form-forgot-password-email'}} *
+      </label>
+      <Input id="ForgotPasswordForm-email"
+        name="email"
+        type="email"
+        class="form-control"
+        @value={{values.email}}
+        disabled={{posting}}
+        required="required"
+        />
+      <small class="form-text text-muted">{{t 'form-helper-forgot-password-email'}}</small>
+    </div>
+  </div>
+  <div class="we-form-actions">
+    <button type="submit" class="btn btn-primary" name="submit">{{t 'form-forgot-password-submit'}}</button>
+  </div>
+</form>
+ 

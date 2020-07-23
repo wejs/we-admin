@@ -1,5 +1,0 @@
-<button type="button" class="btn btn-sm btn-default" {{action 'increaseHighlighted' record}}><i class="fa fa-arrow-up text-success" aria-hidden="true"></i> {{#bs-tooltip placement="top"}}Aumentar a prioridade de exibição{{/bs-tooltip}}
-</button>
-  <button type="button" class="btn btn-sm btn-default" disabled>{{#if record.highlighted}}{{record.highlighted}}{{else}}0{{/if}}</button>
-<button type="button" class="btn btn-sm btn-default" disabled={{cantDecrease}} {{action 'decreaseHighlighted' record}}><i class="fa fa-arrow-down text-danger" aria-hidden="true"></i> {{#bs-tooltip placement="top"}}Diminuir a prioridade de exibição{{/bs-tooltip}}
-</button>
