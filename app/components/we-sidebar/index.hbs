@@ -5,13 +5,7 @@
 
   <hr class="sidebar-divider my-0">
 
-  {{#each adminMenu as |link|}}
-    <li class="nav-item">
-      <LinkTo @route={{link.linkTo}} class="nav-link">
-        {{{link.icon}}} <span> {{link.text}}</span>
-      </LinkTo>
-    </li>
-  {{/each}}
+  <AdminMenu @links={{adminMenu}} />
 
   <!-- Divider -->
   {{!-- <hr class="sidebar-divider d-none d-md-block"> --}}
