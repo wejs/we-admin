@@ -11155,3 +11155,14 @@ body.sidebar-toggled footer.sticky-footer {
   text-align: center;
   margin-top: 15px;
 }
+
+.footer-actions {
+  z-index: 2201;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #f8f8f8;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  padding: 3px 0 3px 5px;
+}

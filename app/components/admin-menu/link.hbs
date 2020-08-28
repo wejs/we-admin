@@ -1,0 +1,17 @@
+{{#if isVisible}}
+  {{#if (eq type 'link')}}
+    <li class="nav-item">
+      <LinkTo @route={{link.linkTo}} class="nav-link">
+        {{{link.icon}}} <span> {{link.text}}</span>
+      </LinkTo>
+    </li>
+  {{/if}}
+  {{#if (eq type 'divisor')}}
+    <hr class="sidebar-divider" />
+  {{/if}}
+  {{#if (eq type 'heading')}}
+    <div class="sidebar-heading">
+      {{link.text}}
+    </div>
+  {{/if}}
+{{/if}}
