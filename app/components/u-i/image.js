@@ -27,7 +27,7 @@ export default class UIImageComponent extends Component {
 
     let ENV = getOwner(this).resolveRegistration('config:environment');
 
-    let src = get(file, 'urls.' + this.args.size);
+    let src = get(file, 'urls.' + (this.args.size || 'thumbnail') );
 
     if (src.startsWith('HTT')) {
       return src;
