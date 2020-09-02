@@ -14,6 +14,7 @@ export default class ApplicationRoute extends Route {
   @service interface;
   @service metrics;
   @service router;
+  @service('title') titleService;
 
   constructor () {
     super(...arguments);
@@ -29,6 +30,8 @@ export default class ApplicationRoute extends Route {
   beforeModel(/* transition */) {
     this.notifications.setDefaultAutoClear(true);
     this.notifications.setDefaultClearDuration(5200);
+
+    this.titleService.start();
 
     let jobs = {};
     jobs.locales = this.getLocalesFromHost();
