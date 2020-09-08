@@ -4,7 +4,7 @@ import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 // import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
-import { copy } from '@ember/object/internals';
+import { copy } from 'ember-copy';
 import { computed } from '@ember/object';
 
 export default class PlanCheckoutFormComponent extends Component {

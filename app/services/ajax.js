@@ -1,10 +1,35 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
-import fetch from 'fetch';
+import AjaxServiceBase from 'ember-ajax/services/ajax';
+import { getOwner } from '@ember/application';
 
-export default class AjaxService extends Service {
+window.$.ajaxSetup({
+  accepts: {
+    json: 'application/vnd.api+json'
+  },
+  headers: {
+    'Accept': 'application/vnd.api+json'
+  },
+  crossDomain: true,
+  xhrFields: {
+    withCredentials: true
+  }
+});
+
+export default class AjaxService extends AjaxServiceBase {
   @service settings;
   @service notifications;
+
+  get host() {
+    return this.ENV.API_HOST;
+  }
+
+  constructor() {
+    super(...arguments);
+
+    this._parentRequest = super.request;
+    this.ENV = getOwner(this).resolveRegistration('config:environment');
+  }
 
   request(url, options = {}) {
     if (!options.headers) {
@@ -15,34 +40,31 @@ export default class AjaxService extends Service {
     options.headers['Content-Type'] = 'application/json';
     options.headers['Accept'] = 'application/json';
 
-    return fetch(url, options)
-    .then(async (response)=> {
-      const data = await response.json();
-
+    return this._parentRequest(url, options)
+    .then((data) => {
       if (!options.disableAPIMessageHanling) {
-        if (!response.ok) {
-          this.settings.queryError(data);
-        } else {
-          this.handleResponseNotification(response);
-        }
+        this.handleResponseNotification(data);
       }
 
       return data;
     })
-    .then(function(data) {
-      return data;
-    })
-    .catch( (error) => {
-      throw error;
+    .catch( (error, x) => {
+      if (error instanceof UnauthorizedError) {
+        if (this.get('session.isAuthenticated')) {
+          return this.get('session').invalidate();
+        }
+      }
+
+      this.settings.queryError(data);
     });
   }
 
-  handleResponseNotification(response) {
+  handleResponseNotification(data) {
     if (
-      response.meta &&
-      response.meta.messages
+      data.meta &&
+      data.meta.messages
     ) {
-      response.meta.messages.forEach( (e)=> {
+      data.meta.messages.forEach( (e)=> {
         switch(e.status) {
           case 'warning':
             this.notifications.warning(e.message);

@@ -12,6 +12,8 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
   @service session;
   @service settings;
 
+  useFetch = false;
+
   @computed('session.{data.authenticated.access_token,isAuthenticated}')
   get headers() {
     return this.settings.getHeaders();
@@ -31,13 +33,13 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
     return modelName;
   }
 
-  // _fetchRequest(options) {
-  //   console.log('TODO!!!!');
-  //
+  _fetchRequest(options) {
+    console.log('TODO!!!!options>', options);
+
   //   // TODO! change to only set includ if is in dev env, in prod set: 'same-origin'
-  //   options.credentials = 'include';
-  //   return fetch(options.url, options);
-  // }
+     options.credentials = 'include';
+     return fetch(options.url, options);
+  }
 
   /**
     This method is called for every response that the adapter receives from the

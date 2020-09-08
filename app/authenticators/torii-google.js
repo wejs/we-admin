@@ -4,26 +4,19 @@ import config from '../config/environment';
 
 export default class ToriiGithubAuthenticator extends Torii {
   @service torii;
+  @service ajax;
 
   async authenticate() {
     const tokenExchangeUri = config.torii.providers['github-oauth2'].tokenExchangeUri;
     let data = await super.authenticate(...arguments);
-    const response = await fetch(tokenExchangeUri, {
+    const rd = await this.ajax.request(tokenExchangeUri, {
       // Adding method type
       method: "POST",
-      // no-cors, *cors, same-origin
-      mode: 'cors',
       // Adding body or contents to send
-      body: JSON.stringify({
+      data: {
         code: data.authorizationCode
-      }),
-      // Adding headers to the request
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
-
-    const rd = await response.json();
 
     return {
       access_token: rd.access_token,

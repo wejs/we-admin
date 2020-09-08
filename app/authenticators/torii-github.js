@@ -8,22 +8,12 @@ export default class ToriiGithubAuthenticator extends Torii {
   async authenticate() {
     const tokenExchangeUri = config.torii.providers['github-oauth2'].tokenExchangeUri;
     let data = await super.authenticate(...arguments);
-    const response = await fetch(tokenExchangeUri, {
-      // Adding method type
+    const rd = await this.ajax.request(tokenExchangeUri, {
       method: "POST",
-      // no-cors, *cors, same-origin
-      mode: 'cors',
-      // Adding body or contents to send
-      body: JSON.stringify({
+      data: {
         code: data.authorizationCode
-      }),
-      // Adding headers to the request
-      headers: {
-        'Content-Type': 'application/json'
       }
     });
-
-    const rd = await response.json();
 
     return {
       access_token: rd.access_token,

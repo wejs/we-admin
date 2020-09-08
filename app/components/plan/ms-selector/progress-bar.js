@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
 import { computed } from '@ember/object';
-import { copy } from '@ember/object/internals';
+import { copy } from 'ember-copy';
 
 // import { alias } from '@ember/object/computed';
 // import { tracked } from '@glimmer/tracking';

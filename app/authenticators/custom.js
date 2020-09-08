@@ -27,32 +27,33 @@ export default class CustomAuthenticator extends Base {
   }
 
   authenticate(email, password, data) {
-    const ENV = getOwner(this).resolveRegistration('config:environment');
-
     if (data) {
       return new Promise( (resolve) => {
         resolve({ id: data, email: email });
       });
     }
 
-    var myHeaders = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
+    const ENV = getOwner(this).resolveRegistration('config:environment');
 
-    const headers = this.settings.getHeaders();
-    headers.Accept = 'application/json';
-    headers['Content-Type'] = 'application/json';
+    if (ENV.authenticateWithToken) {
+      return this.authenticateWithToken(email, password);
+    }
 
-    return fetch(ENV.API_HOST + '/auth/grant-password/authenticate', {
+    return this.authenticateWithSession(email, password);
+  }
+
+  authenticateWithToken(email, password) {
+    const ENV = getOwner(this).resolveRegistration('config:environment');
+
+    return this.ajax.request(ENV.API_HOST + '/auth/grant-password/authenticate', {
       method: 'POST',
-      headers,
-      // credentials: 'include',
-      body: JSON.stringify({
+      data: {
         grant_type: 'password',
         email: email,
         password: password
-      })
+      }
     })
-    .then(async (response)=> {
+    .then(async (response) => {
       const data = await response.json();
 
       if (!response.ok) {
@@ -62,10 +63,10 @@ export default class CustomAuthenticator extends Base {
 
       return data;
     })
-    .then(function(data) {
+    .then(function (data) {
       return data;
     })
-    .then( (r)=> {
+    .then((r) => {
       if (!r.user) {
         return false;
       }
@@ -87,11 +88,27 @@ export default class CustomAuthenticator extends Base {
     });
   }
 
+  authenticateWithSession(email, password) {
+    const ENV = getOwner(this).resolveRegistration('config:environment');
+
+    return this.ajax.request(ENV.API_HOST + '/login', {
+      method: 'POST',
+      data: {
+        email: email,
+        password: password
+      }
+    })
+    .then((r) => {
+      if (r && r.user && r.user.id) {
+        return { email: email, id: r.user.id };
+      } else {
+        return { email: email };
+      }
+    });
+  }
+
   invalidate() {
     const ENV = getOwner(this).resolveRegistration('config:environment');
-    return fetch(ENV.API_HOST + '/auth/logout', {
-      credentials: 'include',
-      headers: { Accept: 'application/json' }
-    });
+    return this.ajax.request(ENV.API_HOST + '/auth/logout', {});
   }
 }

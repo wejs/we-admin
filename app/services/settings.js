@@ -2,26 +2,29 @@ import Service from '@ember/service';
 import { inject } from '@ember/service';
 import { getOwner } from '@ember/application';
 import { computed } from '@ember/object';
-import $ from 'jquery';
 import { debug } from '@ember/debug';
 import { bind } from '@ember/runloop';
+import fetch from 'fetch';
 
 let ENV;
 
 export default Service.extend({
   store: inject('store'),
   session: inject('session'),
+  notifications: inject('notifications'),
+  ajax: inject('ajax'),
 
-  init(){
+  ENV: null,
+
+  init() {
     this._super(...arguments);
 
     this.set('themeCollorOptions', [
-      { id: 'default', name: 'Cor padrão do tema'},
+      { id: 'default', name: 'Cor padrão do tema' },
       // { id: 'dark', name: 'Tema escuro'}
     ]);
 
     ENV = getOwner(this).resolveRegistration('config:environment');
-
     this.set('ENV', ENV);
   },
 
@@ -34,12 +37,12 @@ export default Service.extend({
   // alias for help get current authenticated user roles
   userRoles: computed.alias('user.roles'),
 
-  isAdmin: computed('userRoles', function() {
-    let roles = this.get('userRoles');
+  isAdmin: computed('userRoles', function () {
+    let roles = this.userRoles;
     if (!roles || !roles.indexOf) {
       return false;
     }
-    return (roles.indexOf('administrator') > -1 );
+    return (roles.indexOf('administrator') > -1);
   }),
   // invert isAdmin to use in disabled inputs
   notIsAdmin: computed.not('isAdmin'),
@@ -54,112 +57,90 @@ export default Service.extend({
   themeCollorOptions: null,
 
   getUserSettings() {
-    // const uid = this.get('authenticatedUserId');
-    let headers = { Accept: 'application/vnd.api+json' },
-        accessToken = this.get('accessToken');
-
-    if (accessToken) {
-      headers.Authorization = `Basic ${accessToken}`;
-    }
-
-    return $.ajax({
-      url: ENV.API_HOST + '/user-settings?adminMenu=true',
-      type: 'GET',
-      cache: false,
-      headers: headers
-    })
-    .then( (response)=> {
-      // sync authe between site and admin:
-      if (response.authenticatedUser) {
-        if (!this.get('session.isAuthenticated')) {
-          debug('should be authenticated...');
-          // authenticate ...
-          return this.get('session')
-          .authenticate(
-            'authenticator:custom',
-            response.authenticatedUser.email,
-            null,
-            response.authenticatedUser.id
-          )
-          .then( ()=> {
-            location.reload();
-            return response;
-          });
+    return this.ajax.request(ENV.API_HOST + '/user-settings?adminMenu=true')
+      .then((response) => {
+        // sync authe between site and admin:
+        if (response.authenticatedUser) {
+          if (!this.session.isAuthenticated) {
+            debug('should be authenticated...');
+            // authenticate ...
+            return this.session
+              .authenticate(
+                'authenticator:custom',
+                response.authenticatedUser.email,
+                null,
+                response.authenticatedUser.id
+              )
+              .then(() => {
+                location.reload();
+                return response;
+              });
+          }
+        } else {
+          // user not is authenticated:
+          if (this.session.isAuthenticated) {
+            return this.session.invalidate().then(() => {
+              location.reload();
+              return response;
+            });
+          }
         }
-      } else {
-        // user not is authenticated:
-        if (this.get('session.isAuthenticated')) {
-          return this.get('session').invalidate().then(()=> {
-            location.reload();
-            return response;
-          });
-        }
-      }
 
-      return response;
-    })
-    .then( (response)=> {
-      this.set('data', response);
-
-      if (response.authenticatedUser) {
-        return this.get('store')
-        .findRecord('user', response.authenticatedUser.id)
-        .then( (u)=> {
-          this.set('user', u);
-
-          return response;
-        });
-      } else {
         return response;
-      }
-    });
+      })
+      .then((response) => {
+        this.set('data', response);
+
+        if (response.authenticatedUser) {
+          return this.store
+            .findRecord('user', response.authenticatedUser.id)
+            .then((u) => {
+              this.set('user', u);
+
+              return response;
+            });
+        } else {
+          return response;
+        }
+      });
   },
 
   setSystemSettings(newData) {
     const self = this;
-    // const uid = this.get('authenticatedUserId');
-    let headers = { Accept: 'application/vnd.api+json' },
-        accessToken = this.get('accessToken');
 
-    if (accessToken) {
-      headers.Authorization = `Basic ${accessToken}`;
-    }
-
-    return $.ajax({
-      url: ENV.API_HOST + '/system-settings',
+    return this.ajax.request(ENV.API_HOST + '/system-settings', {
       type: 'POST',
-      cache: false,
-      headers: headers,
       data: newData
     })
-    .then( (response)=> {
-      bind(this, function() {
-        self.set('systemSettings', response);
-        return response;
+    .then((data) => {
+      bind(this, function () {
+        self.set('systemSettings', data);
+        return data;
       });
-
     });
   },
 
   getThemeConfigs() {
     // const uid = this.get('authenticatedUserId');
     let headers = { Accept: 'application/vnd.api+json' },
-        accessToken = this.get('accessToken');
+      accessToken = this.accessToken;
 
     if (accessToken) {
       headers.Authorization = `Basic ${accessToken}`;
     }
 
-    return $.ajax({
-      url: ENV.API_HOST + '/theme',
+    return fetch(ENV.API_HOST + '/theme', {
       type: 'get',
       cache: false,
       headers: headers
     })
-    .then( (response)=> {
-      // this.set('systemSettings', response);
-      return response;
-    });
+      .then(function (response) {
+        return response.json();
+      })
+      .then((response) => {
+        // this.set('systemSettings', response);
+        return response;
+      });
   },
 
   defaultSelectorLinksComponents() {
@@ -189,7 +170,7 @@ export default Service.extend({
 
   getHeaders() {
     let headers = { Accept: 'application/vnd.api+json' },
-        accessToken = this.get('session.session.authenticated.access_token');
+      accessToken = this.session.session.get('authenticated.access_token');
 
     if (accessToken) {
       headers.Authorization = `Basic ${accessToken}`;
@@ -198,7 +179,7 @@ export default Service.extend({
     return headers;
   },
 
-  slugfy (str) {
+  slugfy(str) {
     if (!str) {
       return null;
     }
@@ -207,9 +188,9 @@ export default Service.extend({
     str = str.toLowerCase();
 
     // remove accents, swap ñ for n, etc
-    const from = "ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;";
-    const to   = "AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------";
-    for (var i=0, l=from.length ; i<l ; i++) {
+    const from = 'ÁÄÂÀÃÅČÇĆĎÉĚËÈÊẼĔȆÍÌÎÏŇÑÓÖÒÔÕØŘŔŠŤÚŮÜÙÛÝŸŽáäâàãåčçćďéěëèêẽĕȇíìîïňñóöòôõøðřŕšťúůüùûýÿžþÞĐđßÆa·/_,:;';
+    const to = 'AAAAAACCCDEEEEEEEEIIIINNOOOOOORRSTUUUUUYYZaaaaaacccdeeeeeeeeiiiinnooooooorrstuuuuuyyzbBDdBAa------';
+    for (var i = 0, l = from.length; i < l; i++) {
       str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
     }
 
@@ -218,5 +199,96 @@ export default Service.extend({
       .replace(/-+/g, '-'); // collapse dashes
 
     return str;
+  },
+
+  handleMessages(responseData) {
+    return this.queryError(responseData);
+  },
+
+  queryError(err) {
+    // todo! add an better validation handling here...
+    if (err && err.errors) {
+      err.errors.forEach((e) => {
+        if (e.errorName === 'SequelizeValidationError') {
+          // todo! add an better validation handling here...
+          this.notifications.error(e.title);
+        } else {
+          this.notifications.error(e.title);
+        }
+      });
+    } else if (
+      err &&
+      err.meta &&
+      err.meta.messages
+    ) {
+      err.meta.messages.forEach((e) => {
+        switch (e.status) {
+          case 'warning':
+            this.notifications.warning(e.message);
+            break;
+          case 'success':
+            this.notifications.success(e.message);
+            break;
+          default:
+            this.notifications.error(e.message);
+        }
+      });
+    } else if (
+      err &&
+      err.responseJSON &&
+      err.responseJSON.meta &&
+      err.responseJSON.meta.messages
+    ) {
+      err.responseJSON.meta.messages.forEach((e) => {
+        switch (e.status) {
+          case 'warning':
+            this.notifications.warning(e.message);
+            break;
+          case 'success':
+            this.notifications.success(e.message);
+            break;
+          default:
+            this.notifications.error(e.message);
+        }
+      });
+    } else if (
+      err &&
+      err.responseJSON &&
+      err.responseJSON &&
+      err.responseJSON.messages
+    ) {
+      err.responseJSON.messages.forEach((e) => {
+        switch (e.status) {
+          case 'warning':
+            this.notifications.warning(e.message);
+            break;
+          case 'success':
+            this.notifications.success(e.message);
+            break;
+          default:
+            this.notifications.error(e.message);
+        }
+      });
+
+    } else if (
+      err &&
+      err.messages
+    ) {
+      err.messages.forEach((e) => {
+        switch (e.status) {
+          case 'warning':
+            this.notifications.warning(e.message);
+            break;
+          case 'success':
+            this.notifications.success(e.message);
+            break;
+          default:
+            this.notifications.error(e.message);
+        }
+      });
+    } else {
+      debug('Unknow query error', { error: err });
+      console.log('Unknow query error', { error: err });
+    }
   }
 });
