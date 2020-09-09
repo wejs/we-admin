@@ -121,26 +121,13 @@ export default Service.extend({
   },
 
   getThemeConfigs() {
-    // const uid = this.get('authenticatedUserId');
-    let headers = { Accept: 'application/vnd.api+json' },
-      accessToken = this.accessToken;
-
-    if (accessToken) {
-      headers.Authorization = `Basic ${accessToken}`;
-    }
-
-    return fetch(ENV.API_HOST + '/theme', {
-      type: 'get',
-      cache: false,
-      headers: headers
+    return this.ajax.request(ENV.API_HOST + '/theme', {
+      method: 'GET',
+      cache: false
     })
-      .then(function (response) {
-        return response.json();
-      })
-      .then((response) => {
-        // this.set('systemSettings', response);
-        return response;
-      });
+    .then((response) => {
+      return response;
+    });
   },
 
   defaultSelectorLinksComponents() {

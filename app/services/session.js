@@ -17,7 +17,7 @@ export default class SessionService extends BaseSessionService {
 
   async handleInvalidation() {
     try {
-      await this.currentUser.load();
+      await this.currentUser.unLoad();
     } catch (e) {
       console.error('Error on handleInvalidation', {
         error: e

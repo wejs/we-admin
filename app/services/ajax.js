@@ -36,7 +36,12 @@ export default class AjaxService extends AjaxServiceBase {
       options.headers = this.settings.getHeaders();
     }
 
-    options.credentials = 'include';
+    const ENV = getOwner(this).resolveRegistration('config:environment');
+
+    if (ENV.authenticateWithToken) {
+      options.credentials = 'include';
+    }
+
     options.headers['Content-Type'] = 'application/json';
     options.headers['Accept'] = 'application/json';
 
@@ -48,7 +53,7 @@ export default class AjaxService extends AjaxServiceBase {
 
       return data;
     })
-    .catch( (error, x) => {
+    .catch( (error) => {
       if (error instanceof UnauthorizedError) {
         if (this.get('session.isAuthenticated')) {
           return this.get('session').invalidate();

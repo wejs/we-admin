@@ -13,7 +13,7 @@ export default class SignupController extends Controller {
 
     this.ajax.request(ENV.API_HOST + '/signup', {
       method: 'POST',
-      body: JSON.stringify(user)
+      data: user
     })
     .then((r) => {
       this.settings.handleMessages(r);

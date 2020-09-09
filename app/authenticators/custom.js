@@ -53,19 +53,6 @@ export default class CustomAuthenticator extends Base {
         password: password
       }
     })
-    .then(async (response) => {
-      const data = await response.json();
-
-      if (!response.ok) {
-        response.responseJSON = data;
-        throw response;
-      }
-
-      return data;
-    })
-    .then(function (data) {
-      return data;
-    })
     .then((r) => {
       if (!r.user) {
         return false;
