@@ -1,10 +1,11 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { oneWay } from '@ember/object/computed';
-import { computed } from '@ember/object';
+import { computed, action } from '@ember/object';
 
 export default class AdminMenuLinkComponent extends Component {
   @service currentUser;
+  @service interface;
 
   @oneWay('args.link') link;
 
@@ -50,5 +51,10 @@ export default class AdminMenuLinkComponent extends Component {
     }
 
     return this.link.type
+  }
+
+  @action
+  closeSideMenu() {
+    this.interface.toggleSidebar();
   }
 }

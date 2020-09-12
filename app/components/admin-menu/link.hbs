@@ -1,7 +1,7 @@
 {{#if isVisible}}
   {{#if (eq type 'link')}}
     <li class="nav-item">
-      <LinkTo @route={{link.linkTo}} class="nav-link">
+      <LinkTo @route={{link.linkTo}} {{on "click" this.closeSideMenu}}  class="nav-link">
         {{{link.icon}}} <span> {{link.text}}</span>
       </LinkTo>
     </li>

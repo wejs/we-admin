@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class InterfaceService extends Service {
   @service settings;
 
-  @tracked sidebarIsOpen = false;
+  @tracked sidebarIsOpen = (window.outerWidth >= 768);
 
   initInterface() {
     setTimeout(() => {
@@ -22,6 +22,20 @@ export default class InterfaceService extends Service {
     }
 
     $("body").toggleClass("sidebar-toggled");
+  }
+
+  closeSidebar() {
+    if (this.sidebarIsOpen) {
+      this.sidebarIsOpen = false;
+      $("body").toggleClass("sidebar-toggled");
+    }
+  }
+
+  openSidebar() {
+    if (!this.sidebarIsOpen) {
+      this.sidebarIsOpen = true;
+      $("body").toggleClass("sidebar-toggled");
+    }
   }
 
   setInterfaceMecanism() {
