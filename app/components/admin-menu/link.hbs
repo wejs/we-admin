@@ -1,7 +1,7 @@
 {{#if isVisible}}
   {{#if (eq type 'link')}}
     <li class="nav-item">
-      <LinkTo @route={{link.linkTo}} {{on "click" this.closeSideMenu}}  class="nav-link">
+      <LinkTo @route={{link.linkTo}}  {{on "click" this.closeSideMenu}} class="nav-link">
         {{{link.icon}}} <span> {{link.text}}</span>
       </LinkTo>
     </li>
@@ -13,5 +13,12 @@
     <div class="sidebar-heading">
       {{link.text}}
     </div>
+  {{/if}}
+  {{#if (eq type 'external')}}
+    <li class="nav-item">
+      <a href={{link.linkTo}} {{on "click" this.closeSideMenu}} class="nav-link">
+        {{{link.icon}}} <span> {{link.text}}</span>
+      </a>
+    </li>
   {{/if}}
 {{/if}}

@@ -10,7 +10,7 @@ export default class AdminMenuLinkComponent extends Component {
   @oneWay('args.link') link;
 
   @computed('link', 'currentUser.user.roles.[]')
-  get isVisible () {
+  get isVisible() {
     const roles = this.currentUser.user.roles;
     const link = this.link;
 
@@ -41,11 +41,11 @@ export default class AdminMenuLinkComponent extends Component {
   }
 
   @computed('link.type')
-  get type () {
+  get type() {
     if (
       !this.link ||
       !this.link.type ||
-      ( this.link.type == 'link' )
+      (this.link.type == 'link')
     ) {
       return 'link';
     }
@@ -55,6 +55,12 @@ export default class AdminMenuLinkComponent extends Component {
 
   @action
   closeSideMenu() {
-    this.interface.toggleSidebar();
+    if (this.canToggleMenu()) {
+      this.interface.closeSidebar();
+    }
+  }
+
+  canToggleMenu() {
+    return (window.outerWidth < 768);
   }
 }
