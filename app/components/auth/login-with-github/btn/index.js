@@ -1,5 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 
 export default class LoginWithGithubBTNComponent extends Component {
@@ -8,8 +9,14 @@ export default class LoginWithGithubBTNComponent extends Component {
   @service router;
 
   @action
-  login() {
+  async login() {
+    const ENV = getOwner(this).resolveRegistration('config:environment');
+
     sessionStorage.setItem('redirectToThisAfterLogin', this.router.currentRouteName);
-    this.session.authenticate('authenticator:torii-github', 'github');
+    await this.session.authenticate('authenticator:torii-github', 'github');
+
+    if (this.session.isAuthenticated) {
+      location.href = ENV.rootURL || '/';
+    }
   }
 }

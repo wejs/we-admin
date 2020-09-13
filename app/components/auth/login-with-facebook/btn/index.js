@@ -1,7 +1,6 @@
 import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
-// import { getOwner } from '@ember/application';
-// import { tracked } from '@glimmer/tracking';
+import { getOwner } from '@ember/application';
 import { action } from '@ember/object';
 
 export default class LoginWithFacebookBTNComponent extends Component {
@@ -11,8 +10,14 @@ export default class LoginWithFacebookBTNComponent extends Component {
   @service session;
 
   @action
-  login() {
+  async login() {
+    const ENV = getOwner(this).resolveRegistration('config:environment');
+
     sessionStorage.setItem('redirectToThisAfterLogin', this.router.currentRouteName);
-    this.session.authenticate('authenticator:torii-facebook', 'facebook');
+    await this.session.authenticate('authenticator:torii-facebook', 'facebook');
+
+    if (this.session.isAuthenticated) {
+      location.href = ENV.rootURL || '/';
+    }
   }
 }
