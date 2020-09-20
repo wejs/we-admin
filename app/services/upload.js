@@ -8,6 +8,7 @@ import $ from 'jquery';
 import Service from '@ember/service';
 import { resolve as eResolve } from 'rsvp';
 import { bind } from '@ember/runloop';
+import { Promise, hash } from 'rsvp';
 
 let ENV;
 
@@ -74,7 +75,7 @@ export default Service.extend({
      * Start upload of this file:
      */
     f.upload = function startImageUpload() {
-      return new window.Promise( (resolve, reject)=> {
+      return new Promise( (resolve, reject)=> {
         let uploader = this.uploader;
         let file = this;
 
@@ -145,7 +146,7 @@ export default Service.extend({
      * Start upload of this file:
      */
     f.upload = function startFileUpload() {
-      return new window.Promise( (resolve, reject)=> {
+      return new Promise( (resolve, reject)=> {
         let uploader = this.uploader;
         let file = this;
 
@@ -206,7 +207,7 @@ export default Service.extend({
   },
 
   uploadImages() {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let results = [];
       let imagesToUpload = this.get('imagesToUpload');
       if (!imagesToUpload || !imagesToUpload.length) {
@@ -244,7 +245,7 @@ export default Service.extend({
   },
 
   uploadFiles() {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let results = [];
       let filesToUpload = this.get('filesToUpload');
       if (!filesToUpload || !filesToUpload.length) {

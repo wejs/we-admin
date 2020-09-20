@@ -1,7 +1,7 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 import { get } from '@ember/object';
 import { getOwner } from '@ember/application';
 import $ from 'jquery';
@@ -118,7 +118,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
    * @return {Promise}
    */
   checkIfHaveOnePage(url) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       const ENV = getOwner(this).resolveRegistration('config:environment');
 
       let headers = { Accept: 'application/vnd.api+json' },

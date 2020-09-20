@@ -57,7 +57,7 @@ export default Service.extend({
   themeCollorOptions: null,
 
   getUserSettings() {
-    return this.ajax.request(ENV.API_HOST + '/user-settings?adminMenu=true')
+    return this.ajax.request('/user-settings?adminMenu=true')
       .then((response) => {
         // sync authe between site and admin:
         if (response.authenticatedUser) {

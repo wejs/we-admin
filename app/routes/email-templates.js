@@ -1,6 +1,6 @@
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 import $ from 'jquery';
 import { set } from '@ember/object';
 
@@ -14,7 +14,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   },
 
   getEmailTypes() {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' };
 
       const ENV = getOwner(this).resolveRegistration('config:environment');

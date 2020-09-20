@@ -1,8 +1,12 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import { getOwner } from '@ember/application';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 import fetch from 'fetch';
+
+if (!window.Promise) {
+  window.Promise = Promise;
+}
 
 export default class ApplicationRoute extends Route {
   @service session;
@@ -43,7 +47,7 @@ export default class ApplicationRoute extends Route {
   model() {
     return hash({
       loadedSettings: this.currentUser.load(),
-      minimumLoadingDelay: new window.Promise((resolve) => {
+      minimumLoadingDelay: new Promise((resolve) => {
         setTimeout(() => {
           resolve();
         }, 500);

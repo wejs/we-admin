@@ -2,7 +2,7 @@ import Ember from 'ember';
 import AuthenticatedRouteMixin from 'ember-simple-auth/mixins/authenticated-route-mixin';
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 import { set, get } from '@ember/object';
 import { getOwner } from '@ember/application';
 import $ from 'jquery';
@@ -145,7 +145,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
         colorName = 'default';
       }
 
-      return new window.Promise( (resolve, reject)=> {
+      return new Promise( (resolve, reject)=> {
         if (!release) {
           Ember.Logger.warn('installTheme:theme.release is required');
           return resolve();
@@ -202,7 +202,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
     },
 
     verifyThemesUpdate() {
-      return new window.Promise( (resolve, reject)=> {
+      return new Promise( (resolve, reject)=> {
 
         let headers = { Accept: 'application/vnd.api+json' },
             accessToken = this.get('session.session.authenticated.access_token');
@@ -249,7 +249,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
     },
 
     updateTheme(themeName, release) {
-      return new window.Promise( (resolve, reject)=> {
+      return new Promise( (resolve, reject)=> {
 
         if (!release) {
           Ember.Logger.warn('updateTheme:theme.release is required');

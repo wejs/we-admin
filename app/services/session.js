@@ -12,7 +12,6 @@ export default class SessionService extends BaseSessionService {
     } catch (err) {
       await this.invalidate();
     }
-
   }
 
   async handleInvalidation() {

@@ -5,6 +5,7 @@ import { alias } from '@ember/object/computed';
 import $ from 'jquery';
 import { A } from '@ember/array';
 import { debug } from '@ember/debug';
+import { Promise, hash } from 'rsvp';
 
 let ENV;
 
@@ -57,7 +58,7 @@ export default Service.extend({
    * @return {Promise}
    */
   getPermissionsAndRoles() {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -80,7 +81,7 @@ export default Service.extend({
    * @return {Promise}
    */
   getRoles() {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -127,7 +128,7 @@ export default Service.extend({
    * @return {Promise}
    */
   getUserRoles(userId) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -153,7 +154,7 @@ export default Service.extend({
    * @return {Promise}
    */
   updateUserRoles(roleNames, userId) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -187,7 +188,7 @@ export default Service.extend({
    * @return {Promise}
    */
   removePermission(roleName, permissionName) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -209,7 +210,7 @@ export default Service.extend({
    * Create one role request method
    */
   createRole(role) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -235,7 +236,7 @@ export default Service.extend({
    * Delete one role request method
    */
   deleteRole(role) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -266,7 +267,7 @@ export default Service.extend({
    * @return {Promise}
    */
   addPermissionToRole(roleName, permissionName) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -293,7 +294,7 @@ export default Service.extend({
    * @return {Promise}
    */
   removePermissionFromRole(roleName, permissionName) {
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/vnd.api+json' },
           accessToken = this.get('session.session.authenticated.access_token');
 

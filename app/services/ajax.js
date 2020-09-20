@@ -36,6 +36,10 @@ export default class AjaxService extends AjaxServiceBase {
     this.ENV = getOwner(this).resolveRegistration('config:environment');
   }
 
+  _shouldSendHeaders() {
+    return true;
+  }
+
   request(url, options = {}) {
     if (!url) {
       throw new Error('Url is required to service ajax.request method');

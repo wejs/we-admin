@@ -3,7 +3,7 @@ import { get, set } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject } from '@ember/service';
 import { getOwner } from '@ember/application';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 import { A } from '@ember/array';
 import $ from 'jquery';
 import { bind } from '@ember/runloop';
@@ -61,7 +61,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
 
     this.get('store').push({ data: linksFormated });
 
-    const p = new window.Promise((resolve, reject)=> {
+    const p = new Promise((resolve, reject)=> {
       this.get('store')
       .findRecord('menu', model.menuId)
       .then( (r)=> {
@@ -124,7 +124,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   getLinks(menuId) {
     const ENV = getOwner(this).resolveRegistration('config:environment');
 
-    return new window.Promise( (resolve, reject)=> {
+    return new Promise( (resolve, reject)=> {
       let headers = { Accept: 'application/json' },
           accessToken = this.get('session.session.authenticated.access_token');
 
@@ -335,7 +335,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
           return r;
         }
 
-        return new window.Promise( (resolve, reject)=> {
+        return new Promise( (resolve, reject)=> {
           s.setSystemSettings(settingsToUpdate)
           .then( (result) => {
             set(s, 'systemSettings', result.settings);
@@ -407,7 +407,7 @@ export default Route.extend(AuthenticatedRouteMixin, {
   },
 
   saveLinksOrder() {
-    return new window.Promise((resolve, reject)=> {
+    return new Promise((resolve, reject)=> {
       const ENV = getOwner(this).resolveRegistration('config:environment');
 
       const menuId = this.get('currentModel.record.id'),
