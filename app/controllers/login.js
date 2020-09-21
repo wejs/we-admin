@@ -23,9 +23,5 @@ export default class LoginController extends Controller {
     } catch (error) {
       this.settings.queryError(error);
     }
-
-    if (this.session.isAuthenticated) {
-      location.href = ENV.rootURL || '/';
-    }
   }
 }
