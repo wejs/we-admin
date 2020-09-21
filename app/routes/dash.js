@@ -1,10 +1,11 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import { hash } from 'rsvp';
+import { Promise, hash } from 'rsvp';
 
 export default class AuthenticatedRoute extends Route {
   @service session;
   @service settings;
+  @service router;
 
   beforeModel(transition) {
     sessionStorage.removeItem('redirectToThisAfterLogin');
@@ -14,8 +15,8 @@ export default class AuthenticatedRoute extends Route {
   model() {
     return hash({
       loadedSettings: this.settings.getUserSettings(),
-      minimumLoadingDelay: new window.Promise( (resolve)=> {
-        setTimeout( ()=> {
+      minimumLoadingDelay: new Promise((resolve) => {
+        setTimeout(() => {
           resolve();
         }, 500);
       })
