@@ -10,7 +10,12 @@ export default class SessionService extends BaseSessionService {
     try {
       await this.currentUser.load();
     } catch (err) {
-      await this.invalidate();
+      if (err && err.code == 'AbortError') {
+        // is redirecting ... this may happend in safari browsers...
+        location.reload();
+      } else {
+        await this.invalidate();
+      }
     }
   }
 

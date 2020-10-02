@@ -59,6 +59,8 @@ export default Service.extend({
   getUserSettings() {
     return this.ajax.request('/user-settings?adminMenu=true')
       .then((response) => {
+        // return to fix safari wrong empty return:
+        if (!response) return;
         // sync authe between site and admin:
         if (response.authenticatedUser) {
           if (!this.session.isAuthenticated) {
@@ -72,7 +74,6 @@ export default Service.extend({
                 response.authenticatedUser.id
               )
               .then(() => {
-                location.reload();
                 return response;
               });
           }
@@ -96,7 +97,6 @@ export default Service.extend({
             .findRecord('user', response.authenticatedUser.id)
             .then((u) => {
               this.set('user', u);
-
               return response;
             });
         } else {
