@@ -16,8 +16,8 @@ export default class LoginWithFacebookBTNComponent extends Component {
     sessionStorage.setItem('redirectToThisAfterLogin', this.router.currentRouteName);
     await this.session.authenticate('authenticator:torii-facebook', 'facebook');
 
-    if (this.session.isAuthenticated) {
-      location.href = ENV.rootURL || '/';
-    }
+    // if (this.session.isAuthenticated) {
+    //   location.href = ENV.rootURL || '/';
+    // }
   }
 }

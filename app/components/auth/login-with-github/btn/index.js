@@ -15,8 +15,8 @@ export default class LoginWithGithubBTNComponent extends Component {
     sessionStorage.setItem('redirectToThisAfterLogin', this.router.currentRouteName);
     await this.session.authenticate('authenticator:torii-github', 'github');
 
-    if (this.session.isAuthenticated) {
-      location.href = ENV.rootURL || '/';
-    }
+    // if (this.session.isAuthenticated) {
+    //   location.href = ENV.rootURL || '/';
+    // }
   }
 }

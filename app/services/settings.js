@@ -275,7 +275,7 @@ export default Service.extend({
       });
     } else {
       debug('Unknow query error', { error: err });
-      console.log('Unknow query error', { error: err });
+      console.error('Unknow query error', { error: err });
     }
   }
 });
