@@ -22,7 +22,7 @@ export default Route.extend(ApplicationRouteMixin, {
   beforeModel() {
     this._super(...arguments);
 
-    const ENV = this.get('ENV');
+    // const ENV = this.get('ENV');
 
     // change default intl.t to send errors to console and dont stop page execution
     this.set('intl.t', this.get('i18n.t'));
@@ -34,8 +34,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
     if (typeof tinymce === 'undefined'){
       jobs['tinymce'] = $.getScript(
-        ENV.API_HOST+
-        '/public/plugin/we-plugin-editor-tinymce/files/tinymce.min.js');
+        '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.13/tinymce.min.js');
     }
 
     jobs['locales' ]= this.getLocalesFromHost();
