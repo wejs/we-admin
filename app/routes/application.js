@@ -34,8 +34,7 @@ export default Route.extend(ApplicationRouteMixin, {
 
     if (typeof tinymce === 'undefined'){
       jobs['tinymce'] = $.getScript(
-        ENV.API_HOST+
-        '/public/plugin/we-plugin-editor-tinymce/files/tinymce.min.js');
+        '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.13/tinymce.min.js');
     }
 
     jobs['locales' ]= this.getLocalesFromHost();
