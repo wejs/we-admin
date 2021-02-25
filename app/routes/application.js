@@ -22,7 +22,7 @@ export default Route.extend(ApplicationRouteMixin, {
   beforeModel() {
     this._super(...arguments);
 
-    const ENV = this.get('ENV');
+    // const ENV = this.get('ENV');
 
     // change default intl.t to send errors to console and dont stop page execution
     this.set('intl.t', this.get('i18n.t'));
