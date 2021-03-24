@@ -40,6 +40,11 @@ export default class ApplicationRoute extends Route {
     let jobs = {};
     jobs.locales = this.getLocalesFromHost();
 
+    if (typeof tinymce === 'undefined'){
+      jobs['tinymce'] = $.getScript(
+        '//cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.13/tinymce.min.js');
+    }
+
     // this.addPaypalSDK();
     return hash(jobs);
   }
