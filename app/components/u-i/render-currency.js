@@ -9,7 +9,7 @@ export default class UIRenderCurrencyComponent extends Component {
   @computed('args.value')
   get result() {
     let value = this.args.value;
-    if (value) {
+    if (value || value === 0) {
       let formatter = new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
