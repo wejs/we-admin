@@ -1,9 +1,9 @@
 {{#if isVisible}}
   {{#if (eq type 'link')}}
     <li class="nav-item">
-      <LinkTo @route={{link.linkTo}}  {{on "click" this.closeSideMenu}} class="nav-link">
+      <a href={{link.linkTo}} {{on "click" this.goTo}} class="nav-link">
         {{{link.icon}}} <span> {{link.text}}</span>
-      </LinkTo>
+      </a>
     </li>
   {{/if}}
   {{#if (eq type 'divisor')}}

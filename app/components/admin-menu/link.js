@@ -6,6 +6,7 @@ import { computed, action } from '@ember/object';
 export default class AdminMenuLinkComponent extends Component {
   @service currentUser;
   @service interface;
+  @service router;
 
   @oneWay('args.link') link;
 
@@ -58,6 +59,14 @@ export default class AdminMenuLinkComponent extends Component {
     if (this.canToggleMenu()) {
       this.interface.closeSidebar();
     }
+  }
+
+  @action
+  goTo(event) {
+    event.preventDefault();
+    this.router.transitionTo(this.link.linkTo);
+    this.closeSideMenu();
+    return false;
   }
 
   canToggleMenu() {
