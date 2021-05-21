@@ -41,7 +41,7 @@ export default Component.extend({
 
     let src = get(file, 'urls.'+this.get('size'));
 
-    if (src.startsWith('HTT')) {
+    if (src.startsWith('HTT') || src.startsWith('htt')) {
       this.set('src', src);
     } else {
       this.set('src', this.get('settings.ENV.imageHost') + src);
