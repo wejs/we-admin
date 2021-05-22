@@ -29,7 +29,7 @@ export default class UIImageComponent extends Component {
 
     let src = get(file, 'urls.' + (this.args.size || 'thumbnail') );
 
-    if (src.startsWith('HTT')) {
+    if (src.startsWith('HTT') || src.startsWith('htt')) {
       return src;
     } else {
       return (ENV.imageHost + src);
